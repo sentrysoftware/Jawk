@@ -9,15 +9,15 @@ import java.util.regex.Pattern;
 /**
  * A reader which consumes one record at a time from
  * an underlying input reader.
- * <p>
- * <h3>Greedy Regex Matching</h3>
+ *
+ * <h2>Greedy Regex Matching</h2>
  * The current implementation matches setRecordSeparator against
  * contents of an input buffer (the underlying input
  * stream filling the input buffer). Records are
  * split against the matched regular expression
  * input, treating the regular expression as a
  * record separator.
- * </p>
+ *
  * <p>
  * By default, greedy regular expression matching
  * for setRecordSeparator is turned off. It is assumed
@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
  * input against some sort of ambiguous newline
  * regex). To enable greedy setRecordSeparator regex consumption,
  * use <code>-Djawk.forceGreedyRS=true</code>.
- * </p>
+ *
  */
 public class PartitioningReader extends FilterReader {
 

@@ -12,7 +12,7 @@ import java.io.PrintStream;
  * of a spawned process (by, for example, system() or
  * "cmd" | getline) to the stdin, stdout, and/or stderr
  * of the calling process (the interpreter itself).
- * </p>
+ *
  */
 public class DataPump implements Runnable {
 

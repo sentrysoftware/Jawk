@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * Variable access is achieved through the VariableManager interface.
  * The constructor requires a VariableManager instance (which, in
  * this case, is the compiled Jawk class itself).
- * </p>
+ *
  * <p>
  * Main services include:
  * <ul>
@@ -56,14 +56,14 @@ import org.slf4j.LoggerFactory;
  * <li>Random number engine management.
  * <li>Input field ($0, $1, ...) management.
  * </ul>
- * </p>
+ *
  * <p>
  * All static and non-static service methods should be package-private
  * to the resultant AWK script class rather than public. However,
  * the resultant script class is not in the <code>org.jawk.jrt</code> package
  * by default, and the user may reassign the resultant script class
  * to another package. Therefore, all accessed methods are public.
- * </p>
+ *
  *
  * @see VariableManager
  */
@@ -74,7 +74,7 @@ public class JRT {
 	private static final boolean IS_WINDOWS = (System.getProperty("os.name").indexOf("Windows") >= 0);
 
 	private VariableManager vm;
-	
+
 	private Map<String, Process> output_processes = new HashMap<String, Process>();
 	private Map<String, PrintStream> output_streams = new HashMap<String, PrintStream>();
 
@@ -148,7 +148,7 @@ public class JRT {
 	 * @return A String representation of o.
 	 */
 	public static String toAwkString(Object o, String convfmt, Locale locale) {
-		
+
 		if (o instanceof Number) {
 			// It is a number, some processing is required here
 			double d = ((Number) o).doubleValue();
@@ -205,7 +205,7 @@ public class JRT {
 				// Do nothing here
 			}
 		}
-		
+
 		return toAwkString(o, ofmt, locale);
 	}
 
@@ -214,7 +214,7 @@ public class JRT {
 	 *
 	 * @param o Object to convert.
 	 *
-	 * @return the "double" value of o, or 0 if invalid 
+	 * @return the "double" value of o, or 0 if invalid
 	 */
 	public static double toDouble(Object o) {
 		if (o instanceof Number) {
@@ -238,13 +238,13 @@ public class JRT {
 			return 0;
 		}
 	}
-	
+
 	/*
 	 * Convert a String, Long, or Double to Long.
 	 *
 	 * @param o Object to convert.
 	 *
-	 * @return the "long" value of o, or 0 if invalid 
+	 * @return the "long" value of o, or 0 if invalid
 	 */
 	public static long toLong(Object o) {
 		if (o instanceof Number) {
@@ -266,9 +266,9 @@ public class JRT {
 	 * @param o1 The 1st object.
 	 * @param o2 the 2nd object.
 	 * @param mode <ul>
-	 *   <li>&lt; 0 - Return true if o1 &lt; o2.</li>
-	 *   <li>0 - Return true if o1 == o2.</li>
-	 *   <li>&gt; 0 - Return true if o1 &gt; o2.</li>
+	 *   <li>&lt; 0 - Return true if o1 &lt; o2.
+	 *   <li>0 - Return true if o1 == o2.
+	 *   <li>&gt; 0 - Return true if o1 &gt; o2.
 	 *   </ul>
 	 */
 	public static boolean compare2(Object o1, Object o2, int mode) {
@@ -276,7 +276,7 @@ public class JRT {
 		// Pre-compute String representations of o1 and o2
 		String o1String = o1.toString();
 		String o2String = o2.toString();
-		
+
 		// Special case of Uninitialized objects
 		if (o1 instanceof UninitializedObject) {
 			if (o2 instanceof UninitializedObject ||
@@ -294,7 +294,7 @@ public class JRT {
 				return mode != 0;
 			}
 		}
-		
+
 		if (!(o1 instanceof Number) && !o1String.isEmpty()) {
 			char o1FirstChar = o1String.charAt(0);
 			if (o1FirstChar >= '0' && o1FirstChar <= '9') {
@@ -966,7 +966,7 @@ public class JRT {
 	 * the same file/command name. In this case,
 	 * <em>all</em> open streams with this name
 	 * are closed.
-	 * </p>
+	 *
 	 *
 	 * @param filename The filename/command process to close.
 	 *
@@ -1120,10 +1120,10 @@ public class JRT {
 	 * @return The formatted string; a blank string
 	 *   if the format argument is invalid.
 	 *
-	 * @see #sprintfFunctionNoCatch(Object[],String)
+	 * @see #sprintfFunctionNoCatch(Object[],String,Locale)
 	 */
 	public static String sprintfFunction(Object[] arr, String fmt_arg, Locale locale) {
-		
+
 		// Try to adapt the object types to the specified formats
 		Pattern percentPattern = Pattern.compile("(%%)|(%n)|(%[ -\\+\\(#0]?[0-9]*(\\.[0-9]+)?[bhscdoxefgat])", Pattern.CASE_INSENSITIVE);
 		Matcher percentMatcher = percentPattern.matcher(fmt_arg);
@@ -1140,7 +1140,7 @@ public class JRT {
 					if (i >= arr.length) {
 						percentMatcher.appendReplacement(formatResultBuffer, format1Arg);
 					} else {
-						if (format1Arg.endsWith("d") || 
+						if (format1Arg.endsWith("d") ||
 								format1Arg.endsWith("x") ||
 								format1Arg.endsWith("X") ||
 								format1Arg.endsWith("o")) {
@@ -1203,7 +1203,7 @@ public class JRT {
 	 * @param arr Arguments to format.
 	 * @param fmt_arg The format string to apply.
 	 *
-	 * @see #printfFunctionNoCatch(Object[],String)
+	 * @see #printfFunctionNoCatch(Object[],String,Locale)
 	 */
 	public static void printfFunction(Object[] arr, String fmt_arg, Locale locale) {
 		System.out.print(sprintfFunction(arr, fmt_arg, locale));
@@ -1226,7 +1226,7 @@ public class JRT {
 	 * @param arr Arguments to format.
 	 * @param fmt_arg The format string to apply.
 	 *
-	 * @see #printfFunctionNoCatch(PrintStream,Object[],String)
+	 * @see #printfFunctionNoCatch(PrintStream,Object[],String,Locale)
 	 */
 	public static void printfFunction(PrintStream ps, Object[] arr, String fmt_arg, Locale locale) {
 		ps.print(sprintfFunction(arr, fmt_arg, locale));

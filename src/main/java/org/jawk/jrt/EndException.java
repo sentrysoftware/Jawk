@@ -9,7 +9,7 @@ package org.jawk.jrt;
  * executed. The second catch block executes when exit() is
  * called within any of the END blocks. When invoked,
  * Jawk terminates with an exit code.
- * </p>
+ *
  */
 public class EndException extends RuntimeException {
 

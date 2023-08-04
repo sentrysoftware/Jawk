@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  * The interpreter consists of an instruction processor (interpreter),
  * a runtime stack, and machinery to support the instruction set
  * contained within the tuples.
- * </p>
+ *
  * <p>
  * The interpreter runs completely independent of the frontend/intermediate step.
  * In fact, an intermediate file produced by Jawk is sufficient to
@@ -66,13 +66,13 @@ import org.slf4j.LoggerFactory;
  * parameter values (ARGC/ARGV) after the script on the command line.
  * However, if programmatic access to the AVM is required, meaningful
  * AwkSettings are not required.
- * </p>
+ *
  * <p>
  * Semantic analysis has occurred prior to execution of the interpreter.
  * Therefore, the interpreter throws AwkRuntimeExceptions upon most
  * errors/conditions. It can also throw a <code>java.lang.Error</code> if an
  * interpreter error is encountered.
- * </p>
+ *
  */
 public class AVM implements AwkInterpreter, VariableManager {
 
@@ -108,7 +108,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 * <p>
 	 * Provided to allow programmatic construction of the interpreter
 	 * outside of the framework which is used by Jawk.
-	 * </p>
+	 *
 	 */
 	public AVM() {
 		settings = null;
@@ -128,6 +128,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 *
 	 * @param parameters The parameters affecting the behavior of the
 	 *	interpreter.
+	 * @param extensions Map of the extensions to load
 	 */
 	public AVM(final AwkSettings parameters, final Map<String, JawkExtension> extensions) {
 		if (parameters == null) {
@@ -251,8 +252,6 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 * an execution platform for Jawk scripts.
 	 *
 	 * @param tuples The tuples to interpret.
-	 *
-	 * @return The return code (the value passed into the exit call).
 	 */
 	@Override
 	public void interpret(AwkTuples tuples)
@@ -1960,6 +1959,9 @@ public class AVM implements AwkInterpreter, VariableManager {
 		}
 	}
 
+	/**
+	 * Close all streams in the runtime
+	 */
 	public void waitForIO() {
 		jrt.jrtCloseAll();
 	}
@@ -2025,10 +2027,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 * sprintf() functionality
 	 */
 	private String sprintfFunction(long num_args) {
-		
+
 		// Silly case
 		if (num_args == 0) return "";
-		
+
 		// all but the format argument
 		Object[] arg_array = new Object[(int) (num_args - 1)];
 		// the format argument!
@@ -2098,9 +2100,9 @@ public class AVM implements AwkInterpreter, VariableManager {
 		//	throw new AwkRuntimeException("Attempting to treat a scalar as an array.");
 		assert o1 instanceof AssocArray;
 		AssocArray array = (AssocArray) o1;
-		
+
 		// Convert arr_idx to a true integer if it is one
-//		String indexString = JRT.toAwkStringForOutput(arr_idx, getCONVFMT().toString()); 
+//		String indexString = JRT.toAwkStringForOutput(arr_idx, getCONVFMT().toString());
 		array.put(arr_idx, rhs);
 		push(rhs);
 	}

@@ -27,7 +27,7 @@ public interface HasFunctionAddress {
 	 * the function address (prior to parsing the function
 	 * block), the result is undefined. (As of this writing,
 	 * a NullPointerException is thrown.)
-	 * </p>
+	 *
 	 */
 	Address getFunctionAddress();
 }

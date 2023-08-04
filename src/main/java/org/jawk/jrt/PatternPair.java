@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * If text matches both the first and second regex, the entry
  * is considered a match, but subsequent entries are not considered
  * matched (unless the text matches the first regex).
- * </p>
+ *
  */
 public class PatternPair {
 
@@ -37,7 +37,6 @@ public class PatternPair {
 	 *   up until text matches the second regex, which is still considered
 	 *   a match, but subsequent text is not considered a match
 	 *   (unless, of course, the text matches the first regex).
-	 * </p>
 	 */
 	public boolean matches(String str) {
 		if (p1.matcher(str).find()) {

@@ -5,8 +5,6 @@ import org.jawk.intermediate.AwkTuples;
 
 /**
  * Interpret a Jawk script within this JVM.
- *
- * @param tuples The tuples containing the intermediate code.
  */
 public interface AwkInterpreter {
 

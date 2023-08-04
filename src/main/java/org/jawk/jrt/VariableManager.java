@@ -11,41 +11,45 @@ package org.jawk.jrt;
  * special AWK variables, such as <code>RSTART</code>
  * and <code>ENVIRON</code>. That's because these variables
  * are not referred to within the JRT.
- * </p>
+ *
  *
  * @see JRT
- * @see org.jawk.backend.AwkCompiler
- * @see org.jawk.backend.AwkCompilerImpl
  *
  * @author Danny Daglas
  */
 public interface VariableManager {
 
-	/** Retrieve the contents of the ARGC variable. */
+	/** @return the contents of the ARGC variable. */
 	Object getARGC();
 
-	/** Retrieve the contents of the ARGV variable. */
+	/** @return the contents of the ARGV variable. */
 	Object getARGV();
 
-	/** Retrieve the contents of the CONVFMT variable. */
+	/** @return the contents of the CONVFMT variable. */
 	Object getCONVFMT();
 
-	/** Retrieve the contents of the FS variable. */
+	/** @return the contents of the FS variable. */
 	Object getFS();
 
-	/** Retrieve the contents of the RS variable. */
+	/** @return the contents of the RS variable. */
 	Object getRS();
 
-	/** Retrieve the contents of the OFS variable. */
+	/** @return the contents of the OFS variable. */
 	Object getOFS();
 
-	/** Retrieve the contents of the SUBSEP variable. */
+	/** @return the contents of the SUBSEP variable. */
 	Object getSUBSEP();
 
-	/** Set the contents of the FILENAME variable. */
+	/** 
+	 * Set the contents of the FILENAME variable. 
+	 * @param fileName File name
+	 */
 	void setFILENAME(String fileName);
 
-	/** Set the contents of the NF variable. */
+	/** 
+	 * Set the contents of the NF variable.
+	 * @param newNf Value for NF
+	 */
 	void setNF(Integer newNf);
 
 	/** Increases the NR variable by 1. */
@@ -67,5 +71,5 @@ public interface VariableManager {
 	 * @param value The new contents of the variable.
 	 */
 	void assignVariable(String name, Object value);
-	
+
 }

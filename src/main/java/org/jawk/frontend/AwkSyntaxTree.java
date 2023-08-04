@@ -40,7 +40,7 @@ public interface AwkSyntaxTree {
 	 * list of tuples for the abstract syntax tree, or it is called
 	 * by other abstract syntax tree nodes in response to their
 	 * attempt at populating tuples.
-	 * </p>
+	 *
 	 *
 	 * @param tuples The tuples to populate.
 	 *

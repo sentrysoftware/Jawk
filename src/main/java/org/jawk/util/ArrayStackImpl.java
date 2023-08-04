@@ -9,11 +9,11 @@ import java.util.ArrayList;
  * this implementation is non-synchronized to improve performance.
  * <p>
  * It performs quicker than the <code>LinkedListStackImpl</code> version.
- * </p>
+ *
  * <p>
  * There is no maximum capacity which is enforced, nor is there any
  * checks if <code>pop()</code> is executed on an empty stack.
- * </p>
+ *
  */
 public class ArrayStackImpl<E> extends ArrayList<E> implements MyStack<E> {
 
@@ -42,7 +42,7 @@ public class ArrayStackImpl<E> extends ArrayList<E> implements MyStack<E> {
 	 * Warning: no checks are done in terms of size, etc.
 	 * If a <code>pop()</code> is called on an empty stack,
 	 * an <code>ArrayIndexOutOfBoundException</code> is thrown.
-	 * </p>
+	 *
 	 *
 	 * @return The top of the stack. The element is subsequently
 	 *   removed from the stack.

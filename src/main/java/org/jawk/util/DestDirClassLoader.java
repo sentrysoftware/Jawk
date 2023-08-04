@@ -16,7 +16,7 @@ import java.io.IOException;
  * if it can not find the class its self.
  * <p>
  * For Jawk, this is used when the -d argument is present.
- * </p>
+ *
  */
 public final class DestDirClassLoader extends ClassLoader {
 

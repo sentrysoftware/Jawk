@@ -7,7 +7,7 @@ package org.jawk.util;
  * therefore, needlessly synchronized in a non-multi-threaded
  * environment. As a result, it was necessary to re-implement the
  * stack in this manner by using a non-synchronized list.
- * </p>
+ *
  */
 public interface MyStack<E> {
 
@@ -39,6 +39,7 @@ public interface MyStack<E> {
 
 	/**
 	 * Inspect the top-most element without affecting the stack.
+	 * @return the top of the stack, without removing it from the stack
 	 */
 	E peek();
 }

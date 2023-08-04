@@ -8,7 +8,7 @@ package org.jawk.jrt;
  * or as contained by variables. However, this is the only
  * List in used in this manner within Jawk at the time of
  * this writing.
- * </p>
+ *
  *
  * @see KeyListImpl
  */

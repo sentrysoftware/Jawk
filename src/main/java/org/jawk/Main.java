@@ -38,7 +38,7 @@ public class Main {
 		System.setIn(is);
 		System.setOut(os);
 		System.setErr(es);
-		
+
 		AwkSettings settings = AwkParameters.parseCommandLineArguments(args);
 		Awk awk = new Awk();
 		awk.invoke(settings);
@@ -54,16 +54,11 @@ public class Main {
 	 * System.exit(invoke(args));
 	 * </pre>
 	 * </blockquote>
-	 * </p>
 	 *
 	 * @param args Command line arguments to the VM.
-	 *
-	 * @throws IOException upon an IO error.
-	 * @throws ClassNotFoundException if compilation is requested,
-	 *	 but no compilation implementation class is found.
 	 */
 	public static void main(String[] args) {
-		
+
 		try {
 			AwkSettings settings = AwkParameters.parseCommandLineArguments(args);
 			Awk awk = new Awk();
@@ -74,7 +69,7 @@ public class Main {
 			System.err.printf("%s: %s", e.getClass().getSimpleName(), e.getMessage());
 			System.exit(1);
 		}
-		
+
 	}
 
 

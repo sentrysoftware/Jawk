@@ -15,11 +15,11 @@ import java.util.Set;
  * BlockObjects are chained. The BlockManager
  * blocks on all chained BlockObjects until one
  * is unblocked.
- * </p>
+ *
  * <p>
  * Subclasses must provide meaningful block()
  * and getNotifierTag() routines.
- * </p>
+ *
  * <p>
  * BlockObjects do not actually perform the client
  * blocking. This is done by the BlockManager at the
@@ -27,10 +27,9 @@ import java.util.Set;
  * The AVM/compiled environments make special provision
  * to return the head block object to the BlockManager
  * (within _EXTENSION_ keyword processing).
- * </p>
+ *
  *
  * @see BlockManager
- * @see BulkBlockObject
  */
 public abstract class BlockObject {
 

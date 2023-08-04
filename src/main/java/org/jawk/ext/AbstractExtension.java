@@ -11,7 +11,7 @@ import org.jawk.util.AwkSettings;
  * Provides functionality common to most extensions,
  * such as VM and JRT variable management, and convenience
  * methods such as checkNumArgs() and toAwkString().
- * </p>
+ *
  */
 public abstract class AbstractExtension implements JawkExtension {
 
@@ -76,14 +76,23 @@ public abstract class AbstractExtension implements JawkExtension {
 		}
 	}
 
+	/**
+	 * @return the Runtime
+	 */
 	protected JRT getJrt() {
 		return jrt;
 	}
 
+	/**
+	 * @return the Variable Manager
+	 */
 	protected VariableManager getVm() {
 		return vm;
 	}
 
+	/**
+	 * @return the Settings
+	 */
 	protected AwkSettings getSettings() {
 		return settings;
 	}
