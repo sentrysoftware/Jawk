@@ -19,12 +19,18 @@ import org.jawk.intermediate.UninitializedObject;
  * HashMap, depending on whether to maintain keys in
  * sorted order or not) and delegates calls to it
  * accordingly.
- * </p>
+ *
+ * @author Danny Daglas
  */
 public class AssocArray implements Comparator<Object> {
 
 	private Map<Object, Object> map;
 
+	/**
+	 * <p>Constructor for AssocArray.</p>
+	 *
+	 * @param sortedArrayKeys Whether keys must be kept sorted
+	 */
 	public AssocArray(boolean sortedArrayKeys) {
 		if (sortedArrayKeys) {
 			map = new TreeMap<Object, Object>(this);
@@ -77,6 +83,8 @@ public class AssocArray implements Comparator<Object> {
 	 * Provide a string representation of the delegated
 	 * map object.
 	 * It exists to support the _DUMP keyword.
+	 *
+	 * @return string representing the map/array
 	 */
 	public String mapString() {
 		// was:
@@ -110,7 +118,10 @@ public class AssocArray implements Comparator<Object> {
 	private static final UninitializedObject BLANK = new UninitializedObject();
 
 	/**
-	 * Test whether a particular key is
+	 * <p>isIn.</p>
+	 *
+	 * @param key Key to be checked
+	 * @return whether a particular key is
 	 * contained within the associative array.
 	 * Unlike get(), which adds a blank (null)
 	 * reference to the associative array if the
@@ -122,7 +133,10 @@ public class AssocArray implements Comparator<Object> {
 	}
 
 	/**
-	 * Get the value of an associative array
+	 * <p>get.</p>
+	 *
+	 * @param key Key to retrieve in the array
+	 * @return the value of an associative array
 	 * element given a particular key.
 	 * If the key does not exist, a null value
 	 * (blank string) is inserted into the array
@@ -156,6 +170,13 @@ public class AssocArray implements Comparator<Object> {
 		return result;
 	}
 
+	/**
+	 * Added to support insertion of primitive key types.
+	 *
+	 * @param key Key of the entry to put in the array
+	 * @param value Value of the key
+	 * @return the previous value of the specified key, or null if key didn't exist
+	 */
 	public Object put(Object key, Object value) {
 		if (key == null || key instanceof UninitializedObject) {
 			key = (long)0;
@@ -172,29 +193,54 @@ public class AssocArray implements Comparator<Object> {
 
 	/**
 	 * Added to support insertion of primitive key types.
+	 *
+	 * @param key Index of the entry to put in the array
+	 * @param value Value of the key
+	 * @return the previous value of the specified key, or null if key didn't exist
 	 */
 	public Object put(long key, Object value) {
 		return map.put(key, value);
 	}
 
+	/**
+	 * <p>keySet.</p>
+	 *
+	 * @return the set of keys
+	 */
 	public Set<Object> keySet() {
 		return map.keySet();
 	}
 
+	/**
+	 * Clear the array
+	 */
 	public void clear() {
 		map.clear();
 	}
 
+	/**
+	 * Delete the specified entry
+	 *
+	 * @param key Key of the entry to remove from the array
+	 * @return the value of the entry before it was removed
+	 */
 	public Object remove(Object key) {
 		return map.remove(key);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Do nothing. Should not be called in this state.
+	 */
 	@Override
 	public String toString() {
 		throw new AwkRuntimeException("Cannot evaluate an unindexed array.");
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Comparator implementation used by the TreeMap
 	 * when keys are to be maintained in sorted order.
 	 */
@@ -219,6 +265,11 @@ public class AssocArray implements Comparator<Object> {
 		}
 	}
 
+	/**
+	 * <p>getMapVersion.</p>
+	 *
+	 * @return the specification version of this class
+	 */
 	public String getMapVersion() {
 		return map.getClass().getPackage().getSpecificationVersion();
 	}

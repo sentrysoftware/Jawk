@@ -10,9 +10,12 @@ import java.io.Reader;
  * given on the command line with the first non-"-" parameter,
  * or an "*.awk" (normal) or "*.ai" (intermediate) script,
  * given as a path with a "-f" command line switch.
+ *
+ * @author Danny Daglas
  */
 public class ScriptSource {
 
+	/** Constant <code>DESCRIPTION_COMMAND_LINE_SCRIPT="&lt;command-line-supplied-script&gt;"</code> */
 	public static final String DESCRIPTION_COMMAND_LINE_SCRIPT
 			= "<command-line-supplied-script>";
 
@@ -20,6 +23,13 @@ public class ScriptSource {
 	private Reader reader;
 	private boolean intermediate;
 
+	/**
+	 * <p>Constructor for ScriptSource.</p>
+	 *
+	 * @param description a {@link java.lang.String} object
+	 * @param reader a {@link java.io.Reader} object
+	 * @param intermediate a boolean
+	 */
 	public ScriptSource(String description, Reader reader, boolean intermediate) {
 
 		this.description = description;
@@ -27,6 +37,11 @@ public class ScriptSource {
 		this.intermediate = intermediate;
 	}
 
+	/**
+	 * <p>Getter for the field <code>description</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object
+	 */
 	public final String getDescription() {
 		return description;
 	}
@@ -39,6 +54,7 @@ public class ScriptSource {
 	 * @return The reader which contains the intermediate file, null if
 	 *   either the -f argument is not used, or the argument does not
 	 *   refer to an intermediate file.
+	 * @throws java.io.IOException if any.
 	 */
 	public Reader getReader()
 			throws IOException
@@ -50,6 +66,9 @@ public class ScriptSource {
 	 * Returns the <code>InputStream</code> serving the contents of this source.
 	 * This returns non-<code>null</code> only if {@see #isIntermediate()}
 	 * returns <code>true</code>.
+	 *
+	 * @return a {@link java.io.InputStream} object
+	 * @throws java.io.IOException if any.
 	 */
 	public InputStream getInputStream()
 			throws IOException
@@ -71,6 +90,7 @@ public class ScriptSource {
 		return intermediate;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return getDescription();

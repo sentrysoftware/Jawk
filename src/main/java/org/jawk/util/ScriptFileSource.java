@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Represents one AWK-script file content source.
+ *
+ * @author Danny Daglas
  */
 public class ScriptFileSource extends ScriptSource {
 
@@ -19,6 +21,11 @@ public class ScriptFileSource extends ScriptSource {
 	private Reader fileReader;
 	private InputStream fileInputStream;
 
+	/**
+	 * <p>Constructor for ScriptFileSource.</p>
+	 *
+	 * @param filePath a {@link java.lang.String} object
+	 */
 	public ScriptFileSource(String filePath) {
 		super(filePath, null, filePath.endsWith(".ai"));
 
@@ -27,10 +34,16 @@ public class ScriptFileSource extends ScriptSource {
 		this.fileInputStream = null;
 	}
 
+	/**
+	 * <p>Getter for the field <code>filePath</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object
+	 */
 	public String getFilePath() {
 		return filePath;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Reader getReader() {
 
@@ -45,6 +58,7 @@ public class ScriptFileSource extends ScriptSource {
 		return fileReader;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public InputStream getInputStream() {
 

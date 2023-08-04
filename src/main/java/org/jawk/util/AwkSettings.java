@@ -13,6 +13,8 @@ import java.util.Map;
  * These values have defaults.
  * These defaults may be changed through command line arguments,
  * or when invoking Jawk programmatically, from within Java code.
+ *
+ * @author Danny Daglas
  */
 public class AwkSettings {
 
@@ -126,7 +128,7 @@ public class AwkSettings {
 	 * which means the appropriate default file-name will get used.
 	 */
 	private String outputFilename = null;
-	
+
 	/**
 	 * Output stream;
 	 * <code>System.out</code> by default,
@@ -139,20 +141,22 @@ public class AwkSettings {
 	 * <code>"."</code> by default.
 	 */
 	private String destinationDirectory = ".";
-	
+
 	/**
 	 * Locale for the output of numbers
 	 * <code>US-English</code> by default.
 	 */
 	private Locale locale = Locale.US;
-	
+
 	/**
 	 * Default value for RS, when not set specifically by the AWK script
 	 */
 	private String defaultRS = System.getProperty("line.separator", "\n");
 
 	/**
-	 * Provide a human readable representation of the parameters values.
+	 * <p>toDescriptionString.</p>
+	 *
+	 * @return a human readable representation of the parameters values.
 	 */
 	public String toDescriptionString() {
 
@@ -249,9 +253,10 @@ public class AwkSettings {
 	}
 
 	/**
+	 * <p>Getter for the field <code>outputFilename</code>.</p>
+	 *
 	 * @param defaultFileName The filename to return if -o argument
 	 *   is not used.
-	 *
 	 * @return the optarg for the -o parameter, or the defaultFileName
 	 *   parameter if -o is not utilized.
 	 */
@@ -264,7 +269,9 @@ public class AwkSettings {
 	}
 
 	/**
-	 * Returns the script sources meta info.
+	 * <p>Getter for the field <code>scriptSources</code>.</p>
+	 *
+	 * @return the script sources meta info.
 	 * This will usually be either one String container,
 	 * made up of the script given on the command line directly,
 	 * with the first non-"-" parameter,
@@ -274,13 +281,19 @@ public class AwkSettings {
 		return scriptSources;
 	}
 
+	/**
+	 * Add the specified ScriptSource
+	 *
+	 * @param scriptSource ScriptSource instance to add
+	 */
 	public void addScriptSource(ScriptSource scriptSource) {
 		scriptSources.add(scriptSource);
 	}
 
 	/**
 	 * Where input is read from.
-	 * By default, this is {@link System#in}.
+	 * By default, this is {@link java.lang.System#in}.
+	 *
 	 * @return the input
 	 */
 	public InputStream getInput() {
@@ -289,7 +302,8 @@ public class AwkSettings {
 
 	/**
 	 * Where input is read from.
-	 * By default, this is {@link System#in}.
+	 * By default, this is {@link java.lang.System#in}.
+	 *
 	 * @param input the input to set
 	 */
 	public void setInput(InputStream input) {
@@ -301,6 +315,7 @@ public class AwkSettings {
 	 * executing the script (-v assignments).
 	 * The values may be of type <code>Integer</code>,
 	 * <code>Double</code> or <code>String</code>.
+	 *
 	 * @return the variables
 	 */
 	public Map<String, Object> getVariables() {
@@ -312,6 +327,7 @@ public class AwkSettings {
 	 * executing the script (-v assignments).
 	 * The values may be of type <code>Integer</code>,
 	 * <code>Double</code> or <code>String</code>.
+	 *
 	 * @param variables the variables to set
 	 */
 	public void setVariables(Map<String, Object> variables) {
@@ -322,6 +338,7 @@ public class AwkSettings {
 	 * Contains name=value or filename entries.
 	 * Order is important, which is why name=value and filenames
 	 * are listed in the same List container.
+	 *
 	 * @return the nameValueOrFileNames
 	 */
 	public List<String> getNameValueOrFileNames() {
@@ -332,6 +349,7 @@ public class AwkSettings {
 	 * Contains name=value or filename entries.
 	 * Order is important, which is why name=value and filenames
 	 * are listed in the same List container.
+	 *
 	 * @param nameValueOrFileNames the nameValueOrFileNames to set
 	 */
 	public void setNameValueOrFileNames(List<String> nameValueOrFileNames) {
@@ -344,6 +362,7 @@ public class AwkSettings {
 	 * made up of the script given on the command line directly,
 	 * with the first non-"-" parameter,
 	 * or one or multiple script file names (if provided with -f switches).
+	 *
 	 * @param scriptSources the scriptSources to set
 	 */
 	public void setScriptSources(List<ScriptSource> scriptSources) {
@@ -353,6 +372,7 @@ public class AwkSettings {
 	/**
 	 * Whether to interpret or compile the script.
 	 * Initial value is set to <code>false</code> (interpret).
+	 *
 	 * @return the compile
 	 */
 	public boolean isCompile() {
@@ -362,6 +382,7 @@ public class AwkSettings {
 	/**
 	 * Whether to interpret or compile the script.
 	 * Initial value is set to <code>false</code> (interpret).
+	 *
 	 * @param compile the compile to set
 	 */
 	public void setCompile(boolean compile) {
@@ -371,6 +392,7 @@ public class AwkSettings {
 	/**
 	 * Whether to compile and execute the script.
 	 * Initial value is set to <code>false</code> (interpret).
+	 *
 	 * @return the compileRun
 	 */
 	public boolean isCompileRun() {
@@ -380,6 +402,7 @@ public class AwkSettings {
 	/**
 	 * Whether to compile and execute the script.
 	 * Initial value is set to <code>false</code> (interpret).
+	 *
 	 * @param compileRun the compileRun to set
 	 */
 	public void setCompileRun(boolean compileRun) {
@@ -389,6 +412,7 @@ public class AwkSettings {
 	/**
 	 * Initial Field Separator (FS) value.
 	 * <code>null</code> means the default FS value.
+	 *
 	 * @return the fieldSeparator
 	 */
 	public String getFieldSeparator() {
@@ -398,6 +422,7 @@ public class AwkSettings {
 	/**
 	 * Initial Field Separator (FS) value.
 	 * <code>null</code> means the default FS value.
+	 *
 	 * @param fieldSeparator the fieldSeparator to set
 	 */
 	public void setFieldSeparator(String fieldSeparator) {
@@ -407,6 +432,7 @@ public class AwkSettings {
 	/**
 	 * Whether to dump the syntax tree;
 	 * <code>false</code> by default.
+	 *
 	 * @return the dumpSyntaxTree
 	 */
 	public boolean isDumpSyntaxTree() {
@@ -416,6 +442,7 @@ public class AwkSettings {
 	/**
 	 * Whether to dump the syntax tree;
 	 * <code>false</code> by default.
+	 *
 	 * @param dumpSyntaxTree the dumpSyntaxTree to set
 	 */
 	public void setDumpSyntaxTree(boolean dumpSyntaxTree) {
@@ -425,6 +452,7 @@ public class AwkSettings {
 	/**
 	 * Whether to dump the intermediate code;
 	 * <code>false</code> by default.
+	 *
 	 * @return the dumpIntermediateCode
 	 */
 	public boolean isDumpIntermediateCode() {
@@ -434,6 +462,7 @@ public class AwkSettings {
 	/**
 	 * Whether to dump the intermediate code;
 	 * <code>false</code> by default.
+	 *
 	 * @param dumpIntermediateCode the dumpIntermediateCode to set
 	 */
 	public void setDumpIntermediateCode(boolean dumpIntermediateCode) {
@@ -443,6 +472,7 @@ public class AwkSettings {
 	/**
 	 * Whether to enable additional functions (_sleep/_dump);
 	 * <code>false</code> by default.
+	 *
 	 * @return the additionalFunctions
 	 */
 	public boolean isAdditionalFunctions() {
@@ -452,6 +482,7 @@ public class AwkSettings {
 	/**
 	 * Whether to enable additional functions (_sleep/_dump);
 	 * <code>false</code> by default.
+	 *
 	 * @param additionalFunctions the additionalFunctions to set
 	 */
 	public void setAdditionalFunctions(boolean additionalFunctions) {
@@ -461,6 +492,7 @@ public class AwkSettings {
 	/**
 	 * Whether to enable additional type functions (_INTEGER/_DOUBLE/_STRING);
 	 * <code>false</code> by default.
+	 *
 	 * @return the additionalTypeFunctions
 	 */
 	public boolean isAdditionalTypeFunctions() {
@@ -470,6 +502,7 @@ public class AwkSettings {
 	/**
 	 * Whether to enable additional type functions (_INTEGER/_DOUBLE/_STRING);
 	 * <code>false</code> by default.
+	 *
 	 * @param additionalTypeFunctions the additionalTypeFunctions to set
 	 */
 	public void setAdditionalTypeFunctions(boolean additionalTypeFunctions) {
@@ -479,6 +512,7 @@ public class AwkSettings {
 	/**
 	 * Whether to maintain array keys in sorted order;
 	 * <code>false</code> by default.
+	 *
 	 * @return the useSortedArrayKeys
 	 */
 	public boolean isUseSortedArrayKeys() {
@@ -488,6 +522,7 @@ public class AwkSettings {
 	/**
 	 * Whether to maintain array keys in sorted order;
 	 * <code>false</code> by default.
+	 *
 	 * @param useSortedArrayKeys the useSortedArrayKeys to set
 	 */
 	public void setUseSortedArrayKeys(boolean useSortedArrayKeys) {
@@ -497,6 +532,7 @@ public class AwkSettings {
 	/**
 	 * Whether user extensions are enabled;
 	 * <code>false</code> by default.
+	 *
 	 * @return the userExtensions
 	 */
 	public boolean isUserExtensions() {
@@ -506,6 +542,7 @@ public class AwkSettings {
 	/**
 	 * Whether user extensions are enabled;
 	 * <code>false</code> by default.
+	 *
 	 * @param userExtensions the userExtensions to set
 	 */
 	public void setUserExtensions(boolean userExtensions) {
@@ -515,6 +552,7 @@ public class AwkSettings {
 	/**
 	 * Write to intermediate file;
 	 * <code>false</code> by default.
+	 *
 	 * @return the writeIntermediateFile
 	 */
 	public boolean isWriteIntermediateFile() {
@@ -524,6 +562,7 @@ public class AwkSettings {
 	/**
 	 * Write to intermediate file;
 	 * <code>false</code> by default.
+	 *
 	 * @param writeIntermediateFile the writeIntermediateFile to set
 	 */
 	public void setWriteIntermediateFile(boolean writeIntermediateFile) {
@@ -534,6 +573,7 @@ public class AwkSettings {
 	 * Output filename;
 	 * <code>null</code> by default,
 	 * which means the appropriate default file-name will get used.
+	 *
 	 * @return the outputFilename
 	 */
 	public String getOutputFilename() {
@@ -544,25 +584,28 @@ public class AwkSettings {
 	 * Output filename;
 	 * <code>null</code> by default,
 	 * which means the appropriate default file-name will get used.
+	 *
 	 * @param outputFilename the outputFilename to set
 	 */
 	public void setOutputFilename(String outputFilename) {
 		this.outputFilename = outputFilename;
 	}
-	
+
 	/**
 	 * Output stream;
 	 * <code>System.out</code> by default,
 	 * which means we will print to stdout by default
+	 *
 	 * @return the output stream
 	 */
 	public PrintStream getOutputStream() {
 		return outputStream;
 	}
-	
+
 	/**
 	 * Sets the OutputStream to print to (instead of System.out by default)
-	 * @param pOutputStream
+	 *
+	 * @param pOutputStream OutputStream to use for print statements
 	 */
 	public void setOutputStream(PrintStream pOutputStream) {
 		outputStream = pOutputStream;
@@ -571,6 +614,7 @@ public class AwkSettings {
 	/**
 	 * Compiled destination directory (if provided);
 	 * <code>"."</code> by default.
+	 *
 	 * @return the destinationDirectory
 	 */
 	public String getDestinationDirectory() {
@@ -579,6 +623,7 @@ public class AwkSettings {
 
 	/**
 	 * Compiled destination directory (if provided).
+	 *
 	 * @param destinationDirectory the destinationDirectory to set,
 	 *   <code>"."</code> by default.
 	 */
@@ -595,6 +640,7 @@ public class AwkSettings {
 	 * Whether to trap <code>IllegalFormatExceptions</code>
 	 * for <code>[s]printf</code>;
 	 * <code>true</code> by default.
+	 *
 	 * @return the catchIllegalFormatExceptions
 	 */
 	public boolean isCatchIllegalFormatExceptions() {
@@ -605,6 +651,7 @@ public class AwkSettings {
 	 * Whether to trap <code>IllegalFormatExceptions</code>
 	 * for <code>[s]printf</code>;
 	 * <code>true</code> by default.
+	 *
 	 * @param catchIllegalFormatExceptions the catchIllegalFormatExceptions to set
 	 */
 	public void setCatchIllegalFormatExceptions(boolean catchIllegalFormatExceptions) {
@@ -614,6 +661,7 @@ public class AwkSettings {
 	/**
 	 * Whether Jawk consumes stdin or ARGV file input;
 	 * <code>true</code> by default.
+	 *
 	 * @return the useStdIn
 	 */
 	public boolean isUseStdIn() {
@@ -623,36 +671,43 @@ public class AwkSettings {
 	/**
 	 * Whether Jawk consumes stdin or ARGV file input;
 	 * <code>true</code> by default.
+	 *
 	 * @param useStdIn the useStdIn to set
 	 */
 	public void setUseStdIn(boolean useStdIn) {
 		this.useStdIn = useStdIn;
 	}
-	
+
 	/**
+	 * <p>Getter for the field <code>locale</code>.</p>
+	 *
 	 * @return the Locale that will be used for outputting numbers
 	 */
 	public Locale getLocale() {
 		return locale;
 	}
-	
+
 	/**
 	 * Sets the Locale for outputting numbers
+	 *
 	 * @param pLocale The locale to be used (e.g.: <code>Locale.US</code>)
 	 */
 	public void setLocale(Locale pLocale) {
 		locale = pLocale;
 	}
-	
+
 	/**
+	 * <p>Getter for the field <code>defaultRS</code>.</p>
+	 *
 	 * @return the default RS, when not set by the AWK script
 	 */
 	public String getDefaultRS() {
 		return defaultRS;
 	}
-	
+
 	/**
 	 * Sets the default RS, when not set by the AWK script
+	 *
 	 * @param rs The regular expression that separates records
 	 */
 	public void setDefaultRS(String rs) {

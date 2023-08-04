@@ -34,19 +34,18 @@ import org.slf4j.LoggerFactory;
  * <p>
  * The overall process to execute a Jawk script is as follows:
  * <ul>
- * <li>Parse the Jawk script, producing an abstract syntax tree.</li>
+ * <li>Parse the Jawk script, producing an abstract syntax tree.
  * <li>Traverse the abstract syntax tree, producing a list of
- *	 instruction tuples for the interpreter.</li>
+ *	 instruction tuples for the interpreter.
  * <li>Traverse the list of tuples, providing a runtime which
- *	 ultimately executes the Jawk script, <strong>or</strong></li>
- *   Command-line parameters dictate which action is to take place.</li>
+ *	 ultimately executes the Jawk script, <strong>or</strong>
+ *   Command-line parameters dictate which action is to take place.
  * </ul>
  * Two additional semantic checks on the syntax tree are employed
  * (both to resolve function calls for defined functions).
  * As a result, the syntax tree is traversed three times.
  * And the number of times tuples are traversed is depends
  * on whether interpretation or compilation takes place.
- * </p>
  * <p>
  * By default a minimal set of extensions are automatically
  * included. Please refer to the EXTENSION_PREFIX static field
@@ -54,14 +53,12 @@ import org.slf4j.LoggerFactory;
  * of the extension system, the prefix defines the following
  * extensions:
  * <ul>
- * <li>CoreExtension</li>
- * <li>SocketExtension</li>
- * <li>StdinExtension</li>
+ * <li>CoreExtension
+ * <li>SocketExtension
+ * <li>StdinExtension
  * </ul>
- * </p>
- * <p>
- * @see org.jawk.backend.AVM
  *
+ * @see org.jawk.backend.AVM
  * @author Danny Daglas
  */
 public class Awk {
@@ -71,17 +68,21 @@ public class Awk {
 			+ "#" + org.jawk.ext.StdinExtension.class.getName();
 	private static final Logger LOG = LoggerFactory.getLogger(Awk.class);
 
+	/**
+	 * Create a new instance of Awk
+	 */
 	public Awk() {}
 
 	/**
+	 * <p>invoke.</p>
+	 *
 	 * @param settings This tells AWK what to do
 	 *   (where to get input from, where to write it to, in what mode to run,
 	 *   ...)
-	 *
-	 * @throws IOException upon an IO error.
-	 * @throws ClassNotFoundException if intermediate code is specified
+	 * @throws java.io.IOException upon an IO error.
+	 * @throws java.lang.ClassNotFoundException if intermediate code is specified
 	 *           but deserialization fails to load in the JVM
-	 * @throws ExitException if interpretation is requested,
+	 * @throws org.jawk.ExitException if interpretation is requested,
 	 *	 and a specific exit code is requested.
 	 */
 	public void invoke(AwkSettings settings)
@@ -171,7 +172,7 @@ public class Awk {
 			// interpret!
 			avm = new AVM(settings, extensions);
 			avm.interpret(tuples);
-			
+
 		} finally {
 			if (avm != null) {
 				avm.waitForIO();
@@ -241,8 +242,8 @@ public class Awk {
 						}
 						retval.put(keyword, ji);
 					}
-				} catch (InstantiationException | 
-						IllegalAccessException | 
+				} catch (InstantiationException |
+						IllegalAccessException |
 						NoSuchMethodException |
 						SecurityException |
 						IllegalArgumentException |

@@ -10,12 +10,12 @@ import org.jawk.util.AwkSettings;
  * Instances of this interface are eligible for insertion
  * into Jawk as an extension to the language. Extensions
  * appear within a Jawk script as function calls.
- * </p>
+ *
  * <p>
  * Extensions introduce native Java modules into the Jawk language.
  * This enables special services into Jawk, such as Sockets,
  * GUIs, databases, etc. natively into Jawk.
- * </p>
+ *
  * <p>
  * Extension functions can be used anywhere an AWK function,
  * builtin or user-defined, can be used. One immediate consideration
@@ -34,7 +34,7 @@ import org.jawk.util.AwkSettings;
  * provide some sort of poll or block call to avoid
  * out-of-control CPU resource consumption.
  * </blockquote>
- * </p>
+ *
  * <p>
  * Extensions introduce keywords into the Jawk parser.
  * Keywords are of type _EXTENSION_ tokens. As a result,
@@ -42,7 +42,8 @@ import org.jawk.util.AwkSettings;
  * variables, or function names. The extension mechanism
  * also guards against keyword collision with other extensions.
  * The Jawk lexer expects extension keywords to match as _ID_'s.
- * </p>
+ *
+ * @author Danny Daglas
  */
 public interface JawkExtension {
 
@@ -52,12 +53,17 @@ public interface JawkExtension {
 	 * and the Variable Manager once.
 	 * <p>
 	 * It is guaranteed init() is called before invoke() is called.
-	 * </p>
+	 *
+	 * @param vm Reference to the Variable Manager
+	 * @param jrt Reference to the Runtime
+	 * @param settings Reference to the settings
 	 */
 	void init(VariableManager vm, JRT jrt, final AwkSettings settings);
 
 	/**
-	 * The name of the extension package.
+	 * <p>getExtensionName.</p>
+	 *
+	 * @return name of the extension package.
 	 */
 	String getExtensionName();
 
@@ -69,7 +75,8 @@ public interface JawkExtension {
 	 * throw a runtime exception if the
 	 * keyword collides with any other keyword
 	 * in the system, extension or otherwise.
-	 * </p>
+	 *
+	 * @return the list of keywords the extension provides support for
 	 */
 	String[] extensionKeywords();
 
@@ -81,7 +88,6 @@ public interface JawkExtension {
 	 *
 	 * @param extensionKeyword The extension keyword to check.
 	 * @param numArgs How many actual parameters are used in the call.
-	 *
 	 * @return An array of parameter indexes containing associative arrays.
 	 *   <strong>Note:</strong> non-inclusion of a parameter index
 	 *   into this array makes no implication as to whether the
@@ -95,7 +101,6 @@ public interface JawkExtension {
 	 *
 	 * @param keyword The extension keyword.
 	 * @param args Arguments to the extension.
-	 *
 	 * @return The return value (result) of the extension.
 	 */
 	Object invoke(String keyword, Object[] args);

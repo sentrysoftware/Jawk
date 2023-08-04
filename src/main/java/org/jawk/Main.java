@@ -1,6 +1,5 @@
 package org.jawk;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
@@ -12,6 +11,8 @@ import org.jawk.util.AwkSettings;
  * of a Jawk script.
  * This entry point is used when Jawk is executed as a stand-alone application.
  * If you want to use Jawk as a library, please use {@see Awk}.
+ *
+ * @author Danny Daglas
  */
 public class Main {
 
@@ -30,7 +31,7 @@ public class Main {
 	 * @param is The input stream to use as stdin.
 	 * @param os The output stream to use as stdout.
 	 * @param es The output stream to use as stderr.
-	 * @throws Exception enables exceptions to propagate to the callee.
+	 * @throws java.lang.Exception enables exceptions to propagate to the callee.
 	 */
 	public Main(String[] args, InputStream is, PrintStream os, PrintStream es)
 			throws Exception
@@ -38,7 +39,7 @@ public class Main {
 		System.setIn(is);
 		System.setOut(os);
 		System.setErr(es);
-		
+
 		AwkSettings settings = AwkParameters.parseCommandLineArguments(args);
 		Awk awk = new Awk();
 		awk.invoke(settings);
@@ -54,16 +55,11 @@ public class Main {
 	 * System.exit(invoke(args));
 	 * </pre>
 	 * </blockquote>
-	 * </p>
 	 *
 	 * @param args Command line arguments to the VM.
-	 *
-	 * @throws IOException upon an IO error.
-	 * @throws ClassNotFoundException if compilation is requested,
-	 *	 but no compilation implementation class is found.
 	 */
 	public static void main(String[] args) {
-		
+
 		try {
 			AwkSettings settings = AwkParameters.parseCommandLineArguments(args);
 			Awk awk = new Awk();
@@ -74,7 +70,7 @@ public class Main {
 			System.err.printf("%s: %s", e.getClass().getSimpleName(), e.getMessage());
 			System.exit(1);
 		}
-		
+
 	}
 
 

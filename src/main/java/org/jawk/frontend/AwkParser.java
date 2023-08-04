@@ -26,7 +26,8 @@ import org.slf4j.LoggerFactory;
  * which is useful the backend that either compiles or interprets the script.
  * <p>
  * It contains the internal state of the parser and the lexer.
- * </p>
+ *
+ * @author Danny Daglas
  */
 public class AwkParser {
 
@@ -127,13 +128,13 @@ public class AwkParser {
 	 * <p>
 	 * Keys are the keywords themselves, and values are the
 	 * token values (equivalent to yytok values in lex/yacc).
-	 * </p>
+	 *
 	 * <p>
 	 * <strong>Note:</strong> whether built-in AWK function names
 	 * and special AWK variable names are formally keywords or not,
 	 * they are not stored in this map. They are separated
 	 * into other maps.
-	 * </p>
+	 *
 	 */
 	private static final Map<String, Integer> KEYWORDS = new HashMap<String, Integer>();
 	static {
@@ -175,7 +176,7 @@ public class AwkParser {
 	 * <strong>Note:</strong> these are not lexer token
 	 * values. Lexer token values are for keywords and
 	 * operators.
-	 * </p>
+	 *
 	 */
 	private static final Map<String, Integer> BUILTIN_FUNC_NAMES = new HashMap<String, Integer>();
 	static {
@@ -211,7 +212,7 @@ public class AwkParser {
 	 * <p>
 	 * Keys are the variable names themselves, and values are the
 	 * variable token values.
-	 * </p>
+	 *
 	 */
 	private static final Map<String, Integer> SPECIAL_VAR_NAMES = new HashMap<String, Integer>();
 	static {
@@ -244,6 +245,14 @@ public class AwkParser {
 	private final boolean no_input;
 	private final Map<String, JawkExtension> extensions;
 
+	/**
+	 * <p>Constructor for AwkParser.</p>
+	 *
+	 * @param additional_functions a boolean
+	 * @param additional_type_functions a boolean
+	 * @param no_input a boolean
+	 * @param extensions a {@link java.util.Map} object
+	 */
 	public AwkParser(boolean additional_functions, boolean additional_type_functions, boolean no_input, Map<String, JawkExtension> extensions) {
 		this.additional_functions = additional_functions;
 		this.additional_type_functions = additional_type_functions;
@@ -321,16 +330,14 @@ public class AwkParser {
 				reader.getLineNumber()
 		);
 	}
-	
+
 	/**
 	 * Parse the script streamed by script_reader. Build and return the
 	 * root of the abstract syntax tree which represents the Jawk script.
 	 *
-	 * @param script_reader The Reader streaming the script to parse.
-	 *
+	 * @param scriptSources List of script sources
 	 * @return The abstract syntax tree of this script.
-	 *
-	 * @throws IOException upon an IO error.
+	 * @throws java.io.IOException upon an IO error.
 	 */
 	public AwkSyntaxTree parse(List<ScriptSource> scriptSources)
 			throws IOException
@@ -346,10 +353,19 @@ public class AwkParser {
 		return SCRIPT();
 	}
 
+	/**
+	 * Exception indicating a syntax problem in the AWK script
+	 *
+		 */
 	public class LexerException extends IOException {
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Create a new LexerException
+		 *
+		 * @param msg Problem description (without the position, which will be added)
+		 */
 		LexerException(String msg) {
 			super(msg + " ("
 					+ scriptSources.get(scriptSourcesCurrentIndex).getDescription()
@@ -2197,7 +2213,7 @@ public class AwkParser {
 		 * list of tuples for the abstract syntax tree, or it is called
 		 * by other abstract syntax tree nodes in response to their
 		 * attempt at populating tuples.
-		 * </p>
+		 *
 		 *
 		 * @param tuples The tuples to populate.
 		 *
@@ -3402,11 +3418,11 @@ public class AwkParser {
 		 * <p>
 		 * It originally was done linearly. However, quirks in the grammar required
 		 * a more general, recursive approach to processing this "list".
-		 * </p>
+		 *
 		 * <p>
 		 * Note: this should be reevaluated periodically in case the grammar
 		 * becomes linear again.
-		 * </p>
+		 *
 		 */
 		@Override
 		public int populateTuples(AwkTuples tuples) {
@@ -3556,19 +3572,19 @@ public class AwkParser {
 		 * <p>
 		 * The checks performed are:
 		 * <ul>
-		 * <li>Make sure the function is defined.</li>
-		 * <li>The number of actual parameters does not</li>
+		 * <li>Make sure the function is defined.
+		 * <li>The number of actual parameters does not
 		 *   exceed the number of formal parameters.
 		 * <li>Matches actual parameters to formal parameter
 		 *   usage with respect to whether they are
 		 *   scalars, arrays, or either.
 		 *   (This determination is based on how
 		 *   the formal parameters are used within
-		 *   the function block.)</li>
+		 *   the function block.)
 		 * </ul>
 		 * A failure of any one of these checks
 		 * results in a SemanticException.
-		 * </p>
+		 *
 		 *
 		 * @throws SemanticException upon a failure of
 		 *   any of the semantic checks specified above.

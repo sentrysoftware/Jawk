@@ -7,7 +7,8 @@ package org.jawk.intermediate;
  * compilation because compilation requires linear
  * access (i.e., non-jumps) to the tuple list, while
  * interpretation requires this as well as jump capability.
- * </p>
+ *
+ * @author Danny Daglas
  */
 public interface PositionForInterpretation extends Position {
 
@@ -21,6 +22,8 @@ public interface PositionForInterpretation extends Position {
 	void jump(Address address);
 
 	/**
+	 * <p>current.</p>
+	 *
 	 * @return The current index into the tuple list (queue)
 	 *	of the tuple located at the current position.
 	 */

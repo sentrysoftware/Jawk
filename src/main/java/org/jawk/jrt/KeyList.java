@@ -8,17 +8,24 @@ package org.jawk.jrt;
  * or as contained by variables. However, this is the only
  * List in used in this manner within Jawk at the time of
  * this writing.
- * </p>
  *
  * @see KeyListImpl
+ * @author Danny Daglas
  */
 //public interface KeyList extends java.util.List<Object>
 public interface KeyList {
 
 	/**
 	 * Retrieve the number of elements in the KeyList.
+	 *
+	 * @return a int
 	 */
 	int size();
 
+	/**
+	 * <p>getFirstAndRemove.</p>
+	 *
+	 * @return a {@link java.lang.Object} object
+	 */
 	Object getFirstAndRemove();
 }

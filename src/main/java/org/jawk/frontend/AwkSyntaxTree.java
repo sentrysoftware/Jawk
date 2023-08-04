@@ -7,6 +7,8 @@ import org.jawk.intermediate.AwkTuples;
  * A Jawk abstract syntax tree node. This provides
  * an appropriate public interface to the abstract
  * syntax tree.
+ *
+ * @author Danny Daglas
  */
 public interface AwkSyntaxTree {
 
@@ -40,10 +42,8 @@ public interface AwkSyntaxTree {
 	 * list of tuples for the abstract syntax tree, or it is called
 	 * by other abstract syntax tree nodes in response to their
 	 * attempt at populating tuples.
-	 * </p>
 	 *
 	 * @param tuples The tuples to populate.
-	 *
 	 * @return The number of items left on the operand stack after
 	 *   these tuples have executed.
 	 */

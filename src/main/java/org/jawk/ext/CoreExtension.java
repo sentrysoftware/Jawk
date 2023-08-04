@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
  * <p>
  * The extension functions which are available are as follows:
  * <ul>
- * <li><strong>Array</strong> - <code><font size=+1>Array(array,1,3,5,7,9)</font></code><br>
+ * <li><strong>Array</strong> - <code>Array(array,1,3,5,7,9)</code><br>
  * Inserts elements into an associative array whose keys
  * are ordered non-negative integers, and the values
  * are the arguments themselves. The first argument is
  * the associative array itself.
- * <li><strong>Map/HashMap/TreeMap/LinkedMap</strong> - <code><font size=+1>Map(map,k1,v1,k2,v2,...,kN,vN)</font></code>,
- * or <code><font size=+1>Map(k1,v1,k2,v2,...,kN,vN)</font></code>.<br>
+ * <li><strong>Map/HashMap/TreeMap/LinkedMap</strong> - <code>Map(map,k1,v1,k2,v2,...,kN,vN)</code>,
+ * or <code>Map(k1,v1,k2,v2,...,kN,vN)</code>.<br>
  * Build an associative array with its keys/values as
  * parameters. The odd parameter count version takes
  * the map name as the first parameter, while the even
@@ -44,15 +44,15 @@ import org.slf4j.LoggerFactory;
  * hash map, TreeMap as an ordered map, and LinkedMap
  * as a map which traverses the key set in order of
  * insertion.
- * <li><strong>MapUnion</strong> - <code><font size=+1>MapUnion(map,k1,v1,k2,v2,...,kN,vN)</font></code><br>
+ * <li><strong>MapUnion</strong> - <code>MapUnion(map,k1,v1,k2,v2,...,kN,vN)</code><br>
  * Similar to Map, except that map is not cleared prior
  * to populating it with key/value pairs from the
  * parameter list.
- * <li><strong>MapCopy</strong> - <code><font size=+1>cnt = MapCopy(aaTarget, aaSource)</font></code><br>
+ * <li><strong>MapCopy</strong> - <code>cnt = MapCopy(aaTarget, aaSource)</code><br>
  * Clears the target associative array and copies the
  * contents of the source associative array to the
  * target associative array.
- * <li><strong>TypeOf</strong> - <code><font size=+1>typestring = TypeOf(item)</font></code><br>
+ * <li><strong>TypeOf</strong> - <code>typestring = TypeOf(item)</code><br>
  * Returns one of the following depending on the argument:
  * 	<ul>
  * 	<li>"String"
@@ -60,38 +60,36 @@ import org.slf4j.LoggerFactory;
  * 	<li>"AssocArray"
  * 	<li>"Reference" (see below)
  * 	</ul>
- * <li><strong>String</strong> - <code><font size=+1>str = String(3)</font></code><br>
+ * <li><strong>String</strong> - <code>str = String(3)</code><br>
  * Converts its argument to a String.
  * Similar to the _STRING extension, but provided
  * for completeness/normalization.
- * <li><strong>Double</strong> - <code><font size=+1>dbl = Double(3)</font></code><br>
+ * <li><strong>Double</strong> - <code>dbl = Double(3)</code><br>
  * Converts its argument to a Double.
  * Similar to the _DOUBLE extension, but provided
  * for completeness/normalization.
- * <li><strong>Halt</strong> - <code><font size=+1>Halt()</font></code><br>
+ * <li><strong>Halt</strong> - <code>Halt()</code><br>
  * Similar to exit(), except that END blocks are
  * not executed if Halt() called before END
  * block processing.
- * <li><strong>Timeout</strong> - <code><font size=+1>r = Timeout(300)</font></code><br>
+ * <li><strong>Timeout</strong> - <code>r = Timeout(300)</code><br>
  * A blocking function which waits N milliseconds
  * before unblocking (continuing). This is useful in scripts which
  * employ blocking, but occasionally needs to break out
  * of the block to perform some calculation, polling, etc.
- * <li><strong>Throw</strong> - <code><font size=+1>Throw("this is an awkruntimeexception")</font></code><br>
+ * <li><strong>Throw</strong> - <code>Throw("this is an awkruntimeexception")</code><br>
  * Throws an AwkRuntimeException from within the script.
- * <li><strong>Version</strong> - <code><font size=+1>print Version(aa)</font></code><br>
+ * <li><strong>Version</strong> - <code>print Version(aa)</code><br>
  * Prints the version of the Java class which represents the parameter.
- * <li><strong>Date</strong> - <code><font size=+1>str = Date()</font></code><br>
+ * <li><strong>Date</strong> - <code>str = Date()</code><br>
  * Similar to the Java equivalent : str = new Date().toString();
- * <li><strong>FileExists</strong> - <code><font size=+1>b = FileExists("/a/b/c")</font></code><br>
+ * <li><strong>FileExists</strong> - <code>b = FileExists("/a/b/c")</code><br>
  * Returns 0 if the file doesn't exist, 1 otherwise.
  * <li><strong>NewRef[erence]/Dereference/DeRef/Unreference/UnRef/etc.</strong> -
- * Reference Management Functions.</font></code><br>
- * These are described in detail below.
+ * Reference Management Functions. These are described in detail below.
  * </ul>
- * </p>
- * <p>
- * <h1>Reference Management</h1>
+ *
+ * <h2>Reference Management</h2>
  * AWK's memory model provides only 4 types of variables
  * for use within AWK scripts:
  * <ul>
@@ -116,7 +114,7 @@ import org.slf4j.LoggerFactory;
  * to enforce type safety within user extensions. Unfortunately, the
  * memory model restrictions make using associative arrays in this
  * capacity very difficult.
- * </p>
+ *
  * <p>
  * We attempt to alleviate these difficulties by adding references
  * to Jawk via the CoreExtension module.
@@ -128,21 +126,21 @@ import org.slf4j.LoggerFactory;
  * functions to perform common associative array operations, such as
  * associative array cell lookup and assignment, key existence
  * check, and key iteration.
- * </p>
+ *
  * <p>
  * The reference model functions are explained below:
  * <ul>
- * <li><strong>NewRef / NewReference</strong> - <code><font size=+1>handle = NewRef(assocarray)</font></code><br>
+ * <li><strong>NewRef / NewReference</strong> - <code>handle = NewRef(assocarray)</code><br>
  * Store map into reference cache. Return the unique string handle
  * for this associative array.
- * <li><strong>DeRef / Dereference</strong> - <code><font size=+1>val = DeRef(handle, key)</font></code><br>
+ * <li><strong>DeRef / Dereference</strong> - <code>val = DeRef(handle, key)</code><br>
  * Return the cell value of the associative array referenced by the key.
  * In other words:
  * <blockquote><pre>
  * return assocarray[key]</pre></blockquote>
- * <li><strong>UnRef / Unreference</strong> - <code><font size=+1>UnRef(handle)</font></code><br>
+ * <li><strong>UnRef / Unreference</strong> - <code>UnRef(handle)</code><br>
  * Eliminate the reference occupied by the reference cache.
- * <li><strong>InRef</strong> - <code><font size=+1>while(key = InRef(handle)) ...</font></code><br>
+ * <li><strong>InRef</strong> - <code>while(key = InRef(handle)) ...</code><br>
  * Iterate through the key-set of the associative array
  * referred to by handle in the reference cache.
  * This is similar to:
@@ -157,7 +155,7 @@ import org.slf4j.LoggerFactory;
  * if one were to break; out of the while loop above,
  * the next call to InRef() will be the next anticipated
  * element of the <code>assoc</code> array.
- * <li><strong>IsInRef</strong> - <code><font size=+1>b = IsInRef(handle, key)</font></code><br>
+ * <li><strong>IsInRef</strong> - <code>b = IsInRef(handle, key)</code><br>
  * Checks whether the associative array in the reference cache
  * contains the key. This is similar to:
  * <blockquote><pre>
@@ -165,10 +163,11 @@ import org.slf4j.LoggerFactory;
  *	...</pre></blockquote>
  * where <code>assocarray</code> is the associative array referred to by
  * handle in the reference cache.
- * <li><strong>DumpRefs</strong> - <code><font size=+1>DumpRefs()</font></code><br>
+ * <li><strong>DumpRefs</strong> - <code>DumpRefs()</code><br>
  * Dumps the reference cache to stdout.
  * </ul>
- * </p>
+ *
+ * @author Danny Daglas
  */
 public class CoreExtension extends AbstractExtension implements JawkExtension {
 
@@ -204,6 +203,9 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 		}
 	};
 
+	/**
+	 * <p>Constructor for CoreExtension.</p>
+	 */
 	public CoreExtension() {
 		synchronized (INSTANCE_LOCK) {
 			if (instance == null) {
@@ -214,11 +216,13 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getExtensionName() {
 		return "Core Extension";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] extensionKeywords() {
 		return new String[] {
@@ -251,6 +255,7 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 				};
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int[] getAssocArrayParameterPositions(String extensionKeyword, int numArgs) {
 		if ((      extensionKeyword.equals("Map")
@@ -278,6 +283,7 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(String keyword, Object[] args) {
 		if        (keyword.equals("Map") || keyword.equals("HashMap")) {

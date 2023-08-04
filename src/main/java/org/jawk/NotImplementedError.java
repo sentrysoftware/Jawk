@@ -5,6 +5,8 @@ package org.jawk;
  * implemented. If this is thrown, then it is the
  * author's intention to complete the section at
  * a later date.
+ *
+ * @author Danny Daglas
  */
 public class NotImplementedError extends Error {
 

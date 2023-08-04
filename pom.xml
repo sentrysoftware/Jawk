@@ -179,6 +179,24 @@
 				<version>2.0</version>
 			</plugin>
 
+			<!-- javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.5.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<show>public</show>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>javadoc</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
@@ -237,6 +255,12 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>4.0.0-M9</version>
+			</plugin>
+
 			<!-- javadoc -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -249,18 +273,10 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
-							<additionalJOptions>
-								<additionalJOption>-Xdoclint:none</additionalJOption>
-							</additionalJOptions>
+							<source>${java.version}</source>
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>4.0.0-M9</version>
 			</plugin>
 
 			<plugin>
@@ -411,6 +427,8 @@
 						<configuration>
 							<charset>${project.build.sourceEncoding}</charset>
 							<encoding>${project.build.sourceEncoding}</encoding>
+							<source>${java.version}</source>
+							<detectJavaApiLink>false</detectJavaApiLink>
 						</configuration>
 					</plugin>
 
@@ -493,6 +511,7 @@
 							<failOnError>false</failOnError>
 							<charset>${project.build.sourceEncoding}</charset>
 							<encoding>${project.build.sourceEncoding}</encoding>
+							<source>${java.version}</source>
 						</configuration>
 						<executions>
 							<execution>

@@ -3,13 +3,17 @@ package org.jawk;
 /**
  * With this Exception, any part of the code may request a
  * <code>System.exit(code)</code> call with a specific code.
+ *
+ * @author Danny Daglas
  */
 public class ExitException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
+	/** Constant <code>EXIT_CODE_OK=0</code> */
 	public static final int EXIT_CODE_OK = 0;
 
+	/** The exit code being returned */
 	private final int code;
 
 	/**
@@ -19,22 +23,51 @@ public class ExitException extends Exception {
 		this(EXIT_CODE_OK);
 	}
 
+	/**
+	 * <p>Constructor for ExitException.</p>
+	 *
+	 * @param code a int
+	 */
 	public ExitException(int code) {
 		this(code, "");
 	}
 
+	/**
+	 * <p>Constructor for ExitException.</p>
+	 *
+	 * @param message a {@link java.lang.String} object
+	 */
 	public ExitException(String message) {
 		this(EXIT_CODE_OK, message);
 	}
 
+	/**
+	 * <p>Constructor for ExitException.</p>
+	 *
+	 * @param code a int
+	 * @param message a {@link java.lang.String} object
+	 */
 	public ExitException(int code, String message) {
 		this(code, message, null);
 	}
 
+	/**
+	 * <p>Constructor for ExitException.</p>
+	 *
+	 * @param code a int
+	 * @param cause a {@link java.lang.Throwable} object
+	 */
 	public ExitException(int code, Throwable cause) {
 		this(code, "", cause);
 	}
 
+	/**
+	 * <p>Constructor for ExitException.</p>
+	 *
+	 * @param code a int
+	 * @param message a {@link java.lang.String} object
+	 * @param cause a {@link java.lang.Throwable} object
+	 */
 	public ExitException(int code, String message, Throwable cause) {
 		super(message + " (exit-code: " + code + ")", cause);
 		this.code = code;
@@ -42,6 +75,8 @@ public class ExitException extends Exception {
 
 	/**
 	 * Returns the code to be passed to the <code>System.exit(code)</code> call.
+	 *
+	 * @return a int
 	 */
 	public int getCode() {
 		return code;

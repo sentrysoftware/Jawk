@@ -9,15 +9,15 @@ import java.util.regex.Pattern;
 /**
  * A reader which consumes one record at a time from
  * an underlying input reader.
- * <p>
- * <h3>Greedy Regex Matching</h3>
+ *
+ * <h2>Greedy Regex Matching</h2>
  * The current implementation matches setRecordSeparator against
  * contents of an input buffer (the underlying input
  * stream filling the input buffer). Records are
  * split against the matched regular expression
  * input, treating the regular expression as a
  * record separator.
- * </p>
+ *
  * <p>
  * By default, greedy regular expression matching
  * for setRecordSeparator is turned off. It is assumed
@@ -34,7 +34,8 @@ import java.util.regex.Pattern;
  * input against some sort of ambiguous newline
  * regex). To enable greedy setRecordSeparator regex consumption,
  * use <code>-Djawk.forceGreedyRS=true</code>.
- * </p>
+ *
+ * @author Danny Daglas
  */
 public class PartitioningReader extends FilterReader {
 
@@ -98,6 +99,8 @@ public class PartitioningReader extends FilterReader {
 	}
 
 	/**
+	 * <p>fromFilenameList.</p>
+	 *
 	 * @return true whether the underlying input reader is from a
 	 *	filename list argument; false otherwise
 	 */
@@ -108,6 +111,7 @@ public class PartitioningReader extends FilterReader {
 	private StringBuilder remaining = new StringBuilder();
 	private char[] readBuffer = new char[4096];
 
+	/** {@inheritDoc} */
 	@Override
 	public int read(char[] b, int start, int len) throws IOException {
 		int readChars = super.read(b, start, len);
@@ -125,8 +129,7 @@ public class PartitioningReader extends FilterReader {
 	 * expression to mark start/end of records.
 	 *
 	 * @return the next record, null if no more records exist
-	 *
-	 * @throws IOException upon an IO error
+	 * @throws java.io.IOException upon an IO error
 	 */
 	public String readRecord() throws IOException {
 

@@ -7,7 +7,8 @@ import java.util.Enumeration;
  * in the input string themselves.
  * <p>
  * For Jawk, this class is used when NF == "".
- * </p>
+ *
+ * @author Danny Daglas
  */
 public class CharacterTokenizer implements Enumeration<Object> {
 
@@ -23,11 +24,13 @@ public class CharacterTokenizer implements Enumeration<Object> {
 		this.input = input;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean hasMoreElements() {
 		return idx < input.length();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object nextElement() {
 		return Character.toString(input.charAt(idx++));

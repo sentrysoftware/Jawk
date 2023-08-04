@@ -16,53 +16,54 @@ import org.slf4j.LoggerFactory;
  *
  * <ul>
  * <li>-v name=val [-v name=val] ... <br/>
- *   Variable assignments prior to the execution of the script.</li>
+ *   Variable assignments prior to the execution of the script.
  * <li>-F regexp <br/>
- *   Field separator (FS).</li>
+ *   Field separator (FS).
  * <li>-f filename <br/>
  *   Use the text contained in filename as the script rather than
- *   obtaining it from the command-line.</li>
+ *   obtaining it from the command-line.
  * <li><i>Extension</i> -c <br/>
  *   Write intermediate file. Intermediate file can be used as
- *   an argument to -f.</li>
+ *   an argument to -f.
  * <li><i>Extension</i> -o filename <br/>
- *   Output filename for intermediate file, tuples, or syntax tree.</li>
+ *   Output filename for intermediate file, tuples, or syntax tree.
  * <li><i>Extension</i> -s <br/>
- *   Dump the intermediate code.</li>
+ *   Dump the intermediate code.
  * <li><i>Extension</i> -S <br/>
- *   Dump the syntax tree.</li>
+ *   Dump the syntax tree.
  * <li><i>Extension</i> -x <br/>
- *   Enables _sleep, _dump, and exec keywords/functions.</li>
+ *   Enables _sleep, _dump, and exec keywords/functions.
  * <li><i>Extension</i> -y <br/>
- *   Enables _INTEGER, _DOUBLE, and _STRING type casting keywords.</li>
+ *   Enables _INTEGER, _DOUBLE, and _STRING type casting keywords.
  * <li><i>Extension</i> -t <br/>
- *   Maintain array keys in sorted order (using a TreeMap instead of a HashMap)</li>
+ *   Maintain array keys in sorted order (using a TreeMap instead of a HashMap)
  * <li><i>Extension</i> -r <br/>
  *   Do NOT error for <code>IllegalFormatException</code> when using
  *   <code>java.util.Formatter</code> for <code>sprintf</code>
- *   and <code>printf</code>.</li>
+ *   and <code>printf</code>.
  * <li><i>Extension</i> -ext <br/>
  *   Enabled user-defined extensions. Works together with the
  *   -Djava.extensions property.
- *   It also disables blank rule as mapping to a print $0 statement.</li>
+ *   It also disables blank rule as mapping to a print $0 statement.
  * <li><i>Extension</i> -ni <br/>
  *   Do NOT consume stdin or files from ARGC/V through input rules.
  *   The motivation is to leave input rules for blocking extensions
- *   (i.e., Sockets, Dialogs, etc).</li>
+ *   (i.e., Sockets, Dialogs, etc).
  * </ul>
  * followed by the script (if -f is not provided), then followed
  * by a list containing zero or more of the following parameters:
  * <ul>
  * <li>name=val <br/>
  *   Variable assignments occurring just prior to receiving input
- *   (but after the BEGIN blocks, if any).</li>
+ *   (but after the BEGIN blocks, if any).
  * <li>filename <br/>
- *   Filenames to treat as input to the script.</li>
+ *   Filenames to treat as input to the script.
  * </ul>
  * <p>
  * If no filenames are provided, stdin is used as input
  * to the script (but only if there are input rules).
- * </p>
+ *
+ * @author Danny Daglas
  */
 public class AwkParameters {
 
@@ -88,14 +89,15 @@ public class AwkParameters {
 	 * The command-line argument semantics are as follows:
 	 * <ul>
 	 * <li>First, "-" arguments are processed until first non-"-" argument
-	 *   is encountered, or the "-" itself is provided.</li>
-	 * <li>Next, a script is expected (unless the -f argument was provided).</li>
+	 *   is encountered, or the "-" itself is provided.
+	 * <li>Next, a script is expected (unless the -f argument was provided).
 	 * <li>Then, subsequent parameters are passed into the script
-	 *   via the ARGC/ARGV variables.</li>
+	 *   via the ARGC/ARGV variables.
 	 * </ul>
-	 * </p>
 	 *
 	 * @param args The command-line arguments provided by the user.
+	 * @return a new instance of AwkSettings that reflects the configuration
+	 *   set in the command line arguments
 	 */
 	public static AwkSettings parseCommandLineArguments(String[] args) {
 
@@ -258,8 +260,8 @@ public class AwkParameters {
 	 * <code>if (argIdx+1 &gt;= args.length) ...</code>.
 	 * However,
 	 * <ul>
-	 * <li>this normalizes the implementation throughout the class.</li>
-	 * <li>additional assertions are performed.</li>
+	 * <li>this normalizes the implementation throughout the class.
+	 * <li>additional assertions are performed.
 	 * </ul>
 	 */
 	private static void checkParameterHasArgument(String[] args, int argIdx) {

@@ -2,10 +2,14 @@ package org.jawk.intermediate;
 
 /**
  * Marks a position within the tuple list (queue).
+ *
+ * @author Danny Daglas
  */
 public interface Position {
 
 	/**
+	 * <p>isEOF.</p>
+	 *
 	 * @return true whether we are at the end
 	 *   of the tuple list, false otherwise
 	 */
@@ -18,6 +22,8 @@ public interface Position {
 	void next();
 
 	/**
+	 * <p>opcode.</p>
+	 *
 	 * @return the opcode for the tuple at this
 	 *	position
 	 */
@@ -28,7 +34,6 @@ public interface Position {
 	 * element within the tuple.
 	 *
 	 * @param idx The item to retrieve from the tuple.
-	 *
 	 * @return the integer representation of the item.
 	 */
 	long intArg(int idx);
@@ -38,7 +43,6 @@ public interface Position {
 	 * element within the tuple.
 	 *
 	 * @param idx The item to retrieve from the tuple.
-	 *
 	 * @return the boolean representation of the item.
 	 */
 	boolean boolArg(int idx);
@@ -48,7 +52,6 @@ public interface Position {
 	 * within the tuple.
 	 *
 	 * @param idx The item to retrieve from the tuple.
-	 *
 	 * @return a reference to the item.
 	 */
 	Object arg(int idx);
@@ -58,7 +61,8 @@ public interface Position {
 	 * <p>
 	 * This is a special form in that the tuple
 	 * has only the address argument, and nothing else.
-	 * </p>
+	 *
+	 * @return a {@link org.jawk.intermediate.Address} object
 	 */
 	Address addressArg();
 
@@ -67,12 +71,15 @@ public interface Position {
 	 * <p>
 	 * This is a special form in that the tuple
 	 * has only the class argument, and nothing else.
-	 * </p>
+	 *
+	 * @return a {@link java.lang.Class} object
 	 */
 	Class<?> classArg();
 
 	/**
 	 * Get the source line number for this position.
+	 *
+	 * @return a int
 	 */
 	int lineNumber();
 }

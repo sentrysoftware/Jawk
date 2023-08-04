@@ -24,57 +24,56 @@ import org.slf4j.LoggerFactory;
  * <blockquote><pre>
  * StdinGetline() == 1 { print "--&gt; " $0 }
  * </pre></blockquote>
- * </p>
+ *
  *
  * <p>
  * The extension functions are as follows:
  * <ul>
- * <hr/>
  * <li>
  *   <p>
- *   <strong><em><font size=+1>StdinHasInput</font></em></strong> -<br/>
+ *   <strong><em>StdinHasInput</em></strong> -<br/>
  *   Returns 1 when StdinGetline() does not block (i.e., when input is available
  *   or upon an EOF), 0 otherwise.<br/>
  *   <strong>Parameters:</strong>
  *   <ul>
- *   <li>none</li>
+ *   <li>none
  *   </ul>
  *   <strong>Returns:</strong>
  *   <ul>
- *   <li>1 when StdinGetline() does not block, 0 otherwise.</li>
+ *   <li>1 when StdinGetline() does not block, 0 otherwise.
  *   </ul>
- *   </p>
+ *
  * <li>
  *   <p>
- *   <strong><em><font size=+1>StdinGetline</font></em></strong> -<br/>
+ *   <strong><em>StdinGetline</em></strong> -<br/>
  *   Retrieve a line of input from stdin. The operation
  *   will block until input is available, EOF, or an IO error.<br/>
  *   <strong>Parameters:</strong>
  *   <ul>
- *   <li>none</li>
+ *   <li>none
  *   </ul>
  *   <strong>Returns:</strong>
  *   <ul>
  *   <li>1 upon successful read of a line of input from stdin,
- *     0 upon an EOF, and -1 when an IO error occurs.</li>
+ *     0 upon an EOF, and -1 when an IO error occurs.
  *   </ul>
- *   </p>
+ *
  * <li>
  *   <p>
- *   <strong><em><font size=+1>StdinBlock</font></em></strong> -<br/>
+ *   <strong><em>StdinBlock</em></strong> -<br/>
  *   Block until a call to StdinGetline() would not block.<br/>
  *   <strong>Parameters:</strong>
  *   <ul>
- *   <li>chained block function - optional</li>
+ *   <li>chained block function - optional
  *   </ul>
  *   <strong>Returns:</strong>
  *   <ul>
- *   <li>"Stdin" if this block object is triggered</li>
+ *   <li>"Stdin" if this block object is triggered
  *   </ul>
- *   </p></li>
- * <hr/>
+ *
  * </ul>
- * </p>
+ *
+ * @author Danny Daglas
  */
 public class StdinExtension extends AbstractExtension implements JawkExtension {
 
@@ -105,6 +104,7 @@ public class StdinExtension extends AbstractExtension implements JawkExtension {
 
 	private boolean isEof = false;
 
+	/** {@inheritDoc} */
 	@Override
 	public void init(VariableManager vm, JRT jrt, final AwkSettings settings) {
 		super.init(vm, jrt, settings);
@@ -144,11 +144,13 @@ public class StdinExtension extends AbstractExtension implements JawkExtension {
 		getLineInputThread.start();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getExtensionName() {
 		return "Stdin Support";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] extensionKeywords() {
 		return new String[] {
@@ -159,6 +161,7 @@ public class StdinExtension extends AbstractExtension implements JawkExtension {
 				};
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(String keyword, Object[] args) {
 		if        (keyword.equals("StdinHasInput")) {

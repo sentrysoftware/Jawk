@@ -15,11 +15,11 @@ import java.util.Set;
  * BlockObjects are chained. The BlockManager
  * blocks on all chained BlockObjects until one
  * is unblocked.
- * </p>
+ *
  * <p>
  * Subclasses must provide meaningful block()
  * and getNotifierTag() routines.
- * </p>
+ *
  * <p>
  * BlockObjects do not actually perform the client
  * blocking. This is done by the BlockManager at the
@@ -27,19 +27,23 @@ import java.util.Set;
  * The AVM/compiled environments make special provision
  * to return the head block object to the BlockManager
  * (within _EXTENSION_ keyword processing).
- * </p>
  *
  * @see BlockManager
- * @see BulkBlockObject
+ * @author Danny Daglas
  */
 public abstract class BlockObject {
 
 	private BlockObject nextBlockObject = null;
 
+	/**
+	 * <p>Constructor for BlockObject.</p>
+	 */
 	protected BlockObject() {}
 
 	/**
 	 * Construct a meaningful notifier tag for this BlockObject.
+	 *
+	 * @return a {@link java.lang.String} object
 	 */
 	public abstract String getNotifierTag();
 
@@ -48,6 +52,8 @@ public abstract class BlockObject {
 	 * the client application. This is called by the BlockManager
 	 * in a way such that the BlockManager waits for one
 	 * BlockObject to unblock.
+	 *
+	 * @throws java.lang.InterruptedException if any.
 	 */
 	public abstract void block() throws InterruptedException;
 
@@ -63,11 +69,18 @@ public abstract class BlockObject {
 	 * Chain this BlockObject to another BlockObject.
 	 * The chain is linear and there is no upper bounds on
 	 * the number of BlockObjects that can be supported.
+	 *
+	 * @param bo a {@link org.jawk.jrt.BlockObject} object
 	 */
 	public void setNextBlockObject(BlockObject bo) {
 		this.nextBlockObject = bo;
 	}
 
+	/**
+	 * <p>Getter for the field <code>nextBlockObject</code>.</p>
+	 *
+	 * @return a {@link org.jawk.jrt.BlockObject} object
+	 */
 	protected final BlockObject getNextBlockObject() {
 		return nextBlockObject;
 	}
@@ -80,8 +93,7 @@ public abstract class BlockObject {
 	 *
 	 * @return A List of chained BlockObjects, including
 	 *   this one.
-	 *
-	 * @throws AwkRuntimeException if the BlockObject
+	 * @throws org.jawk.jrt.AwkRuntimeException if the BlockObject
 	 *   chain contains a cycle.
 	 */
 	public List<BlockObject> getBlockObjects() {
@@ -101,6 +113,8 @@ public abstract class BlockObject {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Ensure non-evaluation of a BlockObject by throwing an AWK Runtime
 	 * exception, in case it leaks into AWK evaluation space.
 	 */
