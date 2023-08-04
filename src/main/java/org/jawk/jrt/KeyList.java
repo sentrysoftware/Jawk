@@ -9,16 +9,23 @@ package org.jawk.jrt;
  * List in used in this manner within Jawk at the time of
  * this writing.
  *
- *
  * @see KeyListImpl
+ * @version $Id: $Id
  */
 //public interface KeyList extends java.util.List<Object>
 public interface KeyList {
 
 	/**
 	 * Retrieve the number of elements in the KeyList.
+	 *
+	 * @return a int
 	 */
 	int size();
 
+	/**
+	 * <p>getFirstAndRemove.</p>
+	 *
+	 * @return a {@link java.lang.Object} object
+	 */
 	Object getFirstAndRemove();
 }

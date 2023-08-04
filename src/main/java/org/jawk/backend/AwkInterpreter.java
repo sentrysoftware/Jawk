@@ -5,6 +5,8 @@ import org.jawk.intermediate.AwkTuples;
 
 /**
  * Interpret a Jawk script within this JVM.
+ *
+ * @version $Id: $Id
  */
 public interface AwkInterpreter {
 
@@ -13,8 +15,7 @@ public interface AwkInterpreter {
 	 * and acting on them accordingly.
 	 *
 	 * @param tuples The tuples to compile.
-	 *
-	 * @throws ExitException indicates that the interpreter would like
+	 * @throws org.jawk.ExitException indicates that the interpreter would like
 	 *   the application to exit.
 	 */
 	void interpret(AwkTuples tuples) throws ExitException;

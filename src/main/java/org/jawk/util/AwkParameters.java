@@ -63,6 +63,7 @@ import org.slf4j.LoggerFactory;
  * If no filenames are provided, stdin is used as input
  * to the script (but only if there are input rules).
  *
+ * @version $Id: $Id
  */
 public class AwkParameters {
 
@@ -93,7 +94,6 @@ public class AwkParameters {
 	 * <li>Then, subsequent parameters are passed into the script
 	 *   via the ARGC/ARGV variables.
 	 * </ul>
-	 *
 	 *
 	 * @param args The command-line arguments provided by the user.
 	 * @return a new instance of AwkSettings that reflects the configuration

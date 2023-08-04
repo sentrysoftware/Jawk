@@ -64,8 +64,8 @@ import org.slf4j.LoggerFactory;
  * by default, and the user may reassign the resultant script class
  * to another package. Therefore, all accessed methods are public.
  *
- *
  * @see VariableManager
+ * @version $Id: $Id
  */
 public class JRT {
 
@@ -144,8 +144,8 @@ public class JRT {
 	 *
 	 * @param o Object to convert.
 	 * @param convfmt The contents of the CONVFMT variable.
-	 *
 	 * @return A String representation of o.
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public static String toAwkString(Object o, String convfmt, Locale locale) {
 
@@ -190,8 +190,8 @@ public class JRT {
 	 *
 	 * @param o Object to convert.
 	 * @param ofmt The contents of the OFMT variable.
-	 *
 	 * @return A String representation of o.
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public static String toAwkStringForOutput(Object o, String ofmt, Locale locale) {
 
@@ -215,6 +215,12 @@ public class JRT {
 	 * @param o Object to convert.
 	 *
 	 * @return the "double" value of o, or 0 if invalid
+	 */
+	/**
+	 * <p>toDouble.</p>
+	 *
+	 * @param o a {@link java.lang.Object} object
+	 * @return a double
 	 */
 	public static double toDouble(Object o) {
 		if (o instanceof Number) {
@@ -246,6 +252,12 @@ public class JRT {
 	 *
 	 * @return the "long" value of o, or 0 if invalid
 	 */
+	/**
+	 * <p>toLong.</p>
+	 *
+	 * @param o a {@link java.lang.Object} object
+	 * @return a long
+	 */
 	public static long toLong(Object o) {
 		if (o instanceof Number) {
 			return ((Number)o).longValue();
@@ -270,6 +282,7 @@ public class JRT {
 	 *   <li>0 - Return true if o1 == o2.
 	 *   <li>&gt; 0 - Return true if o1 &gt; o2.
 	 *   </ul>
+	 * @return a boolean
 	 */
 	public static boolean compare2(Object o1, Object o2, int mode) {
 
@@ -341,7 +354,6 @@ public class JRT {
 	 * String does not represent a valid Double, 1 is returned.
 	 *
 	 * @param o The object to increase.
-	 *
 	 * @return o+1 if o is an Integer or Double object, or
 	 *   if o is a String object and represents a double.
 	 *   Otherwise, 1 is returned. If the return value
@@ -375,7 +387,6 @@ public class JRT {
 	 * String does not represent a valid Double, -1 is returned.
 	 *
 	 * @param o The object to increase.
-	 *
 	 * @return o-1 if o is an Integer or Double object, or
 	 *   if o is a String object and represents a double.
 	 *   Otherwise, -1 is returned. If the return value
@@ -406,7 +417,6 @@ public class JRT {
 	 * or PatternPair to a boolean.
 	 *
 	 * @param o The object to convert to a boolean.
-	 *
 	 * @return For the following class types for o:
 	 * 	<ul>
 	 * 	<li><strong>Integer</strong> - o.intValue() != 0
@@ -418,7 +428,6 @@ public class JRT {
 	 * 	<li><strong>PatternPair</strong> - $0 ~ o (with some state information)
 	 * 	</ul>
 	 * 	If o is none of these types, an error is thrown.
-	 *
 	 * @see PatternPair
 	 */
 	public final boolean toBoolean(Object o) {
@@ -457,8 +466,8 @@ public class JRT {
 	 * @param array The array to populate.
 	 * @param string The string to split.
 	 * @param convfmt Contents of the CONVFMT variable.
-	 *
 	 * @return The number of parts resulting from this split operation.
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public static int split(Object array, Object string, String convfmt, Locale locale) {
 		return splitWorker(new StringTokenizer(toAwkString(string, convfmt, locale)), (AssocArray) array);
@@ -474,8 +483,8 @@ public class JRT {
 	 * @param array The array to populate.
 	 * @param string The string to split.
 	 * @param convfmt Contents of the CONVFMT variable.
-	 *
 	 * @return The number of parts resulting from this split operation.
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public static int split(Object fs, Object array, Object string, String convfmt, Locale locale) {
 		String fs_string = toAwkString(fs, convfmt, locale);
@@ -499,14 +508,29 @@ public class JRT {
 		return cnt;
 	}
 
+	/**
+	 * <p>Getter for the field <code>partitioningReader</code>.</p>
+	 *
+	 * @return a {@link org.jawk.jrt.PartitioningReader} object
+	 */
 	public PartitioningReader getPartitioningReader() {
 		return partitioningReader;
 	}
 
+	/**
+	 * <p>Getter for the field <code>inputLine</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object
+	 */
 	public String getInputLine() {
 		return inputLine;
 	}
 
+	/**
+	 * <p>Setter for the field <code>inputLine</code>.</p>
+	 *
+	 * @param inputLine a {@link java.lang.String} object
+	 */
 	public void setInputLine(String inputLine) {
 		this.inputLine = inputLine;
 	}
@@ -517,10 +541,10 @@ public class JRT {
 	 * the command-line.
 	 *
 	 * @param for_getline true if call is for getline, false otherwise.
-	 *
 	 * @return true if line is consumed, false otherwise.
-	 *
-	 * @throws IOException upon an IO error.
+	 * @throws java.io.IOException upon an IO error.
+	 * @param input a {@link java.io.InputStream} object
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public boolean jrtConsumeInput(final InputStream input, boolean for_getline, Locale locale) throws IOException {
 		// first time!
@@ -726,13 +750,18 @@ public class JRT {
 	 * Retrieve the contents of a particular input field.
 	 *
 	 * @param fieldnum_obj Object referring to the field number.
-	 *
 	 * @return Contents of the field.
 	 */
 	public Object jrtGetInputField(Object fieldnum_obj) {
 		return jrtGetInputField(toFieldNumber(fieldnum_obj));
 	}
 
+	/**
+	 * <p>jrtGetInputField.</p>
+	 *
+	 * @param fieldnum a int
+	 * @return a {@link java.lang.Object} object
+	 */
 	public Object jrtGetInputField(int fieldnum) {
 		if (fieldnum < input_fields.size()) {
 			String retval = input_fields.get(fieldnum);
@@ -748,7 +777,6 @@ public class JRT {
 	 *
 	 * @param value_obj The RHS of the assignment.
 	 * @param field_num Object referring to the field number.
-	 *
 	 * @return A string representation of value_obj.
 	 */
 	public String jrtSetInputField(Object value_obj, int field_num) {
@@ -786,6 +814,12 @@ public class JRT {
 		input_fields.set(0, new_dollar_zero_sb.toString());
 	}
 
+	/**
+	 * <p>jrtConsumeFileInputForGetline.</p>
+	 *
+	 * @param filename a {@link java.lang.String} object
+	 * @return a {@link java.lang.Integer} object
+	 */
 	public Integer jrtConsumeFileInputForGetline(String filename) {
 		try {
 			if (jrtConsumeFileInput(filename)) {
@@ -805,7 +839,6 @@ public class JRT {
 	 * the command if necessary and store it to $0.
 	 *
 	 * @param cmd_string The command to execute.
-	 *
 	 * @return Integer(1) if successful, Integer(0) if no more
 	 * 	input is available, Integer(-1) upon an IO error.
 	 */
@@ -832,6 +865,11 @@ public class JRT {
 		return jrt_input_string;
 	}
 
+	/**
+	 * <p>Getter for the field <code>outputFiles</code>.</p>
+	 *
+	 * @return a {@link java.util.Map} object
+	 */
 	public Map<String, PrintStream> getOutputFiles() {
 		return outputFiles;
 	}
@@ -842,6 +880,7 @@ public class JRT {
 	 *
 	 * @param filename The file which to write the contents of the PrintStream.
 	 * @param append true to append to the file, false to overwrite the file.
+	 * @return a {@link java.io.PrintStream} object
 	 */
 	public final PrintStream jrtGetPrintStream(String filename, boolean append) {
 		PrintStream ps = outputFiles.get(filename);
@@ -856,6 +895,13 @@ public class JRT {
 		return ps;
 	}
 
+	/**
+	 * <p>jrtConsumeFileInput.</p>
+	 *
+	 * @param filename a {@link java.lang.String} object
+	 * @return a boolean
+	 * @throws java.io.IOException if any.
+	 */
 	public boolean jrtConsumeFileInput(String filename) throws IOException {
 		PartitioningReader pr = file_readers.get(filename);
 		if (pr == null) {
@@ -896,6 +942,13 @@ public class JRT {
 		return p;
 	}
 
+	/**
+	 * <p>jrtConsumeCommandInput.</p>
+	 *
+	 * @param cmd a {@link java.lang.String} object
+	 * @return a boolean
+	 * @throws java.io.IOException if any.
+	 */
 	public boolean jrtConsumeCommandInput(String cmd) throws IOException {
 		PartitioningReader pr = command_readers.get(cmd);
 		if (pr == null) {
@@ -935,7 +988,6 @@ public class JRT {
 	 * data to/from the process.
 	 *
 	 * @param cmd The command to execute.
-	 *
 	 * @return The PrintStream which to write to provide
 	 *   input data to the process.
 	 */
@@ -967,9 +1019,7 @@ public class JRT {
 	 * <em>all</em> open streams with this name
 	 * are closed.
 	 *
-	 *
 	 * @param filename The filename/command process to close.
-	 *
 	 * @return Integer(0) upon a successful close, Integer(-1)
 	 *   otherwise.
 	 */
@@ -982,6 +1032,9 @@ public class JRT {
 		return (b1 || b2 || b3 || b4) ? ZERO : MINUS_ONE;
 	}
 
+	/**
+	 * <p>jrtCloseAll.</p>
+	 */
 	public void jrtCloseAll() {
 		Set<String> set = new HashSet<String>();
 		for (String s : file_readers.keySet()) {
@@ -1084,7 +1137,6 @@ public class JRT {
 	 * of the calling process.
 	 *
 	 * @param cmd The command to execute.
-	 *
 	 * @return Integer(return_code) of the created
 	 *   process. Integer(-1) is returned on an IO error.
 	 */
@@ -1116,11 +1168,10 @@ public class JRT {
 	 *
 	 * @param arr Arguments to format.
 	 * @param fmt_arg The format string to apply.
-	 *
 	 * @return The formatted string; a blank string
 	 *   if the format argument is invalid.
-	 *
 	 * @see #sprintfFunctionNoCatch(Object[],String,Locale)
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public static String sprintfFunction(Object[] arr, String fmt_arg, Locale locale) {
 
@@ -1202,8 +1253,8 @@ public class JRT {
 	 *
 	 * @param arr Arguments to format.
 	 * @param fmt_arg The format string to apply.
-	 *
 	 * @see #printfFunctionNoCatch(Object[],String,Locale)
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public static void printfFunction(Object[] arr, String fmt_arg, Locale locale) {
 		System.out.print(sprintfFunction(arr, fmt_arg, locale));
@@ -1225,27 +1276,62 @@ public class JRT {
 	 * @param ps The PrintStream to use for printing.
 	 * @param arr Arguments to format.
 	 * @param fmt_arg The format string to apply.
-	 *
 	 * @see #printfFunctionNoCatch(PrintStream,Object[],String,Locale)
+	 * @param locale a {@link java.util.Locale} object
 	 */
 	public static void printfFunction(PrintStream ps, Object[] arr, String fmt_arg, Locale locale) {
 		ps.print(sprintfFunction(arr, fmt_arg, locale));
 	}
 
+	/**
+	 * <p>sprintfFunctionNoCatch.</p>
+	 *
+	 * @param arr an array of {@link java.lang.Object} objects
+	 * @param fmt_arg a {@link java.lang.String} object
+	 * @param locale a {@link java.util.Locale} object
+	 * @return a {@link java.lang.String} object
+	 * @throws java.util.IllegalFormatException if any.
+	 */
 	public static String sprintfFunctionNoCatch(Object[] arr, String fmt_arg, Locale locale)
 			throws IllegalFormatException
 	{
 		return String.format(locale, fmt_arg, arr);
 	}
 
+	/**
+	 * <p>printfFunctionNoCatch.</p>
+	 *
+	 * @param arr an array of {@link java.lang.Object} objects
+	 * @param fmt_arg a {@link java.lang.String} object
+	 * @param locale a {@link java.util.Locale} object
+	 */
 	public static void printfFunctionNoCatch(Object[] arr, String fmt_arg, Locale locale) {
 		System.out.print(sprintfFunctionNoCatch(arr, fmt_arg, locale));
 	}
 
+	/**
+	 * <p>printfFunctionNoCatch.</p>
+	 *
+	 * @param ps a {@link java.io.PrintStream} object
+	 * @param arr an array of {@link java.lang.Object} objects
+	 * @param fmt_arg a {@link java.lang.String} object
+	 * @param locale a {@link java.util.Locale} object
+	 */
 	public static void printfFunctionNoCatch(PrintStream ps, Object[] arr, String fmt_arg, Locale locale) {
 		ps.print(sprintfFunctionNoCatch(arr, fmt_arg, locale));
 	}
 
+	/**
+	 * <p>replaceFirst.</p>
+	 *
+	 * @param orig_value_obj a {@link java.lang.Object} object
+	 * @param repl_obj a {@link java.lang.Object} object
+	 * @param ere_obj a {@link java.lang.Object} object
+	 * @param sb a {@link java.lang.StringBuffer} object
+	 * @param convfmt a {@link java.lang.String} object
+	 * @param locale a {@link java.util.Locale} object
+	 * @return a {@link java.lang.Integer} object
+	 */
 	public static Integer replaceFirst(Object orig_value_obj, Object repl_obj, Object ere_obj, StringBuffer sb, String convfmt, Locale locale) {
 		String orig_value = toAwkString(orig_value_obj, convfmt, locale);
 		String repl = toAwkString(repl_obj, convfmt, locale);
@@ -1261,6 +1347,17 @@ public class JRT {
 		}
 	}
 
+	/**
+	 * <p>replaceAll.</p>
+	 *
+	 * @param orig_value_obj a {@link java.lang.Object} object
+	 * @param repl_obj a {@link java.lang.Object} object
+	 * @param ere_obj a {@link java.lang.Object} object
+	 * @param sb a {@link java.lang.StringBuffer} object
+	 * @param convfmt a {@link java.lang.String} object
+	 * @param locale a {@link java.util.Locale} object
+	 * @return a {@link java.lang.Integer} object
+	 */
 	public static Integer replaceAll(Object orig_value_obj, Object repl_obj, Object ere_obj, StringBuffer sb, String convfmt, Locale locale) {
 		String orig_value = toAwkString(orig_value_obj, convfmt, locale);
 		String repl = toAwkString(repl_obj, convfmt, locale);
@@ -1280,6 +1377,13 @@ public class JRT {
 		return Integer.valueOf(cnt);
 	}
 
+	/**
+	 * <p>substr.</p>
+	 *
+	 * @param startpos_obj a {@link java.lang.Object} object
+	 * @param str a {@link java.lang.String} object
+	 * @return a {@link java.lang.String} object
+	 */
 	public static String substr(Object startpos_obj, String str) {
 		int startpos = (int) toDouble(startpos_obj);
 		if (startpos <= 0) {
@@ -1292,6 +1396,14 @@ public class JRT {
 		}
 	}
 
+	/**
+	 * <p>substr.</p>
+	 *
+	 * @param size_obj a {@link java.lang.Object} object
+	 * @param startpos_obj a {@link java.lang.Object} object
+	 * @param str a {@link java.lang.String} object
+	 * @return a {@link java.lang.String} object
+	 */
 	public static String substr(Object size_obj, Object startpos_obj, String str) {
 		int startpos = (int) toDouble(startpos_obj);
 		if (startpos <= 0) {
@@ -1311,6 +1423,11 @@ public class JRT {
 		}
 	}
 
+	/**
+	 * <p>timeSeed.</p>
+	 *
+	 * @return a int
+	 */
 	public static int timeSeed() {
 		long l = (new Date()).getTime();
 		long l2 = (l % (1000 * 60 * 60 * 24));
@@ -1318,10 +1435,21 @@ public class JRT {
 		return seed;
 	}
 
+	/**
+	 * <p>newRandom.</p>
+	 *
+	 * @param seed a int
+	 * @return a {@link java.util.Random} object
+	 */
 	public static Random newRandom(int seed) {
 		return new Random(seed);
 	}
 
+	/**
+	 * <p>applyRS.</p>
+	 *
+	 * @param rs_obj a {@link java.lang.Object} object
+	 */
 	public void applyRS(Object rs_obj) {
 //	if (rs_obj.toString().equals(BLANK))
 //		rs_obj = DEFAULT_RS_REGEX;

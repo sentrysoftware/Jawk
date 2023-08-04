@@ -167,6 +167,7 @@ import org.slf4j.LoggerFactory;
  * Dumps the reference cache to stdout.
  * </ul>
  *
+ * @version $Id: $Id
  */
 public class CoreExtension extends AbstractExtension implements JawkExtension {
 
@@ -202,6 +203,9 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 		}
 	};
 
+	/**
+	 * <p>Constructor for CoreExtension.</p>
+	 */
 	public CoreExtension() {
 		synchronized (INSTANCE_LOCK) {
 			if (instance == null) {
@@ -212,11 +216,13 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getExtensionName() {
 		return "Core Extension";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] extensionKeywords() {
 		return new String[] {
@@ -249,6 +255,7 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 				};
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int[] getAssocArrayParameterPositions(String extensionKeyword, int numArgs) {
 		if ((      extensionKeyword.equals("Map")
@@ -276,6 +283,7 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(String keyword, Object[] args) {
 		if        (keyword.equals("Map") || keyword.equals("HashMap")) {

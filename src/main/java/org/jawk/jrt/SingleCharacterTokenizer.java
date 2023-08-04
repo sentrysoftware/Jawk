@@ -5,6 +5,8 @@ import java.util.Enumeration;
 /**
  * Similar to StringTokenizer, except that tokens are delimited
  * by a single character.
+ *
+ * @version $Id: $Id
  */
 public class SingleCharacterTokenizer implements Enumeration<Object> {
 
@@ -25,6 +27,7 @@ public class SingleCharacterTokenizer implements Enumeration<Object> {
 		this.splitChar = splitChar;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean hasMoreElements() {
 		return idx < input.length();
@@ -32,6 +35,7 @@ public class SingleCharacterTokenizer implements Enumeration<Object> {
 
 	private StringBuffer sb = new StringBuffer();
 
+	/** {@inheritDoc} */
 	@Override
 	public Object nextElement() {
 		sb.setLength(0);

@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * There is no maximum capacity which is enforced, nor is there any
  * checks if <code>pop()</code> is executed on an empty stack.
  *
+ * @version $Id: $Id
  */
 public class ArrayStackImpl<E> extends ArrayList<E> implements MyStack<E> {
 
@@ -27,9 +28,9 @@ public class ArrayStackImpl<E> extends ArrayList<E> implements MyStack<E> {
 	}
 
 	/**
-	 * Push an item to the stack.
+	 * {@inheritDoc}
 	 *
-	 * @param o The item to push onto the stack.
+	 * Push an item to the stack.
 	 */
 	@Override
 	public void push(E o) {
@@ -37,21 +38,20 @@ public class ArrayStackImpl<E> extends ArrayList<E> implements MyStack<E> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Pops an item off the stack.
 	 * <p>
 	 * Warning: no checks are done in terms of size, etc.
 	 * If a <code>pop()</code> is called on an empty stack,
 	 * an <code>ArrayIndexOutOfBoundException</code> is thrown.
-	 *
-	 *
-	 * @return The top of the stack. The element is subsequently
-	 *   removed from the stack.
 	 */
 	@Override
 	public E pop() {
 		return remove(size() - 1);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public E peek() {
 		return get(size() - 1);

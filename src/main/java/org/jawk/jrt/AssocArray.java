@@ -20,12 +20,15 @@ import org.jawk.intermediate.UninitializedObject;
  * sorted order or not) and delegates calls to it
  * accordingly.
  *
+ * @version $Id: $Id
  */
 public class AssocArray implements Comparator<Object> {
 
 	private Map<Object, Object> map;
 
 	/**
+	 * <p>Constructor for AssocArray.</p>
+	 *
 	 * @param sortedArrayKeys Whether keys must be kept sorted
 	 */
 	public AssocArray(boolean sortedArrayKeys) {
@@ -80,6 +83,7 @@ public class AssocArray implements Comparator<Object> {
 	 * Provide a string representation of the delegated
 	 * map object.
 	 * It exists to support the _DUMP keyword.
+	 *
 	 * @return string representing the map/array
 	 */
 	public String mapString() {
@@ -114,6 +118,8 @@ public class AssocArray implements Comparator<Object> {
 	private static final UninitializedObject BLANK = new UninitializedObject();
 
 	/**
+	 * <p>isIn.</p>
+	 *
 	 * @param key Key to be checked
 	 * @return whether a particular key is
 	 * contained within the associative array.
@@ -127,6 +133,8 @@ public class AssocArray implements Comparator<Object> {
 	}
 
 	/**
+	 * <p>get.</p>
+	 *
 	 * @param key Key to retrieve in the array
 	 * @return the value of an associative array
 	 * element given a particular key.
@@ -164,6 +172,7 @@ public class AssocArray implements Comparator<Object> {
 
 	/**
 	 * Added to support insertion of primitive key types.
+	 *
 	 * @param key Key of the entry to put in the array
 	 * @param value Value of the key
 	 * @return the previous value of the specified key, or null if key didn't exist
@@ -184,6 +193,7 @@ public class AssocArray implements Comparator<Object> {
 
 	/**
 	 * Added to support insertion of primitive key types.
+	 *
 	 * @param key Index of the entry to put in the array
 	 * @param value Value of the key
 	 * @return the previous value of the specified key, or null if key didn't exist
@@ -193,6 +203,8 @@ public class AssocArray implements Comparator<Object> {
 	}
 
 	/**
+	 * <p>keySet.</p>
+	 *
 	 * @return the set of keys
 	 */
 	public Set<Object> keySet() {
@@ -208,6 +220,7 @@ public class AssocArray implements Comparator<Object> {
 
 	/**
 	 * Delete the specified entry
+	 *
 	 * @param key Key of the entry to remove from the array
 	 * @return the value of the entry before it was removed
 	 */
@@ -216,6 +229,8 @@ public class AssocArray implements Comparator<Object> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Do nothing. Should not be called in this state.
 	 */
 	@Override
@@ -224,6 +239,8 @@ public class AssocArray implements Comparator<Object> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Comparator implementation used by the TreeMap
 	 * when keys are to be maintained in sorted order.
 	 */
@@ -249,6 +266,8 @@ public class AssocArray implements Comparator<Object> {
 	}
 
 	/**
+	 * <p>getMapVersion.</p>
+	 *
 	 * @return the specification version of this class
 	 */
 	public String getMapVersion() {

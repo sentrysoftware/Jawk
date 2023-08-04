@@ -17,6 +17,7 @@ package org.jawk.intermediate;
  * <p>
  * All addresses should have a meaningful label.
  *
+ * @version $Id: $Id
  */
 public interface Address {
 
@@ -39,6 +40,8 @@ public interface Address {
 	void assignIndex(int idx);
 
 	/**
+	 * <p>index.</p>
+	 *
 	 * @return The index into the tuple queue/array.
 	 */
 	int index();

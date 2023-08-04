@@ -16,6 +16,8 @@ package org.jawk.intermediate;
  * will not return a meaningful address. However, anytime
  * after f(x) is defined, getFunctionAddress() will return
  * the correct function address.
+ *
+ * @version $Id: $Id
  */
 public interface HasFunctionAddress {
 
@@ -28,6 +30,7 @@ public interface HasFunctionAddress {
 	 * block), the result is undefined. (As of this writing,
 	 * a NullPointerException is thrown.)
 	 *
+	 * @return a {@link org.jawk.intermediate.Address} object
 	 */
 	Address getFunctionAddress();
 }

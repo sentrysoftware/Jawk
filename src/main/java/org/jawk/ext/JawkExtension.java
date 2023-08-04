@@ -43,6 +43,7 @@ import org.jawk.util.AwkSettings;
  * also guards against keyword collision with other extensions.
  * The Jawk lexer expects extension keywords to match as _ID_'s.
  *
+ * @version $Id: $Id
  */
 public interface JawkExtension {
 
@@ -52,6 +53,7 @@ public interface JawkExtension {
 	 * and the Variable Manager once.
 	 * <p>
 	 * It is guaranteed init() is called before invoke() is called.
+	 *
 	 * @param vm Reference to the Variable Manager
 	 * @param jrt Reference to the Runtime
 	 * @param settings Reference to the settings
@@ -59,6 +61,8 @@ public interface JawkExtension {
 	void init(VariableManager vm, JRT jrt, final AwkSettings settings);
 
 	/**
+	 * <p>getExtensionName.</p>
+	 *
 	 * @return name of the extension package.
 	 */
 	String getExtensionName();
@@ -71,6 +75,7 @@ public interface JawkExtension {
 	 * throw a runtime exception if the
 	 * keyword collides with any other keyword
 	 * in the system, extension or otherwise.
+	 *
 	 * @return the list of keywords the extension provides support for
 	 */
 	String[] extensionKeywords();
@@ -83,7 +88,6 @@ public interface JawkExtension {
 	 *
 	 * @param extensionKeyword The extension keyword to check.
 	 * @param numArgs How many actual parameters are used in the call.
-	 *
 	 * @return An array of parameter indexes containing associative arrays.
 	 *   <strong>Note:</strong> non-inclusion of a parameter index
 	 *   into this array makes no implication as to whether the
@@ -97,7 +101,6 @@ public interface JawkExtension {
 	 *
 	 * @param keyword The extension keyword.
 	 * @param args Arguments to the extension.
-	 *
 	 * @return The return value (result) of the extension.
 	 */
 	Object invoke(String keyword, Object[] args);

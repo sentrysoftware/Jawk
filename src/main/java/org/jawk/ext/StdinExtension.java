@@ -73,6 +73,7 @@ import org.slf4j.LoggerFactory;
  *
  * </ul>
  *
+ * @version $Id: $Id
  */
 public class StdinExtension extends AbstractExtension implements JawkExtension {
 
@@ -103,6 +104,7 @@ public class StdinExtension extends AbstractExtension implements JawkExtension {
 
 	private boolean isEof = false;
 
+	/** {@inheritDoc} */
 	@Override
 	public void init(VariableManager vm, JRT jrt, final AwkSettings settings) {
 		super.init(vm, jrt, settings);
@@ -142,11 +144,13 @@ public class StdinExtension extends AbstractExtension implements JawkExtension {
 		getLineInputThread.start();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getExtensionName() {
 		return "Stdin Support";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String[] extensionKeywords() {
 		return new String[] {
@@ -157,6 +161,7 @@ public class StdinExtension extends AbstractExtension implements JawkExtension {
 				};
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object invoke(String keyword, Object[] args) {
 		if        (keyword.equals("StdinHasInput")) {

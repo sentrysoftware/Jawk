@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * It contains the internal state of the parser and the lexer.
  *
+ * @version $Id: $Id
  */
 public class AwkParser {
 
@@ -244,6 +245,14 @@ public class AwkParser {
 	private final boolean no_input;
 	private final Map<String, JawkExtension> extensions;
 
+	/**
+	 * <p>Constructor for AwkParser.</p>
+	 *
+	 * @param additional_functions a boolean
+	 * @param additional_type_functions a boolean
+	 * @param no_input a boolean
+	 * @param extensions a {@link java.util.Map} object
+	 */
 	public AwkParser(boolean additional_functions, boolean additional_type_functions, boolean no_input, Map<String, JawkExtension> extensions) {
 		this.additional_functions = additional_functions;
 		this.additional_type_functions = additional_type_functions;
@@ -327,10 +336,8 @@ public class AwkParser {
 	 * root of the abstract syntax tree which represents the Jawk script.
 	 *
 	 * @param scriptSources List of script sources
-	 *
 	 * @return The abstract syntax tree of this script.
-	 *
-	 * @throws IOException upon an IO error.
+	 * @throws java.io.IOException upon an IO error.
 	 */
 	public AwkSyntaxTree parse(List<ScriptSource> scriptSources)
 			throws IOException

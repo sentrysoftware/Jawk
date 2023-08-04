@@ -19,6 +19,11 @@ import org.jawk.util.MyStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * <p>AwkTuples class.</p>
+ *
+ * @version $Id: $Id
+ */
 public class AwkTuples implements Serializable {
 
 	/**
@@ -556,6 +561,7 @@ public class AwkTuples implements Serializable {
 	 *
 	 */
 	public static final int _PRINTF_TO_PIPE_ = 269;	// x1, x2, ... xn -> 0
+	/** Constant <code>_SPRINTF_=270</code> */
 	public static final int _SPRINTF_ = 270;	// x1, x2, ... xn -> 0
 	/**
 	 * Depending on the argument, pop and evaluate the string length of the top-of-stack
@@ -1316,8 +1322,10 @@ public class AwkTuples implements Serializable {
 	 *
 	 */
 	public static final int _SLEEP_ = 336;	// x -> 0
+	/** Constant <code>_DUMP_=337</code> */
 	public static final int _DUMP_ = 337;	// x -> 0
 
+	/** Constant <code>_DEREF_ARRAY_=338</code> */
 	public static final int _DEREF_ARRAY_ = 338;	// x -> x
 
 	// for (x in y) {keyset} support
@@ -1764,6 +1772,12 @@ public class AwkTuples implements Serializable {
 	private Map<Integer, Address> address_indexes = new HashMap<Integer, Address>();
 	private Map<String, Integer> address_label_counts = new HashMap<String, Integer>();
 
+	/**
+	 * <p>toOpcodeString.</p>
+	 *
+	 * @param opcode a int
+	 * @return a {@link java.lang.String} object
+	 */
 	public static String toOpcodeString(int opcode) {
 		Class<?> c = AwkTuples.class;
 		Field[] fields = c.getDeclaredFields();
@@ -1780,10 +1794,18 @@ public class AwkTuples implements Serializable {
 		return "{" + opcode + "}";
 	}
 
+	/**
+	 * <p>pop.</p>
+	 */
 	public void pop() {
 		queue.add(new Tuple(_POP_));
 	}
 
+	/**
+	 * <p>push.</p>
+	 *
+	 * @param o a {@link java.lang.Object} object
+	 */
 	public void push(Object o) {
 		assert (o instanceof String) || (o instanceof Long) || (o instanceof Integer) || (o instanceof Double); //  || (o instanceof Pattern); //  || (o instanceof PatternPair);
 		if (o instanceof String) {
@@ -1799,22 +1821,46 @@ public class AwkTuples implements Serializable {
 		}
 	}
 
+	/**
+	 * <p>ifFalse.</p>
+	 *
+	 * @param address a {@link org.jawk.intermediate.Address} object
+	 */
 	public void ifFalse(Address address) {
 		queue.add(new Tuple(_IFFALSE_, address));
 	}
 
+	/**
+	 * <p>toNumber.</p>
+	 */
 	public void toNumber() {
 		queue.add(new Tuple(_TO_NUMBER_));
 	}
 
+	/**
+	 * <p>ifTrue.</p>
+	 *
+	 * @param address a {@link org.jawk.intermediate.Address} object
+	 */
 	public void ifTrue(Address address) {
 		queue.add(new Tuple(_IFTRUE_, address));
 	}
 
+	/**
+	 * <p>gotoAddress.</p>
+	 *
+	 * @param address a {@link org.jawk.intermediate.Address} object
+	 */
 	public void gotoAddress(Address address) {
 		queue.add(new Tuple(_GOTO_, address));
 	}
 
+	/**
+	 * <p>createAddress.</p>
+	 *
+	 * @param label a {@link java.lang.String} object
+	 * @return a {@link org.jawk.intermediate.Address} object
+	 */
 	public Address createAddress(String label) {
 		Integer I = address_label_counts.get(label);
 		if (I == null) {
@@ -1829,6 +1875,12 @@ public class AwkTuples implements Serializable {
 		return address;
 	}
 
+	/**
+	 * <p>address.</p>
+	 *
+	 * @param address a {@link org.jawk.intermediate.Address} object
+	 * @return a {@link org.jawk.intermediate.AwkTuples} object
+	 */
 	public AwkTuples address(Address address) {
 		if (unresolved_addresses.contains(address)) {
 			unresolved_addresses.remove(address);
@@ -1839,496 +1891,1030 @@ public class AwkTuples implements Serializable {
 		throw new Error(address.toString() + " is already resolved, or unresolved from another scope.");
 	}
 
+	/**
+	 * <p>nop.</p>
+	 */
 	public void nop() {
 		queue.add(new Tuple(_NOP_));
 	}
 
+	/**
+	 * <p>print.</p>
+	 *
+	 * @param num_exprs a int
+	 */
 	public void print(int num_exprs) {
 		queue.add(new Tuple(_PRINT_, num_exprs));
 	}
 
+	/**
+	 * <p>printToFile.</p>
+	 *
+	 * @param num_exprs a int
+	 * @param append a boolean
+	 */
 	public void printToFile(int num_exprs, boolean append) {
 		queue.add(new Tuple(_PRINT_TO_FILE_, num_exprs, append));
 	}
 
+	/**
+	 * <p>printToPipe.</p>
+	 *
+	 * @param num_exprs a int
+	 */
 	public void printToPipe(int num_exprs) {
 		queue.add(new Tuple(_PRINT_TO_PIPE_, num_exprs));
 	}
 
+	/**
+	 * <p>printf.</p>
+	 *
+	 * @param num_exprs a int
+	 */
 	public void printf(int num_exprs) {
 		queue.add(new Tuple(_PRINTF_, num_exprs));
 	}
 
+	/**
+	 * <p>printfToFile.</p>
+	 *
+	 * @param num_exprs a int
+	 * @param append a boolean
+	 */
 	public void printfToFile(int num_exprs, boolean append) {
 		queue.add(new Tuple(_PRINTF_TO_FILE_, num_exprs, append));
 	}
 
+	/**
+	 * <p>printfToPipe.</p>
+	 *
+	 * @param num_exprs a int
+	 */
 	public void printfToPipe(int num_exprs) {
 		queue.add(new Tuple(_PRINTF_TO_PIPE_, num_exprs));
 	}
 
+	/**
+	 * <p>sprintf.</p>
+	 *
+	 * @param num_exprs a int
+	 */
 	public void sprintf(int num_exprs) {
 		queue.add(new Tuple(_SPRINTF_, num_exprs));
 	}
 
+	/**
+	 * <p>length.</p>
+	 *
+	 * @param num_exprs a int
+	 */
 	public void length(int num_exprs) {
 		queue.add(new Tuple(_LENGTH_, num_exprs));
 	}
 
+	/**
+	 * <p>concat.</p>
+	 */
 	public void concat() {
 		queue.add(new Tuple(_CONCAT_));
 	}
 
+	/**
+	 * <p>assign.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void assign(int offset, boolean is_global) {
 		queue.add(new Tuple(_ASSIGN_, offset, is_global));
 	}
 
+	/**
+	 * <p>assignArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void assignArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_ASSIGN_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>assignAsInput.</p>
+	 */
 	public void assignAsInput() {
 		queue.add(new Tuple(_ASSIGN_AS_INPUT_));
 	}
 
+	/**
+	 * <p>assignAsInputField.</p>
+	 */
 	public void assignAsInputField() {
 		queue.add(new Tuple(_ASSIGN_AS_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>dereference.</p>
+	 *
+	 * @param offset a int
+	 * @param is_array a boolean
+	 * @param is_global a boolean
+	 */
 	public void dereference(int offset, boolean is_array, boolean is_global) {
 		queue.add(new Tuple(_DEREFERENCE_, offset, is_array, is_global));
 	}
 
+	/**
+	 * <p>plusEq.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void plusEq(int offset, boolean is_global) {
 		queue.add(new Tuple(_PLUS_EQ_, offset, is_global));
 	}
 
+	/**
+	 * <p>minusEq.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void minusEq(int offset, boolean is_global) {
 		queue.add(new Tuple(_MINUS_EQ_, offset, is_global));
 	}
 
+	/**
+	 * <p>multEq.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void multEq(int offset, boolean is_global) {
 		queue.add(new Tuple(_MULT_EQ_, offset, is_global));
 	}
 
+	/**
+	 * <p>divEq.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void divEq(int offset, boolean is_global) {
 		queue.add(new Tuple(_DIV_EQ_, offset, is_global));
 	}
 
+	/**
+	 * <p>modEq.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void modEq(int offset, boolean is_global) {
 		queue.add(new Tuple(_MOD_EQ_, offset, is_global));
 	}
 
+	/**
+	 * <p>powEq.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void powEq(int offset, boolean is_global) {
 		queue.add(new Tuple(_POW_EQ_, offset, is_global));
 	}
 
+	/**
+	 * <p>plusEqArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void plusEqArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_PLUS_EQ_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>minusEqArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void minusEqArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_MINUS_EQ_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>multEqArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void multEqArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_MULT_EQ_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>divEqArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void divEqArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_DIV_EQ_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>modEqArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void modEqArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_MOD_EQ_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>powEqArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void powEqArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_POW_EQ_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>plusEqInputField.</p>
+	 */
 	public void plusEqInputField() {
 		queue.add(new Tuple(_PLUS_EQ_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>minusEqInputField.</p>
+	 */
 	public void minusEqInputField() {
 		queue.add(new Tuple(_MINUS_EQ_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>multEqInputField.</p>
+	 */
 	public void multEqInputField() {
 		queue.add(new Tuple(_MULT_EQ_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>divEqInputField.</p>
+	 */
 	public void divEqInputField() {
 		queue.add(new Tuple(_DIV_EQ_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>modEqInputField.</p>
+	 */
 	public void modEqInputField() {
 		queue.add(new Tuple(_MOD_EQ_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>powEqInputField.</p>
+	 */
 	public void powEqInputField() {
 		queue.add(new Tuple(_POW_EQ_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>srand.</p>
+	 *
+	 * @param num a int
+	 */
 	public void srand(int num) {
 		queue.add(new Tuple(_SRAND_, num));
 	}
 
+	/**
+	 * <p>rand.</p>
+	 */
 	public void rand() {
 		queue.add(new Tuple(_RAND_));
 	}
 
+	/**
+	 * <p>intFunc.</p>
+	 */
 	public void intFunc() {
 		queue.add(new Tuple(_INTFUNC_));
 	}
 
+	/**
+	 * <p>sqrt.</p>
+	 */
 	public void sqrt() {
 		queue.add(new Tuple(_SQRT_));
 	}
 
+	/**
+	 * <p>log.</p>
+	 */
 	public void log() {
 		queue.add(new Tuple(_LOG_));
 	}
 
+	/**
+	 * <p>exp.</p>
+	 */
 	public void exp() {
 		queue.add(new Tuple(_EXP_));
 	}
 
+	/**
+	 * <p>sin.</p>
+	 */
 	public void sin() {
 		queue.add(new Tuple(_SIN_));
 	}
 
+	/**
+	 * <p>cos.</p>
+	 */
 	public void cos() {
 		queue.add(new Tuple(_COS_));
 	}
 
+	/**
+	 * <p>atan2.</p>
+	 */
 	public void atan2() {
 		queue.add(new Tuple(_ATAN2_));
 	}
 
+	/**
+	 * <p>match.</p>
+	 */
 	public void match() {
 		queue.add(new Tuple(_MATCH_));
 	}
 
+	/**
+	 * <p>index.</p>
+	 */
 	public void index() {
 		queue.add(new Tuple(_INDEX_));
 	}
 
+	/**
+	 * <p>subForDollar0.</p>
+	 *
+	 * @param is_gsub a boolean
+	 */
 	public void subForDollar0(boolean is_gsub) {
 		queue.add(new Tuple(_SUB_FOR_DOLLAR_0_, is_gsub));
 	}
 
+	/**
+	 * <p>subForDollarReference.</p>
+	 *
+	 * @param is_gsub a boolean
+	 */
 	public void subForDollarReference(boolean is_gsub) {
 		queue.add(new Tuple(_SUB_FOR_DOLLAR_REFERENCE_, is_gsub));
 	}
 
+	/**
+	 * <p>subForVariable.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 * @param is_gsub a boolean
+	 */
 	public void subForVariable(int offset, boolean is_global, boolean is_gsub) {
 		queue.add(new Tuple(_SUB_FOR_VARIABLE_, offset, is_global, is_gsub));
 	}
 
+	/**
+	 * <p>subForArrayReference.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 * @param is_gsub a boolean
+	 */
 	public void subForArrayReference(int offset, boolean is_global, boolean is_gsub) {
 		queue.add(new Tuple(_SUB_FOR_ARRAY_REFERENCE_, offset, is_global, is_gsub));
 	}
 
+	/**
+	 * <p>split.</p>
+	 *
+	 * @param numargs a int
+	 */
 	public void split(int numargs) {
 		queue.add(new Tuple(_SPLIT_, numargs));
 	}
 
+	/**
+	 * <p>substr.</p>
+	 *
+	 * @param numargs a int
+	 */
 	public void substr(int numargs) {
 		queue.add(new Tuple(_SUBSTR_, numargs));
 	}
 
+	/**
+	 * <p>tolower.</p>
+	 */
 	public void tolower() {
 		queue.add(new Tuple(_TOLOWER_));
 	}
 
+	/**
+	 * <p>toupper.</p>
+	 */
 	public void toupper() {
 		queue.add(new Tuple(_TOUPPER_));
 	}
 
+	/**
+	 * <p>system.</p>
+	 */
 	public void system() {
 		queue.add(new Tuple(_SYSTEM_));
 	}
 
+	/**
+	 * <p>exec.</p>
+	 */
 	public void exec() {
 		queue.add(new Tuple(_EXEC_));
 	}
 
+	/**
+	 * <p>swap.</p>
+	 */
 	public void swap() {
 		queue.add(new Tuple(_SWAP_));
 	}
 
+	/**
+	 * <p>add.</p>
+	 */
 	public void add() {
 		queue.add(new Tuple(_ADD_));
 	}
 
+	/**
+	 * <p>subtract.</p>
+	 */
 	public void subtract() {
 		queue.add(new Tuple(_SUBTRACT_));
 	}
 
+	/**
+	 * <p>multiply.</p>
+	 */
 	public void multiply() {
 		queue.add(new Tuple(_MULTIPLY_));
 	}
 
+	/**
+	 * <p>divide.</p>
+	 */
 	public void divide() {
 		queue.add(new Tuple(_DIVIDE_));
 	}
 
+	/**
+	 * <p>mod.</p>
+	 */
 	public void mod() {
 		queue.add(new Tuple(_MOD_));
 	}
 
+	/**
+	 * <p>pow.</p>
+	 */
 	public void pow() {
 		queue.add(new Tuple(_POW_));
 	}
 
+	/**
+	 * <p>inc.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void inc(int offset, boolean is_global) {
 		queue.add(new Tuple(_INC_, offset, is_global));
 	}
 
+	/**
+	 * <p>dec.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void dec(int offset, boolean is_global) {
 		queue.add(new Tuple(_DEC_, offset, is_global));
 	}
 
+	/**
+	 * <p>incArrayRef.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void incArrayRef(int offset, boolean is_global) {
 		queue.add(new Tuple(_INC_ARRAY_REF_, offset, is_global));
 	}
 
+	/**
+	 * <p>decArrayRef.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void decArrayRef(int offset, boolean is_global) {
 		queue.add(new Tuple(_DEC_ARRAY_REF_, offset, is_global));
 	}
 
+	/**
+	 * <p>incDollarRef.</p>
+	 */
 	public void incDollarRef() {
 		queue.add(new Tuple(_INC_DOLLAR_REF_));
 	}
 
+	/**
+	 * <p>decDollarRef.</p>
+	 */
 	public void decDollarRef() {
 		queue.add(new Tuple(_DEC_DOLLAR_REF_));
 	}
 
+	/**
+	 * <p>dup.</p>
+	 */
 	public void dup() {
 		queue.add(new Tuple(_DUP_));
 	}
 
+	/**
+	 * <p>not.</p>
+	 */
 	public void not() {
 		queue.add(new Tuple(_NOT_));
 	}
 
+	/**
+	 * <p>negate.</p>
+	 */
 	public void negate() {
 		queue.add(new Tuple(_NEGATE_));
 	}
 
+	/**
+	 * <p>cmpEq.</p>
+	 */
 	public void cmpEq() {
 		queue.add(new Tuple(_CMP_EQ_));
 	}
 
+	/**
+	 * <p>cmpLt.</p>
+	 */
 	public void cmpLt() {
 		queue.add(new Tuple(_CMP_LT_));
 	}
 
+	/**
+	 * <p>cmpGt.</p>
+	 */
 	public void cmpGt() {
 		queue.add(new Tuple(_CMP_GT_));
 	}
 
+	/**
+	 * <p>matches.</p>
+	 */
 	public void matches() {
 		queue.add(new Tuple(_MATCHES_));
 	}
 
+	/**
+	 * <p>sleep.</p>
+	 *
+	 * @param num_args a int
+	 */
 	public void sleep(int num_args) {
 		queue.add(new Tuple(_SLEEP_, num_args));
 	}
 
+	/**
+	 * <p>dump.</p>
+	 *
+	 * @param num_args a int
+	 */
 	public void dump(int num_args) {
 		queue.add(new Tuple(_DUMP_, num_args));
 	}
 
+	/**
+	 * <p>dereferenceArray.</p>
+	 */
 	public void dereferenceArray() {
 		queue.add(new Tuple(_DEREF_ARRAY_));
 	}
 
+	/**
+	 * <p>keylist.</p>
+	 */
 	public void keylist() {
 		queue.add(new Tuple(_KEYLIST_));
 	}
 
+	/**
+	 * <p>isEmptyList.</p>
+	 *
+	 * @param address a {@link org.jawk.intermediate.Address} object
+	 */
 	public void isEmptyList(Address address) {
 		queue.add(new Tuple(_IS_EMPTY_KEYLIST_, address));
 	}
 
+	/**
+	 * <p>getFirstAndRemoveFromList.</p>
+	 */
 	public void getFirstAndRemoveFromList() {
 		queue.add(new Tuple(_GET_FIRST_AND_REMOVE_FROM_KEYLIST_));
 	}
 
+	/**
+	 * <p>checkClass.</p>
+	 *
+	 * @param cls a {@link java.lang.Class} object
+	 * @return a boolean
+	 */
 	public boolean checkClass(Class<?> cls) {
 		queue.add(new Tuple(_CHECK_CLASS_, cls));
 		return true;
 	}
 
+	/**
+	 * <p>getInputField.</p>
+	 */
 	public void getInputField() {
 		queue.add(new Tuple(_GET_INPUT_FIELD_));
 	}
 
+	/**
+	 * <p>consumeInput.</p>
+	 *
+	 * @param address a {@link org.jawk.intermediate.Address} object
+	 */
 	public void consumeInput(Address address) {
 		queue.add(new Tuple(_CONSUME_INPUT_, address));
 	}
 
+	/**
+	 * <p>getlineInput.</p>
+	 */
 	public void getlineInput() {
 		queue.add(new Tuple(_GETLINE_INPUT_));
 	}
 
+	/**
+	 * <p>useAsFileInput.</p>
+	 */
 	public void useAsFileInput() {
 		queue.add(new Tuple(_USE_AS_FILE_INPUT_));
 	}
 
+	/**
+	 * <p>useAsCommandInput.</p>
+	 */
 	public void useAsCommandInput() {
 		queue.add(new Tuple(_USE_AS_COMMAND_INPUT_));
 	}
 
+	/**
+	 * <p>nfOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void nfOffset(int offset) {
 		queue.add(new Tuple(_NF_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>nrOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void nrOffset(int offset) {
 		queue.add(new Tuple(_NR_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>fnrOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void fnrOffset(int offset) {
 		queue.add(new Tuple(_FNR_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>fsOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void fsOffset(int offset) {
 		queue.add(new Tuple(_FS_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>rsOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void rsOffset(int offset) {
 		queue.add(new Tuple(_RS_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>ofsOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void ofsOffset(int offset) {
 		queue.add(new Tuple(_OFS_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>rstartOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void rstartOffset(int offset) {
 		queue.add(new Tuple(_RSTART_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>rlengthOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void rlengthOffset(int offset) {
 		queue.add(new Tuple(_RLENGTH_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>filenameOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void filenameOffset(int offset) {
 		queue.add(new Tuple(_FILENAME_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>subsepOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void subsepOffset(int offset) {
 		queue.add(new Tuple(_SUBSEP_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>convfmtOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void convfmtOffset(int offset) {
 		queue.add(new Tuple(_CONVFMT_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>ofmtOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void ofmtOffset(int offset) {
 		queue.add(new Tuple(_OFMT_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>environOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void environOffset(int offset) {
 		queue.add(new Tuple(_ENVIRON_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>argcOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void argcOffset(int offset) {
 		queue.add(new Tuple(_ARGC_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>argvOffset.</p>
+	 *
+	 * @param offset a int
+	 */
 	public void argvOffset(int offset) {
 		queue.add(new Tuple(_ARGV_OFFSET_, offset));
 	}
 
+	/**
+	 * <p>applyRS.</p>
+	 */
 	public void applyRS() {
 		queue.add(new Tuple(_APPLY_RS_));
 	}
 
+	/**
+	 * <p>function.</p>
+	 *
+	 * @param func_name a {@link java.lang.String} object
+	 * @param num_formal_params a int
+	 */
 	public void function(String func_name, int num_formal_params) {
 		queue.add(new Tuple(_FUNCTION_, func_name, num_formal_params));
 	}
 	//public void callFunction(Address addr, String func_name, int num_formal_params, int num_actual_params) { queue.add(new Tuple(_CALL_FUNCTION_, addr, func_name, num_formal_params, num_actual_params)); }
 
+	/**
+	 * <p>callFunction.</p>
+	 *
+	 * @param has_func_addr a {@link org.jawk.intermediate.HasFunctionAddress} object
+	 * @param func_name a {@link java.lang.String} object
+	 * @param num_formal_params a int
+	 * @param num_actual_params a int
+	 */
 	public void callFunction(HasFunctionAddress has_func_addr, String func_name, int num_formal_params, int num_actual_params) {
 		queue.add(new Tuple(_CALL_FUNCTION_, has_func_addr, func_name, num_formal_params, num_actual_params));
 	}
 
+	/**
+	 * <p>setReturnResult.</p>
+	 */
 	public void setReturnResult() {
 		queue.add(new Tuple(_SET_RETURN_RESULT_));
 	}
 
+	/**
+	 * <p>returnFromFunction.</p>
+	 */
 	public void returnFromFunction() {
 		queue.add(new Tuple(_RETURN_FROM_FUNCTION_));
 	}
 
+	/**
+	 * <p>setNumGlobals.</p>
+	 *
+	 * @param num_globals a int
+	 */
 	public void setNumGlobals(int num_globals) {
 		queue.add(new Tuple(_SET_NUM_GLOBALS_, num_globals));
 	}
 
+	/**
+	 * <p>close.</p>
+	 */
 	public void close() {
 		queue.add(new Tuple(_CLOSE_));
 	}
 
+	/**
+	 * <p>applySubsep.</p>
+	 *
+	 * @param count a int
+	 */
 	public void applySubsep(int count) {
 		queue.add(new Tuple(_APPLY_SUBSEP_, count));
 	}
 
+	/**
+	 * <p>deleteArrayElement.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void deleteArrayElement(int offset, boolean is_global) {
 		queue.add(new Tuple(_DELETE_ARRAY_ELEMENT_, offset, is_global));
 	}
 
+	/**
+	 * <p>deleteArray.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
 	public void deleteArray(int offset, boolean is_global) {
 		queue.add(new Tuple(_DELETE_ARRAY_, offset, is_global));
 	}
 
+	/**
+	 * <p>setExitAddress.</p>
+	 *
+	 * @param addr a {@link org.jawk.intermediate.Address} object
+	 */
 	public void setExitAddress(Address addr) {
 		queue.add(new Tuple(_SET_EXIT_ADDRESS_, addr));
 	}
 
+	/**
+	 * <p>setWithinEndBlocks.</p>
+	 *
+	 * @param b a boolean
+	 */
 	public void setWithinEndBlocks(boolean b) {
 		queue.add(new Tuple(_SET_WITHIN_END_BLOCKS_, b));
 	}
 
+	/**
+	 * <p>exitWithCode.</p>
+	 */
 	public void exitWithCode() {
 		queue.add(new Tuple(_EXIT_WITH_CODE_));
 	}
 
+	/**
+	 * <p>regexp.</p>
+	 *
+	 * @param regexp_str a {@link java.lang.String} object
+	 */
 	public void regexp(String regexp_str) {
 		queue.add(new Tuple(_REGEXP_, regexp_str));
 	}
 
+	/**
+	 * <p>regexpPair.</p>
+	 */
 	public void regexpPair() {
 		queue.add(new Tuple(_REGEXP_PAIR_));
 	}
 
+	/**
+	 * <p>isIn.</p>
+	 */
 	public void isIn() {
 		queue.add(new Tuple(_IS_IN_));
 	}
 
+	/**
+	 * <p>castInt.</p>
+	 */
 	public void castInt() {
 		queue.add(new Tuple(_CAST_INT_));
 	}
 
+	/**
+	 * <p>castDouble.</p>
+	 */
 	public void castDouble() {
 		queue.add(new Tuple(_CAST_DOUBLE_));
 	}
 
+	/**
+	 * <p>castString.</p>
+	 */
 	public void castString() {
 		queue.add(new Tuple(_CAST_STRING_));
 	}
 
+	/**
+	 * <p>scriptThis.</p>
+	 */
 	public void scriptThis() {
 		queue.add(new Tuple(_THIS_));
 	}
 
+	/**
+	 * <p>extension.</p>
+	 *
+	 * @param extension_keyword a {@link java.lang.String} object
+	 * @param param_count a int
+	 * @param is_initial a boolean
+	 */
 	public void extension(String extension_keyword, int param_count, boolean is_initial) {
 		queue.add(new Tuple(_EXTENSION_, extension_keyword, param_count, is_initial));
 	}
 
+	/**
+	 * <p>dump.</p>
+	 *
+	 * @param ps a {@link java.io.PrintStream} object
+	 */
 	public void dump(PrintStream ps) {
 		ps.println("(" + version_manager + ")");
 		ps.println();
@@ -2342,6 +2928,11 @@ public class AwkTuples implements Serializable {
 		}
 	}
 
+	/**
+	 * <p>top.</p>
+	 *
+	 * @return a {@link org.jawk.intermediate.Position} object
+	 */
 	public Position top() {
 		return new PositionImpl();
 	}
@@ -2373,6 +2964,7 @@ public class AwkTuples implements Serializable {
 	/**
 	 * Accept a {variable_name -&gt; offset} mapping such that global variables can be
 	 * assigned while processing name=value and filename command-line arguments.
+	 *
 	 * @param varname Name of the global variable
 	 * @param offset What offset to use for the variable
 	 * @param is_array Whether the variable is actually an array
@@ -2406,14 +2998,29 @@ public class AwkTuples implements Serializable {
 		this.function_names = new HashSet<String>(function_names);
 	}
 
+	/**
+	 * <p>getGlobalVariableOffsetMap.</p>
+	 *
+	 * @return a {@link java.util.Map} object
+	 */
 	public Map<String, Integer> getGlobalVariableOffsetMap() {
 		return global_var_offset_map;
 	}
 
+	/**
+	 * <p>getGlobalVariableAarrayMap.</p>
+	 *
+	 * @return a {@link java.util.Map} object
+	 */
 	public Map<String, Boolean> getGlobalVariableAarrayMap() {
 		return global_var_aarray_map;
 	}
 
+	/**
+	 * <p>getFunctionNameSet.</p>
+	 *
+	 * @return a {@link java.util.Set} object
+	 */
 	public Set<String> getFunctionNameSet() {
 		assert function_names != null;
 		return function_names;
@@ -2437,6 +3044,11 @@ public class AwkTuples implements Serializable {
 		lineno_stack.push(lineno);
 	}
 
+	/**
+	 * <p>popSourceLineNumber.</p>
+	 *
+	 * @param lineno a int
+	 */
 	public void popSourceLineNumber(int lineno) {
 		int tos = lineno_stack.pop();
 		assert (lineno == tos);

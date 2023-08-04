@@ -73,6 +73,7 @@ import org.slf4j.LoggerFactory;
  * errors/conditions. It can also throw a <code>java.lang.Error</code> if an
  * interpreter error is encountered.
  *
+ * @version $Id: $Id
  */
 public class AVM implements AwkInterpreter, VariableManager {
 
@@ -108,7 +109,6 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 * <p>
 	 * Provided to allow programmatic construction of the interpreter
 	 * outside of the framework which is used by Jawk.
-	 *
 	 */
 	public AVM() {
 		settings = null;
@@ -248,10 +248,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Traverse the tuples, executing their associated opcodes to provide
 	 * an execution platform for Jawk scripts.
-	 *
-	 * @param tuples The tuples to interpret.
 	 */
 	@Override
 	public void interpret(AwkTuples tuples)
@@ -2131,9 +2131,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 		runtime_stack.setVariable(l, JRT.dec(o), is_global);
 	}
 
-	/**
-	 * @return The string value of the record separator.
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public final Object getRS() {
 		assert rs_offset != NULL_OFFSET;
@@ -2141,9 +2139,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 		return rs_obj;
 	}
 
-	/**
-	 * @return The string value of the output field separator.
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public final Object getOFS() {
 		assert ofs_offset != NULL_OFFSET;
@@ -2151,9 +2147,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 		return ofs_obj;
 	}
 
-	/**
-	 * @return The string value of the SUBSEP variable.
-	 */
+	/** {@inheritDoc} */
 	@Override
 	public final Object getSUBSEP() {
 		assert subsep_offset != NULL_OFFSET;
@@ -2208,6 +2202,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 		// otherwise, do nothing
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public final void assignVariable(String name, Object obj) {
 		// make sure we're not receiving funcname=value assignments
@@ -2311,6 +2306,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 		return retval;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getFS() {
 		assert fs_offset != NULL_OFFSET;
@@ -2318,6 +2314,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 		return fs_string;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getCONVFMT() {
 		assert convfmt_offset != NULL_OFFSET : "convfmt_offset not defined";
@@ -2325,36 +2322,43 @@ public class AVM implements AwkInterpreter, VariableManager {
 		return convfmt_string;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void resetFNR() {
 		runtime_stack.setVariable(fnr_offset, ZERO, true);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void incFNR() {
 		inc(fnr_offset, true);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void incNR() {
 		inc(nr_offset, true);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setNF(Integer I) {
 		runtime_stack.setVariable(nf_offset, I, true);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setFILENAME(String filename) {
 		runtime_stack.setVariable(filename_offset, filename, true);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getARGV() {
 		return runtime_stack.getVariable(argv_offset, true);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getARGC() {
 		return runtime_stack.getVariable(argc_offset, true);

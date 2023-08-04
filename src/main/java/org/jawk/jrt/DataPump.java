@@ -13,6 +13,7 @@ import java.io.PrintStream;
  * "cmd" | getline) to the stdin, stdout, and/or stderr
  * of the calling process (the interpreter itself).
  *
+ * @version $Id: $Id
  */
 public class DataPump implements Runnable {
 
@@ -45,6 +46,8 @@ public class DataPump implements Runnable {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * VM entry point for the thread. It performs the data
 	 * relay.
 	 */

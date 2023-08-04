@@ -13,16 +13,19 @@ import java.util.LinkedList;
  * There is no maximum capacity which is enforced, nor is there any
  * checks if pop() is executed on an empty stack.
  *
+ * @version $Id: $Id
  */
 public class LinkedListStackImpl<E> extends LinkedList<E> implements MyStack<E> {
 
 	private static final long serialVersionUID = 1L;
 
+	/** {@inheritDoc} */
 	@Override
 	public void push(E o) {
 		addFirst(o);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public E pop() {
 		return removeFirst();

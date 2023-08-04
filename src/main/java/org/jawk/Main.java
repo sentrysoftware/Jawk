@@ -12,6 +12,8 @@ import org.jawk.util.AwkSettings;
  * of a Jawk script.
  * This entry point is used when Jawk is executed as a stand-alone application.
  * If you want to use Jawk as a library, please use {@see Awk}.
+ *
+ * @version $Id: $Id
  */
 public class Main {
 
@@ -30,7 +32,7 @@ public class Main {
 	 * @param is The input stream to use as stdin.
 	 * @param os The output stream to use as stdout.
 	 * @param es The output stream to use as stderr.
-	 * @throws Exception enables exceptions to propagate to the callee.
+	 * @throws java.lang.Exception enables exceptions to propagate to the callee.
 	 */
 	public Main(String[] args, InputStream is, PrintStream os, PrintStream es)
 			throws Exception

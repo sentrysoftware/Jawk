@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
  * block code segments.
  *
  * @see BlockObject
+ * @version $Id: $Id
  */
 public class BlockManager {
 
@@ -51,6 +52,7 @@ public class BlockManager {
 	 * @param bo BlockObject to employ. Other block objects
 	 *   may be linked to this block object. In this event,
 	 *   employ all block objects simultaneously.
+	 * @return a {@link java.lang.String} object
 	 */
 	public String block(BlockObject bo) {
 		// get all block objects

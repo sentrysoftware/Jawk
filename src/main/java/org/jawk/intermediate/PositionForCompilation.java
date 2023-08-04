@@ -8,8 +8,14 @@ package org.jawk.intermediate;
  * access (i.e., non-jumps) to the tuple list, while
  * interpretation requires this as well as jump capability.
  *
+ * @version $Id: $Id
  */
 public interface PositionForCompilation extends Position {
 
+	/**
+	 * <p>index.</p>
+	 *
+	 * @return a int
+	 */
 	int index();
 }

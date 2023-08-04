@@ -5,6 +5,8 @@ import java.util.Enumeration;
 /**
  * Similar to StringTokenizer, except that tokens are delimited
  * by a regular expression.
+ *
+ * @version $Id: $Id
  */
 public class RegexTokenizer implements Enumeration<Object> {
 
@@ -22,11 +24,13 @@ public class RegexTokenizer implements Enumeration<Object> {
 		array = input.split(delimitterRegexPattern, -2);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean hasMoreElements() {
 		return idx < array.length;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object nextElement() {
 		return array[idx++];

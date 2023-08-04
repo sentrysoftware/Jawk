@@ -12,6 +12,7 @@ import org.jawk.util.AwkSettings;
  * such as VM and JRT variable management, and convenience
  * methods such as checkNumArgs() and toAwkString().
  *
+ * @version $Id: $Id
  */
 public abstract class AbstractExtension implements JawkExtension {
 
@@ -19,6 +20,7 @@ public abstract class AbstractExtension implements JawkExtension {
 	private VariableManager vm;
 	private AwkSettings settings;
 
+	/** {@inheritDoc} */
 	@Override
 	public void init(VariableManager vm, JRT jrt, final AwkSettings settings) {
 		this.vm = vm;
@@ -31,7 +33,6 @@ public abstract class AbstractExtension implements JawkExtension {
 	 * based on the value of the CONVFMT variable.
 	 *
 	 * @param obj The Jawk variable to convert to a Jawk string.
-	 *
 	 * @return A string representation of obj after CONVFMT
 	 *   has been applied.
 	 */
@@ -40,12 +41,10 @@ public abstract class AbstractExtension implements JawkExtension {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Assume no guarantee of any extension parameter being an
 	 * associative array.
-	 *
-	 * @param extensionKeyword The extension keyword to check.
-	 * @param argCount The number of actual parameters used in this
-	 *   extension invocation.
 	 */
 	@Override
 	public int[] getAssocArrayParameterPositions(String extensionKeyword, int argCount) {
@@ -59,9 +58,6 @@ public abstract class AbstractExtension implements JawkExtension {
 	 *
 	 * @param arr The arguments to check.
 	 * @param expectedNum The expected number of arguments.
-	 *
-	 * @throws IllegalAwkArgumentException if the number of arguments
-	 *   do not match the expected number of arguments.
 	 */
 	protected static void checkNumArgs(Object[] arr, int expectedNum) {
 		// some sanity checks on the arguments
@@ -77,6 +73,8 @@ public abstract class AbstractExtension implements JawkExtension {
 	}
 
 	/**
+	 * <p>Getter for the field <code>jrt</code>.</p>
+	 *
 	 * @return the Runtime
 	 */
 	protected JRT getJrt() {
@@ -84,6 +82,8 @@ public abstract class AbstractExtension implements JawkExtension {
 	}
 
 	/**
+	 * <p>Getter for the field <code>vm</code>.</p>
+	 *
 	 * @return the Variable Manager
 	 */
 	protected VariableManager getVm() {
@@ -91,6 +91,8 @@ public abstract class AbstractExtension implements JawkExtension {
 	}
 
 	/**
+	 * <p>Getter for the field <code>settings</code>.</p>
+	 *
 	 * @return the Settings
 	 */
 	protected AwkSettings getSettings() {

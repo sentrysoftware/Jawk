@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
  * is considered a match, but subsequent entries are not considered
  * matched (unless the text matches the first regex).
  *
+ * @version $Id: $Id
  */
 public class PatternPair {
 
@@ -21,6 +22,12 @@ public class PatternPair {
 	private Pattern p2;
 	private boolean within = false;
 
+	/**
+	 * <p>Constructor for PatternPair.</p>
+	 *
+	 * @param s1 a {@link java.lang.String} object
+	 * @param s2 a {@link java.lang.String} object
+	 */
 	public PatternPair(String s1, String s2) {
 		p1 = Pattern.compile(s1);
 		p2 = Pattern.compile(s2);
@@ -31,6 +38,7 @@ public class PatternPair {
 	 * if this or previous text matches the first regex, up until
 	 * the text is matched against the second regex.
 	 * <p>
+	 *
 	 * @param str Text to match against the first and second
 	 *   regular expressions.
 	 * @return true if this or previous text matches the first regex,
@@ -49,6 +57,7 @@ public class PatternPair {
 		return within;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return p1 + "," + p2;

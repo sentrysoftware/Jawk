@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
  * regex). To enable greedy setRecordSeparator regex consumption,
  * use <code>-Djawk.forceGreedyRS=true</code>.
  *
+ * @version $Id: $Id
  */
 public class PartitioningReader extends FilterReader {
 
@@ -98,6 +99,8 @@ public class PartitioningReader extends FilterReader {
 	}
 
 	/**
+	 * <p>fromFilenameList.</p>
+	 *
 	 * @return true whether the underlying input reader is from a
 	 *	filename list argument; false otherwise
 	 */
@@ -108,6 +111,7 @@ public class PartitioningReader extends FilterReader {
 	private StringBuilder remaining = new StringBuilder();
 	private char[] readBuffer = new char[4096];
 
+	/** {@inheritDoc} */
 	@Override
 	public int read(char[] b, int start, int len) throws IOException {
 		int readChars = super.read(b, start, len);
@@ -125,8 +129,7 @@ public class PartitioningReader extends FilterReader {
 	 * expression to mark start/end of records.
 	 *
 	 * @return the next record, null if no more records exist
-	 *
-	 * @throws IOException upon an IO error
+	 * @throws java.io.IOException upon an IO error
 	 */
 	public String readRecord() throws IOException {
 

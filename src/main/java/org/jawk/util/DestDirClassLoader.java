@@ -17,15 +17,22 @@ import java.io.IOException;
  * <p>
  * For Jawk, this is used when the -d argument is present.
  *
+ * @version $Id: $Id
  */
 public final class DestDirClassLoader extends ClassLoader {
 
 	private String dirname;
 
+	/**
+	 * <p>Constructor for DestDirClassLoader.</p>
+	 *
+	 * @param dirname a {@link java.lang.String} object
+	 */
 	public DestDirClassLoader(String dirname) {
 		this.dirname = dirname;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	protected Class<?> findClass(String name)
 			throws ClassNotFoundException

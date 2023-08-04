@@ -57,9 +57,10 @@ import org.slf4j.LoggerFactory;
  * <li>SocketExtension
  * <li>StdinExtension
  * </ul>
- * @see org.jawk.backend.AVM
  *
+ * @see org.jawk.backend.AVM
  * @author Danny Daglas
+ * @version $Id: $Id
  */
 public class Awk {
 
@@ -74,14 +75,15 @@ public class Awk {
 	public Awk() {}
 
 	/**
+	 * <p>invoke.</p>
+	 *
 	 * @param settings This tells AWK what to do
 	 *   (where to get input from, where to write it to, in what mode to run,
 	 *   ...)
-	 *
-	 * @throws IOException upon an IO error.
-	 * @throws ClassNotFoundException if intermediate code is specified
+	 * @throws java.io.IOException upon an IO error.
+	 * @throws java.lang.ClassNotFoundException if intermediate code is specified
 	 *           but deserialization fails to load in the JVM
-	 * @throws ExitException if interpretation is requested,
+	 * @throws org.jawk.ExitException if interpretation is requested,
 	 *	 and a specific exit code is requested.
 	 */
 	public void invoke(AwkSettings settings)
