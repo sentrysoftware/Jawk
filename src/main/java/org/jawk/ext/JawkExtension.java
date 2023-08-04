@@ -43,7 +43,7 @@ import org.jawk.util.AwkSettings;
  * also guards against keyword collision with other extensions.
  * The Jawk lexer expects extension keywords to match as _ID_'s.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public interface JawkExtension {
 

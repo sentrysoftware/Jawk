@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * <p>
  * It contains the internal state of the parser and the lexer.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class AwkParser {
 
@@ -356,8 +356,7 @@ public class AwkParser {
 	/**
 	 * Exception indicating a syntax problem in the AWK script
 	 *
-	 * @version $Id: $Id
-	 */
+		 */
 	public class LexerException extends IOException {
 
 		private static final long serialVersionUID = 1L;

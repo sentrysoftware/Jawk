@@ -12,7 +12,7 @@ import org.jawk.util.AwkSettings;
  * such as VM and JRT variable management, and convenience
  * methods such as checkNumArgs() and toAwkString().
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public abstract class AbstractExtension implements JawkExtension {
 

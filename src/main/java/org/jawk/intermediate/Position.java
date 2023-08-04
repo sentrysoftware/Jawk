@@ -3,7 +3,7 @@ package org.jawk.intermediate;
 /**
  * Marks a position within the tuple list (queue).
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public interface Position {
 

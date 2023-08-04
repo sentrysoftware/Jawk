@@ -20,7 +20,7 @@ import org.jawk.intermediate.UninitializedObject;
  * sorted order or not) and delegates calls to it
  * accordingly.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class AssocArray implements Comparator<Object> {
 

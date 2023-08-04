@@ -73,7 +73,7 @@ import org.slf4j.LoggerFactory;
  *
  * </ul>
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class StdinExtension extends AbstractExtension implements JawkExtension {
 

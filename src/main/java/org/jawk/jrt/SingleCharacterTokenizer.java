@@ -6,7 +6,7 @@ import java.util.Enumeration;
  * Similar to StringTokenizer, except that tokens are delimited
  * by a single character.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class SingleCharacterTokenizer implements Enumeration<Object> {
 

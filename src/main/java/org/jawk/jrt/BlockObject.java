@@ -29,7 +29,7 @@ import java.util.Set;
  * (within _EXTENSION_ keyword processing).
  *
  * @see BlockManager
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public abstract class BlockObject {
 

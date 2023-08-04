@@ -8,7 +8,7 @@ import java.util.Enumeration;
  * <p>
  * For Jawk, this class is used when NF == "".
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class CharacterTokenizer implements Enumeration<Object> {
 

@@ -17,7 +17,7 @@ package org.jawk.intermediate;
  * after f(x) is defined, getFunctionAddress() will return
  * the correct function address.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public interface HasFunctionAddress {
 

@@ -14,7 +14,7 @@ import java.util.Map;
  * These defaults may be changed through command line arguments,
  * or when invoking Jawk programmatically, from within Java code.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class AwkSettings {
 

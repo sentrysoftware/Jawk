@@ -13,7 +13,7 @@ import java.io.PrintStream;
  * "cmd" | getline) to the stdin, stdout, and/or stderr
  * of the calling process (the interpreter itself).
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class DataPump implements Runnable {
 

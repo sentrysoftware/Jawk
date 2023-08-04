@@ -5,7 +5,7 @@ package org.jawk.jrt;
  * in programmatic distinction between Jawk and other
  * argument exception issues.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class IllegalAwkArgumentException extends IllegalArgumentException {
 

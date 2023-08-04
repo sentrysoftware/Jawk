@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  * is considered a match, but subsequent entries are not considered
  * matched (unless the text matches the first regex).
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class PatternPair {
 

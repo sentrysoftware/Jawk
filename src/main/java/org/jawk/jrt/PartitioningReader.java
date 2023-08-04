@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  * regex). To enable greedy setRecordSeparator regex consumption,
  * use <code>-Djawk.forceGreedyRS=true</code>.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class PartitioningReader extends FilterReader {
 

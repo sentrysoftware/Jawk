@@ -13,7 +13,7 @@ import java.util.LinkedList;
  * There is no maximum capacity which is enforced, nor is there any
  * checks if pop() is executed on an empty stack.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class LinkedListStackImpl<E> extends LinkedList<E> implements MyStack<E> {
 

@@ -10,7 +10,7 @@ package org.jawk.jrt;
  * called within any of the END blocks. When invoked,
  * Jawk terminates with an exit code.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class EndException extends RuntimeException {
 

@@ -3,7 +3,7 @@ package org.jawk.intermediate;
 /**
  * <p>UninitializedObject class.</p>
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class UninitializedObject {
 

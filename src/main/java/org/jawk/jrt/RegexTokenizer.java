@@ -6,7 +6,7 @@ import java.util.Enumeration;
  * Similar to StringTokenizer, except that tokens are delimited
  * by a regular expression.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class RegexTokenizer implements Enumeration<Object> {
 

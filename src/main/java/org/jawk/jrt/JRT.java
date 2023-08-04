@@ -65,7 +65,7 @@ import org.slf4j.LoggerFactory;
  * to another package. Therefore, all accessed methods are public.
  *
  * @see VariableManager
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class JRT {
 

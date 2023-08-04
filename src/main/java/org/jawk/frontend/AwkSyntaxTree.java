@@ -8,7 +8,7 @@ import org.jawk.intermediate.AwkTuples;
  * an appropriate public interface to the abstract
  * syntax tree.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public interface AwkSyntaxTree {
 

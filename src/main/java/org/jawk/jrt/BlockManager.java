@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * block code segments.
  *
  * @see BlockObject
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class BlockManager {
 

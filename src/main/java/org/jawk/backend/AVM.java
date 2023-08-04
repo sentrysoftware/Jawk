@@ -73,7 +73,7 @@ import org.slf4j.LoggerFactory;
  * errors/conditions. It can also throw a <code>java.lang.Error</code> if an
  * interpreter error is encountered.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class AVM implements AwkInterpreter, VariableManager {
 

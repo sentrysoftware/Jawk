@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Represents one AWK-script file content source.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class ScriptFileSource extends ScriptSource {
 

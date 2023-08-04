@@ -63,7 +63,7 @@ import org.slf4j.LoggerFactory;
  * If no filenames are provided, stdin is used as input
  * to the script (but only if there are input rules).
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class AwkParameters {
 

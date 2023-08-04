@@ -6,7 +6,7 @@ package org.jawk;
  * author's intention to complete the section at
  * a later date.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class NotImplementedError extends Error {
 

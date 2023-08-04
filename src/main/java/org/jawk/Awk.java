@@ -60,7 +60,6 @@ import org.slf4j.LoggerFactory;
  *
  * @see org.jawk.backend.AVM
  * @author Danny Daglas
- * @version $Id: $Id
  */
 public class Awk {
 

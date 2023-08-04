@@ -8,7 +8,7 @@ package org.jawk.util;
  * environment. As a result, it was necessary to re-implement the
  * stack in this manner by using a non-synchronized list.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public interface MyStack<E> {
 

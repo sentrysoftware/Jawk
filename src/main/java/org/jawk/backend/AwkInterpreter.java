@@ -6,7 +6,7 @@ import org.jawk.intermediate.AwkTuples;
 /**
  * Interpret a Jawk script within this JVM.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public interface AwkInterpreter {
 

@@ -17,7 +17,7 @@ import java.io.IOException;
  * <p>
  * For Jawk, this is used when the -d argument is present.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public final class DestDirClassLoader extends ClassLoader {
 

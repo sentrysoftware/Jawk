@@ -274,8 +274,6 @@
 						</goals>
 						<configuration>
 							<source>${java.version}</source>
-							<defaultAuthor>Danny Daglas</defaultAuthor>
-							<defaultVersion>${project.version}</defaultVersion>
 						</configuration>
 					</execution>
 				</executions>

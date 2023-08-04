@@ -17,7 +17,7 @@ package org.jawk.intermediate;
  * <p>
  * All addresses should have a meaningful label.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public interface Address {
 

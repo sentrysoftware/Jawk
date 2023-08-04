@@ -11,7 +11,7 @@ import java.io.Reader;
  * or an "*.awk" (normal) or "*.ai" (intermediate) script,
  * given as a path with a "-f" command line switch.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class ScriptSource {
 

@@ -167,7 +167,7 @@ import org.slf4j.LoggerFactory;
  * Dumps the reference cache to stdout.
  * </ul>
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class CoreExtension extends AbstractExtension implements JawkExtension {
 

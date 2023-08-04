@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * There is no maximum capacity which is enforced, nor is there any
  * checks if <code>pop()</code> is executed on an empty stack.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class ArrayStackImpl<E> extends ArrayList<E> implements MyStack<E> {
 

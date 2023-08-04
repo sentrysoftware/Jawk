@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * Implement the KeyList interface with an ArrayList.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 //public class KeyListImpl extends ArrayList<Object> implements KeyList
 public class KeyListImpl implements KeyList {

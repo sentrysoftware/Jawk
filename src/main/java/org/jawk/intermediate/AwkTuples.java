@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * <p>AwkTuples class.</p>
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class AwkTuples implements Serializable {
 

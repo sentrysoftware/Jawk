@@ -5,7 +5,7 @@ package org.jawk.jrt;
  * to conveniently distinguish between Jawk runtime
  * exceptions and other runtime exceptions.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class AwkRuntimeException extends RuntimeException {
 

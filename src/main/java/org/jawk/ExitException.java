@@ -4,7 +4,7 @@ package org.jawk;
  * With this Exception, any part of the code may request a
  * <code>System.exit(code)</code> call with a specific code.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class ExitException extends Exception {
 

@@ -12,7 +12,7 @@ import org.jawk.util.AwkSettings;
  * This entry point is used when Jawk is executed as a stand-alone application.
  * If you want to use Jawk as a library, please use {@see Awk}.
  *
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 public class Main {
 

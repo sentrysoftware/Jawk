@@ -14,63 +14,55 @@ package org.jawk.jrt;
  *
  * @see JRT
  * @author Danny Daglas
- * @version $Id: $Id
  */
 public interface VariableManager {
 
-	/** @return the contents of the ARGC variable. */
 	/**
 	 * <p>getARGC.</p>
 	 *
-	 * @return a {@link java.lang.Object} object
+	 * @return the contents of the ARGC variable.
 	 */
 	Object getARGC();
 
-	/** @return the contents of the ARGV variable. */
 	/**
 	 * <p>getARGV.</p>
 	 *
-	 * @return a {@link java.lang.Object} object
+	 * @return the contents of the ARGV variable.
 	 */
 	Object getARGV();
 
-	/** @return the contents of the CONVFMT variable. */
 	/**
 	 * <p>getCONVFMT.</p>
 	 *
-	 * @return a {@link java.lang.Object} object
+	 * @return the contents of the CONVFMT variable.
 	 */
 	Object getCONVFMT();
 
-	/** @return the contents of the FS variable. */
 	/**
 	 * <p>getFS.</p>
-	 *
-	 * @return a {@link java.lang.Object} object
+	 * 
+	 * @return the contents of the FS variable.
 	 */
 	Object getFS();
 
-	/** @return the contents of the RS variable. */
 	/**
 	 * <p>getRS.</p>
 	 *
-	 * @return a {@link java.lang.Object} object
+	 * @return the contents of the RS variable.
 	 */
 	Object getRS();
 
-	/** @return the contents of the OFS variable. */
 	/**
 	 * <p>getOFS.</p>
 	 *
-	 * @return a {@link java.lang.Object} object
+	 * @return the contents of the OFS variable.
 	 */
 	Object getOFS();
 
-	/** @return the contents of the SUBSEP variable. */
 	/**
 	 * <p>getSUBSEP.</p>
 	 *
-	 * @return a {@link java.lang.Object} object
+	 * @return the contents of the SUBSEP variable.
 	 */
 	Object getSUBSEP();
 

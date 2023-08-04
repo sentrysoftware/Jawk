@@ -10,7 +10,7 @@ package org.jawk.jrt;
  * this writing.
  *
  * @see KeyListImpl
- * @version $Id: $Id
+ * @author Danny Daglas
  */
 //public interface KeyList extends java.util.List<Object>
 public interface KeyList {
