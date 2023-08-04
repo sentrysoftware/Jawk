@@ -26,13 +26,12 @@ import org.slf4j.LoggerFactory;
  */
 public class AwkTuples implements Serializable {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 3261725178303196488L;
+	private static final long serialVersionUID = 2L;
 
+	/** Our logger */
 	private static final Logger LOG = LoggerFactory.getLogger(AwkTuples.class);
 
+	/** Version Manager */
 	private VersionManager version_manager = new VersionManager();
 
 	private static final class AddressImpl implements Address, Serializable {
@@ -1764,12 +1763,13 @@ public class AwkTuples implements Serializable {
 			return super.add(t);
 		}
 	};
+
+	/** Unresolved addresses */
 	private Set<Address> unresolved_addresses = new HashSet<Address>();
 
-	/**
-	 * Needed only for dumping intermediate code to text such that address labels are provided.
-	 */
+	/** Needed only for dumping intermediate code to text such that address labels are provided. */
 	private Map<Integer, Address> address_indexes = new HashMap<Integer, Address>();
+	/** Needed only for dumping intermediate code to text such that address labels are provided. */
 	private Map<String, Integer> address_label_counts = new HashMap<String, Integer>();
 
 	/**
@@ -2957,8 +2957,14 @@ public class AwkTuples implements Serializable {
 			tuple.touch(queue);
 		}
 	}
+
+	/** Map of global variables offsets */
 	private Map<String, Integer> global_var_offset_map = new HashMap<String, Integer>();
+
+	/** Map of global arrays */
 	private Map<String, Boolean> global_var_aarray_map = new HashMap<String, Boolean>();
+
+	/** List of user function names */
 	private Set<String> function_names = null;
 
 	/**
@@ -3026,8 +3032,7 @@ public class AwkTuples implements Serializable {
 		return function_names;
 	}
 
-	// linenumber stack ...
-
+	/** linenumber stack ... */
 	private MyStack<Integer> lineno_stack = new LinkedListStackImpl<Integer>();
 
 	/**

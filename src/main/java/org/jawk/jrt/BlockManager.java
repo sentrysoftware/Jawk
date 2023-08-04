@@ -36,7 +36,6 @@ public class BlockManager {
 	 * <p>
 	 * And, the BlockThread algorithm is as follows:
 	 *
-	 * <p>
 	 * <ul>
 	 * <li>try, catch for InterruptedException ...
 	 *   <ul>

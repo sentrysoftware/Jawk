@@ -37,7 +37,6 @@ public class PatternPair {
 	 * Text is matched against this regex pair, returning true only
 	 * if this or previous text matches the first regex, up until
 	 * the text is matched against the second regex.
-	 * <p>
 	 *
 	 * @param str Text to match against the first and second
 	 *   regular expressions.

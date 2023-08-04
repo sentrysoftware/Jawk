@@ -13,6 +13,7 @@ public class ExitException extends Exception {
 	/** Constant <code>EXIT_CODE_OK=0</code> */
 	public static final int EXIT_CODE_OK = 0;
 
+	/** The exit code being returned */
 	private final int code;
 
 	/**

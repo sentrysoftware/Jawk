@@ -353,10 +353,20 @@ public class AwkParser {
 		return SCRIPT();
 	}
 
+	/**
+	 * Exception indicating a syntax problem in the AWK script
+	 *
+	 * @version $Id: $Id
+	 */
 	public class LexerException extends IOException {
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Create a new LexerException
+		 *
+		 * @param msg Problem description (without the position, which will be added)
+		 */
 		LexerException(String msg) {
 			super(msg + " ("
 					+ scriptSources.get(scriptSourcesCurrentIndex).getDescription()
