@@ -1,5 +1,22 @@
 # Contributing
 
+## Boost vs LGPL vs GPL
+
+The original code from Danny Daglas was under the Boost Software License. The current code is now mainly under LGPL, which means it's actually GPLv3, but can be used in non-GPL projects.
+
+**Important:**
+
+* The `Jawk.jar`` executable artifact is released under strict GPLv3.
+* The `jawk`` Maven artifact is released under LGPL and can be used in non-GPL projects.
+
+Each file includes a license header. Make sure to always include this header.
+
+To update all Java files to include the header, simply use the command below:
+
+```bash
+$ mvn license:update-file-header
+```
+
 ## How to build
 
 Jawk uses Maven 2+ as build system, which you have to install first.
