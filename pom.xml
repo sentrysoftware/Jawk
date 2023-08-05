@@ -39,9 +39,14 @@
 
 	<licenses>
 		<license>
-			<name>GPL</name>
-			<url>http://www.gnu.org/licenses/gpl.html</url>
+			<name>LGPL-3.0-only</name>
+			<url>https://spdx.org/licenses/LGPL-3.0-only.html</url>
 			<distribution>repo</distribution>
+		</license>
+		<license>
+			<name>GPL-3.0-only</name>
+			<url>https://spdx.org/licenses/GPL-3.0-only.html</url>
+			<distribution>manual</distribution>
 		</license>
 	</licenses>
 
@@ -226,6 +231,38 @@
 				<configuration>
 					<encoding>${project.build.resourceEncoding}</encoding>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.2.0</version>
+				<configuration>
+					<licenseName>lgpl_v3</licenseName>
+					<copyrightOwners>Danny Daglas, Robin Vobruba, Sentry Software</copyrightOwners>
+					<copyrightStringFormat>Copyleft %1$s %2$s</copyrightStringFormat>
+					<includes>
+						<include>main/java/**/*.java</include>
+					</includes>
+					<trimHeaderLine>true</trimHeaderLine>
+					<canUpdateCopyright>true</canUpdateCopyright>
+					<canUpdateDescription>true</canUpdateDescription>
+					<processStartTag>╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲</processStartTag>
+					<sectionDelimiter>჻჻჻჻჻჻</sectionDelimiter>
+					<processEndTag>╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱</processEndTag>
+				</configuration>
+				<executions>
+					<execution>
+						<id>check-license</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>check-file-header</goal>
+						</goals>
+						<configuration>
+							<failOnMissingHeader>true</failOnMissingHeader>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
