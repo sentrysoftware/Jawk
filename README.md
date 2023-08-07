@@ -97,7 +97,7 @@ Add Jawk in the list of dependencies in your [Maven **pom.xml**](https://maven.a
 <dependencies>
 	<!-- [...] -->
 	<dependency>
-		<groupId>com.sentrysoftware</groupId>
+		<groupId>org.sentrysoftware</groupId>
 		<artifactId>jawk</artifactId>
 		<version>2.1.00-SNAPSHOT</version> <!-- Use the latest version released -->
 	</dependency>
@@ -125,12 +125,12 @@ Invoke AWK scripts files on input files:
 
 		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
-    	settings.setOutputStream(new PrintStream(resultBytesStream));
+		settings.setOutputStream(new PrintStream(resultBytesStream));
 
-    	// Sets the AWK script to execute
-    	settings.addScriptSource(new ScriptFileSource(scriptFile.getAbsolutePath()));
+		// Sets the AWK script to execute
+		settings.addScriptSource(new ScriptFileSource(scriptFile.getAbsolutePath()));
 
-    	// Execute the awk script against the specified input
+		// Execute the awk script against the specified input
 		Awk awk = new Awk();
 		awk.invoke(settings);
 
@@ -159,18 +159,18 @@ Execute AWK script (as String) on String input:
 		// Set the input files
 		settings.setInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 
-       	// We force \n as the Record Separator (RS) because even if running on Windows
-       	// we're passing Java strings, where end of lines are simple \n
-       	settings.setDefaultRS("\n");
+		// We force \n as the Record Separator (RS) because even if running on Windows
+		// we're passing Java strings, where end of lines are simple \n
+		settings.setDefaultRS("\n");
 
-       	// Create the OutputStream, to collect the result as a String
+		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
-    	settings.setOutputStream(new UniformPrintStream(resultBytesStream));
+		settings.setOutputStream(new UniformPrintStream(resultBytesStream));
 
-    	// Sets the AWK script to execute
-    	settings.addScriptSource(new ScriptSource("Body", new StringReader(script), false));
+		// Sets the AWK script to execute
+		settings.addScriptSource(new ScriptSource("Body", new StringReader(script), false));
 
-    	// Execute the awk script against the specified input
+		// Execute the awk script against the specified input
 		Awk awk = new Awk();
 		awk.invoke(settings);
 
@@ -184,7 +184,16 @@ Execute AWK script (as String) on String input:
 
 List...
 
-## Differences with hoijui's original Jawk
+## Differences with the original Jawk
 
-List...
+There's a growing list of things that make our version diverge from the original Jawk written by Danny Daglas, and maintained by Robin Vobruba:
 
+* Replaced [Logback](https://logback.qos.ch/) with the [SimpleLogger](https://www.slf4j.org/api/org/slf4j/simple/SimpleLogger.html) that comes with [SLF4J](https://www.slf4j.org/)
+* Removed the AWK-to-JVM bytecode compiler
+* Removed the Socket extension (to get a smaller jar)
+* Improved performance in parsing inputs and printed output
+* Support for long integers
+* Support for octal and hexadecimal notation in strings (allowing `ESC`` characters to do fancy terminal effects)
+* Artifact *groupId* and package is `org.sentrysoftware`
+* Added gawk's suite of unit tests
+* License is LGPL for the Maven artifact
