@@ -63,7 +63,7 @@
 			</roles>
 		</developer>
 		<developer>
-			<name>hoijui (@hoijui)</name>
+			<name>Robin Vobruba (@hoijui)</name>
 			<email>hoijui.quaero@gmail.com</email>
 			<roles>
 				<role>maintainer</role>
@@ -80,6 +80,7 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/sentrysoftware/Jawk.git</connection>
+		<url>https://github.com/sentrysoftware/Jawk</url>
 	</scm>
 
 	<reporting>
