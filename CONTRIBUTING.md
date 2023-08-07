@@ -72,8 +72,8 @@ Moves it from the Sonatype staging to the main Sonatype repo.
 	* firefox https://oss.sonatype.org
 	* login
 	* got to the "Staging Repositories" tab
-	* select "org.jawk..."
+	* select "org.sentrysoftware..."
 	* "Close" it
-	* select "org.jawk..." again
+	* select "org.sentrysoftware..." again
 	* "Release" it
 

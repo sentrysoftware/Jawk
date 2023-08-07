@@ -7,18 +7,18 @@
 		<project.build.encoding>UTF-8</project.build.encoding>
 		<project.build.sourceEncoding>${project.build.encoding}</project.build.sourceEncoding>
 		<project.build.resourceEncoding>${project.build.encoding}</project.build.resourceEncoding>
-		<project.pkgName>org.jawk</project.pkgName>
-		<project.mainClass>org.jawk.Main</project.mainClass>
+		<project.pkgName>org.sentrysoftware</project.pkgName>
+		<project.mainClass>org.sentrysoftware.Main</project.mainClass>
 		<java.version>8</java.version>
 		<testExcludedClass>**/*GawkTest.java</testExcludedClass>
 	</properties>
 
 	<organization>
 		<name>Sentry Software</name>
-		<url>http://www.sentrysoftware.com</url>
+		<url>https://sentrysoftware.com</url>
 	</organization>
 
-	<groupId>com.sentrysoftware</groupId>
+	<groupId>org.sentrysoftware</groupId>
 	<artifactId>jawk</artifactId>
 	<version>2.1.00-SNAPSHOT</version>
 
@@ -403,7 +403,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Export-Package>org.jawk.jrt org.jawk org.jawk.frontend org.jawk.ext</Export-Package>
+						<Export-Package>org.sentrysoftware.jrt org.sentrysoftware org.sentrysoftware.frontend org.sentrysoftware.ext</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
