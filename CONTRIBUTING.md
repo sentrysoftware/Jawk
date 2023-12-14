@@ -74,6 +74,6 @@ Moves it from the Sonatype staging to the main Sonatype repo.
 	* got to the "Staging Repositories" tab
 	* select "org.sentrysoftware..."
 	* "Close" it
-	* select "org.sentrysoftware..." again
+	* select "org.sentrysoftware.jawk..." again
 	* "Release" it
 
