@@ -1,0 +1,12 @@
+name: Maven Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    uses: sentrysoftware/workflows/.github/workflows/maven-central-deploy.yml@main
+    with:
+      jdkVersion: "17"
+    secrets: inherit
