@@ -60,6 +60,7 @@ import org.sentrysoftware.jrt.PatternPair;
 import org.sentrysoftware.jrt.RegexTokenizer;
 import org.sentrysoftware.jrt.SingleCharacterTokenizer;
 import org.sentrysoftware.jrt.VariableManager;
+import org.sentrysoftware.printf4j.Printf4J;
 import org.sentrysoftware.util.ArrayStackImpl;
 import org.sentrysoftware.util.AwkSettings;
 import org.sentrysoftware.util.LinkedListStackImpl;
@@ -2063,9 +2064,9 @@ public class AVM implements AwkInterpreter, VariableManager {
 			arg_array[i] = pop();
 		}
 		if (trap_illegal_format_exceptions) {
-			return JRT.sprintfFunction(arg_array, fmt, locale);
+			return Printf4J.sprintf(locale, fmt, arg_array);
 		} else {
-			return JRT.sprintfFunctionNoCatch(arg_array, fmt, locale);
+			return JRT.sprintfNoCatch(locale, fmt, arg_array);
 		}
 	}
 
