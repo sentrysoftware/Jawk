@@ -120,7 +120,7 @@ public class JRT {
 	private Map<String, PartitioningReader> command_readers = new HashMap<String, PartitioningReader>();
 	private Map<String, Process> command_processes = new HashMap<String, Process>();
 	private Map<String, PrintStream> outputFiles = new HashMap<String, PrintStream>();
-
+	
 	/**
 	 * Create a JRT with a VariableManager
 	 *
@@ -1182,139 +1182,15 @@ public class JRT {
 	}
 
 	/**
-	 * Applies a format string to a set of parameters and
-	 * returns the formatted result.
-	 * String.format() is used to perform the formatting.
-	 * Thus, an IllegalFormatException can be thrown.
-	 * If so, a blank string ("") is returned.
-	 *
-	 * @param arr Arguments to format.
-	 * @param fmt_arg The format string to apply.
-	 * @return The formatted string; a blank string
-	 *   if the format argument is invalid.
-	 * @see #sprintfFunctionNoCatch(Object[],String,Locale)
-	 * @param locale a {@link java.util.Locale} object
-	 */
-	public static String sprintfFunction(Object[] arr, String fmt_arg, Locale locale) {
-
-		// Try to adapt the object types to the specified formats
-		Pattern percentPattern = Pattern.compile("(%%)|(%n)|(%[ -\\+\\(#0]?[0-9]*(\\.[0-9]+)?[bhscdoxefgat])", Pattern.CASE_INSENSITIVE);
-		Matcher percentMatcher = percentPattern.matcher(fmt_arg);
-		StringBuffer formatResultBuffer = new StringBuffer();
-		int i = 0;
-		while (percentMatcher.find()) {
-			if (percentMatcher.group(1) != null) {
-				percentMatcher.appendReplacement(formatResultBuffer, "%");
-			} else if (percentMatcher.group(2) != null) {
-				percentMatcher.appendReplacement(formatResultBuffer, "\n");
-			} else {
-				String format1Arg = percentMatcher.group(3);
-				if (format1Arg != null) {
-					if (i >= arr.length) {
-						percentMatcher.appendReplacement(formatResultBuffer, format1Arg);
-					} else {
-						if (format1Arg.endsWith("d") ||
-								format1Arg.endsWith("x") ||
-								format1Arg.endsWith("X") ||
-								format1Arg.endsWith("o")) {
-							percentMatcher.appendReplacement(formatResultBuffer, String.format(locale, format1Arg, toLong(arr[i])));
-						} else if (format1Arg.endsWith("e") ||
-								format1Arg.endsWith("E") ||
-								format1Arg.endsWith("f") ||
-								format1Arg.endsWith("a") ||
-								format1Arg.endsWith("A")) {
-							percentMatcher.appendReplacement(formatResultBuffer, String.format(locale, format1Arg, toDouble(arr[i])));
-						} else if (format1Arg.endsWith("g") ||
-								format1Arg.endsWith("G")) {
-							String tempFormatResult = String.format(locale, format1Arg, toDouble(arr[i]));
-							if ((tempFormatResult.indexOf('.') > -1 || tempFormatResult.indexOf(',') > -1) && tempFormatResult.indexOf('e') == -1 && tempFormatResult.indexOf('E') == -1) {
-								while (tempFormatResult.endsWith("0")) {
-									tempFormatResult = tempFormatResult.substring(0, tempFormatResult.length() - 1);
-								}
-								if (tempFormatResult.endsWith(".") || tempFormatResult.endsWith(",")) {
-									tempFormatResult = tempFormatResult.substring(0, tempFormatResult.length() - 1);
-								}
-							}
-							percentMatcher.appendReplacement(formatResultBuffer, tempFormatResult);
-						} else {
-							percentMatcher.appendReplacement(formatResultBuffer, String.format(locale, format1Arg, arr[i]));
-						}
-						i++;
-					}
-				}
-			}
-		}
-		percentMatcher.appendTail(formatResultBuffer);
-		return formatResultBuffer.toString();
-
-//		try {
-//			return String.format(fmt_arg, arr);
-//		} catch (IllegalFormatException ife) {
-//			fmt_arg = fmt_arg.replace("%.0f", "%s").replace("%d", "%s");
-//
-//			try {
-//				return String.format(fmt_arg, arr);
-//			} catch (IllegalFormatException ife2) {
-//				return "";
-//			}
-//		}
-	}
-
-	/**
-	 * Applies a format string to a set of parameters and
-	 * prints the result to stdout.
-	 * The implementation is a simple call to sprintfFunction:
-	 * <blockquote>
-	 * <pre>
-	 * System.out.print(sprintfFunction(arr, fmt_arg));
-	 * </pre>
-	 * </blockquote>
-	 * String.format() is used to perform the formatting.
-	 * Thus, an IllegalFormatException can be thrown.
-	 * If so, a blank string ("") is printed.
-	 *
-	 * @param arr Arguments to format.
-	 * @param fmt_arg The format string to apply.
-	 * @see #printfFunctionNoCatch(Object[],String,Locale)
-	 * @param locale a {@link java.util.Locale} object
-	 */
-	public static void printfFunction(Object[] arr, String fmt_arg, Locale locale) {
-		System.out.print(sprintfFunction(arr, fmt_arg, locale));
-	}
-
-	/**
-	 * Applies a format string to a set of parameters and
-	 * prints the result to a PrintStream.
-	 * The implementation is a simple call to sprintfFunction:
-	 * <blockquote>
-	 * <pre>
-	 * ps.print(sprintfFunction(arr, fmt_arg));
-	 * </pre>
-	 * </blockquote>
-	 * String.format() is used to perform the formatting.
-	 * Thus, an IllegalFormatException can be thrown.
-	 * If so, a blank string ("") is printed.
-	 *
-	 * @param ps The PrintStream to use for printing.
-	 * @param arr Arguments to format.
-	 * @param fmt_arg The format string to apply.
-	 * @see #printfFunctionNoCatch(PrintStream,Object[],String,Locale)
-	 * @param locale a {@link java.util.Locale} object
-	 */
-	public static void printfFunction(PrintStream ps, Object[] arr, String fmt_arg, Locale locale) {
-		ps.print(sprintfFunction(arr, fmt_arg, locale));
-	}
-
-	/**
 	 * <p>sprintfFunctionNoCatch.</p>
 	 *
-	 * @param arr an array of {@link java.lang.Object} objects
-	 * @param fmt_arg a {@link java.lang.String} object
 	 * @param locale a {@link java.util.Locale} object
+	 * @param fmt_arg a {@link java.lang.String} object
+	 * @param arr an array of {@link java.lang.Object} objects
 	 * @return a {@link java.lang.String} object
 	 * @throws java.util.IllegalFormatException if any.
 	 */
-	public static String sprintfFunctionNoCatch(Object[] arr, String fmt_arg, Locale locale)
+	public static String sprintfNoCatch(Locale locale, String fmt_arg, Object... arr)
 			throws IllegalFormatException
 	{
 		return String.format(locale, fmt_arg, arr);
@@ -1323,24 +1199,24 @@ public class JRT {
 	/**
 	 * <p>printfFunctionNoCatch.</p>
 	 *
-	 * @param arr an array of {@link java.lang.Object} objects
-	 * @param fmt_arg a {@link java.lang.String} object
 	 * @param locale a {@link java.util.Locale} object
+	 * @param fmt_arg a {@link java.lang.String} object
+	 * @param arr an array of {@link java.lang.Object} objects
 	 */
-	public static void printfFunctionNoCatch(Object[] arr, String fmt_arg, Locale locale) {
-		System.out.print(sprintfFunctionNoCatch(arr, fmt_arg, locale));
+	public static void printfNoCatch(Locale locale, String fmt_arg, Object... arr) {
+		System.out.print(sprintfNoCatch(locale, fmt_arg, arr));
 	}
 
 	/**
 	 * <p>printfFunctionNoCatch.</p>
 	 *
 	 * @param ps a {@link java.io.PrintStream} object
-	 * @param arr an array of {@link java.lang.Object} objects
-	 * @param fmt_arg a {@link java.lang.String} object
 	 * @param locale a {@link java.util.Locale} object
+	 * @param fmt_arg a {@link java.lang.String} object
+	 * @param arr an array of {@link java.lang.Object} objects
 	 */
-	public static void printfFunctionNoCatch(PrintStream ps, Object[] arr, String fmt_arg, Locale locale) {
-		ps.print(sprintfFunctionNoCatch(arr, fmt_arg, locale));
+	public static void printfNoCatch(PrintStream ps, Locale locale, String fmt_arg, Object... arr) {
+		ps.print(sprintfNoCatch(locale, fmt_arg, arr));
 	}
 
 	/**

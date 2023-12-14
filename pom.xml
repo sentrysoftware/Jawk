@@ -434,6 +434,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.sentrysoftware</groupId>
+			<artifactId>printf4j</artifactId>
+			<version>0.9.05</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.github.stefanbirkner</groupId>
 			<artifactId>system-rules</artifactId>
 			<version>1.19.0</version>
