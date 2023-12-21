@@ -21,4 +21,4 @@ See [AWK in Java documentation](https://sentrysoftware.github.io/Jawk/java.html)
 
 ## Contributing
 
-See [CONTRIBUDING.md](contributing.md).
+See [CONTRIBUDING.md](CONTRIBUTING.md).
