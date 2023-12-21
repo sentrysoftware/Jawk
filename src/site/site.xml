@@ -21,6 +21,8 @@
 
 		<menu name="User Documentation">
 			<item name="Getting Started" href="index.html" />
+			<item name="Jawk CLI" href="cli.html" />
+			<item name="AWK in Java" href="java.html" />
 			<item name="Extensions" href="extensions.html" />
 		</menu>
 
