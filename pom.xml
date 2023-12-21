@@ -162,7 +162,7 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>2.3.0</version>
 				<configuration>
-					<licenseName>apache_v2</licenseName>
+					<licenseName>lgpl_v3</licenseName>
 					<copyrightOwners>Sentry Software</copyrightOwners>
 					<copyrightStringFormat>Copyright %1$s %2$s</copyrightStringFormat>
 					<includes>
