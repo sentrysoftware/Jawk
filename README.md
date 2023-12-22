@@ -2,6 +2,7 @@
 
 ![GitHub release (with filter)](https://img.shields.io/github/v/release/sentrysoftware/jawk)
 ![Build](https://img.shields.io/github/actions/workflow/status/sentrysoftware/jawk/deploy.yml)
+![Reproducible](https://img.shields.io/badge/build-reproducible-green)
 ![GitHub top language](https://img.shields.io/github/languages/top/sentrysoftware/jawk)
 ![License](https://img.shields.io/github/license/sentrysoftware/jawk)
 
