@@ -12,11 +12,16 @@
 		<keywords>awk</keywords>
 	</custom>
 
+	<bannerLeft>
+		<src>images/sentry-logo-white.png</src>
+		<href>https://sentrysoftware.com</href>
+	</bannerLeft>
+
 	<body>
 
 		<links>
 			<item name="Fork on GitHub" href="${project.scm.url}" />
-			<!-- <item name="First Link" href="https://sentrysoftware.com" /> -->
+			<item name="The GNU Awk User's Guide" href="https://www.gnu.org/software/gawk/manual/gawk.html" />
 		</links>
 
 		<menu name="User Documentation">
