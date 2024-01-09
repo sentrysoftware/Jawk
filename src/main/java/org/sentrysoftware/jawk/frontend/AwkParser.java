@@ -340,6 +340,21 @@ public class AwkParser {
 			}
 		}
 	}
+	
+	/**
+	 * Skip all whitespaces and comments
+	 * @throws IOException
+	 */
+	private void skipWhitespaces() throws IOException {
+		while (c == ' ' || c == '\t' || c == '#' || c == '\n') {
+			if (c == '#') {
+				while (c >= 0 && c != '\n') {
+					read();
+				}
+			}
+			read();
+		}
+	}
 
 	/**
 	 * Logs a warning about the syntax of the script (at which line, of which file)
@@ -477,9 +492,6 @@ public class AwkParser {
 				while (c >= 0 && c != '\n') {
 					read();
 				}
-//// Causes failure when comments are embedded within lines of code...
-////			if (c == '\n')
-////				read();
 			} else {
 				read();
 			}
@@ -490,6 +502,7 @@ public class AwkParser {
 		}
 		if (c == ',') {
 			read();
+			skipWhitespaces();
 			return token = _COMMA_;
 		}
 		if (c == '(') {
@@ -502,6 +515,7 @@ public class AwkParser {
 		}
 		if (c == '{') {
 			read();
+			skipWhitespaces();
 			return token = _OPEN_BRACE_;
 		}
 		if (c == '}') {
@@ -526,16 +540,19 @@ public class AwkParser {
 		}
 		if (c == '?') {
 			read();
+			skipWhitespaces();
 			return token = _QUESTION_MARK_;
 		}
 		if (c == ':') {
 			read();
+			skipWhitespaces();
 			return token = _COLON_;
 		}
 		if (c == '&') {
 			read();
 			if (c == '&') {
 				read();
+				skipWhitespaces();
 				return token = _AND_;
 			}
 			throw new LexerException("use && for logical and");
@@ -544,6 +561,7 @@ public class AwkParser {
 			read();
 			if (c == '|') {
 				read();
+				skipWhitespaces();
 				return token = _OR_;
 			}
 			return token = _PIPE_;
@@ -730,11 +748,7 @@ public class AwkParser {
 						read();
 					}
 				}
-				if (c == '\n') {
-					read();
-				} else {
-					read();
-				}
+				read();
 			}
 			return token = _NEWLINE_;
 		}
