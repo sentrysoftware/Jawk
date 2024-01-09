@@ -506,6 +506,17 @@ public class AVM implements AwkInterpreter, VariableManager {
 						position.next();
 						break;
 					}
+					case AwkTuples._UNARY_PLUS_: {
+						// stack[0] = item to convert to a number
+						double d = JRT.toDouble(pop());
+						if (d == (long) d) {
+							push((long)d);
+						} else {
+							push(d);
+						}
+						position.next();
+						break;
+					}
 					case AwkTuples._GOTO_: {
 						// arg[0] = address
 

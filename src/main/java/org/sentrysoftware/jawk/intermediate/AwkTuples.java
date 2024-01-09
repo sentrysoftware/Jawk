@@ -1772,6 +1772,16 @@ public class AwkTuples implements Serializable {
 	public static final int _DELETE_ARRAY_ = 384;	// 0 -> 0
 
 	/**
+	 * Converts the top stack element to a number;
+	 * pushes the result onto the stack.
+	 * <p>
+	 * Stack before: x ...<br/>
+	 * Stack after: x ... (as a number)
+	 *
+	 */
+	public static final int _UNARY_PLUS_ = 385;	// x -> -x
+
+	/**
 	 * Override add() to populate the line number for each tuple,
 	 * rather than polluting all the constructors with this assignment.
 	 */
@@ -2495,6 +2505,13 @@ public class AwkTuples implements Serializable {
 	 */
 	public void negate() {
 		queue.add(new Tuple(_NEGATE_));
+	}
+
+	/**
+	 * <p>unary plus.</p>
+	 */
+	public void unaryPlus() {
+		queue.add(new Tuple(_UNARY_PLUS_));
 	}
 
 	/**
