@@ -37,5 +37,16 @@ public class AwkParserTest {
 		assertThrows("Interrupted hex number in string by EOF must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished\\xF", null));
 		assertThrows("Interrupted hex number in string by EOL must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished\\xf\n\"}", null));
 	}
+	
+	@Test
+	public void testMultiLineStatement() throws Exception {
+		assertEquals("|| must allow eol", "success", AwkTestHelper.runAwk("BEGIN { if (0 || \n    1) { printf \"success\" } }", null));
+		assertEquals("&& must allow eol", "success", AwkTestHelper.runAwk("BEGIN { if (1 && \n    1) { printf \"success\" } }", null));
+		assertEquals("? must allow eol", "success", AwkTestHelper.runAwk("BEGIN { printf 1 ?\n\"success\" : \"failed\" }", null));
+		assertEquals(": must allow eol", "success", AwkTestHelper.runAwk("BEGIN { printf 1 ? \"success\" :\n\"failed\" }", null));
+		assertEquals(", must allow eol", "success", AwkTestHelper.runAwk("BEGIN { printf(\"%s\", \n\"success\") }", null));
+		assertEquals("do must allow eol", "success", AwkTestHelper.runAwk("BEGIN { do\n printf \"success\"; while (0) }", null));
+		assertEquals("else must allow eol", "success", AwkTestHelper.runAwk("BEGIN { if (0) { printf \"failure\" } else \n printf \"success\" }", null));
+	}
 
 }
