@@ -49,4 +49,8 @@ public class AwkParserTest {
 		assertEquals("else must allow eol", "success", AwkTestHelper.runAwk("BEGIN { if (0) { printf \"failure\" } else \n printf \"success\" }", null));
 	}
 
+	@Test
+	public void testUnaryPlus() throws Exception {
+		assertEquals("+a must convert a to number", "0", AwkTestHelper.runAwk("BEGIN { printf +a }", null));
+	}
 }

@@ -1392,8 +1392,10 @@ public class AwkParser {
 		} else if (token == _MINUS_) {
 			lexer();
 			return new NegativeExpression_AST(FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
-		}
-		else if (token == _INTEGER_) {
+		} else if (token == _PLUS_) {
+			lexer();
+			return new UnaryPlusExpression_AST(FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
+		} else if (token == _INTEGER_) {
 			AST integer = symbol_table.addINTEGER(text.toString());
 			lexer();
 			return integer;
@@ -3374,6 +3376,24 @@ public class AwkParser {
 			int ast1_result = ast1.populateTuples(tuples);
 			assert ast1_result == 1;
 			tuples.negate();
+			popSourceLineNumber(tuples);
+			return 1;
+		}
+	}
+
+	private final class UnaryPlusExpression_AST extends ScalarExpression_AST {
+
+		private UnaryPlusExpression_AST(AST expr) {
+			super(expr);
+		}
+
+		@Override
+		public int populateTuples(AwkTuples tuples) {
+			pushSourceLineNumber(tuples);
+			assert ast1 != null;
+			int ast1_result = ast1.populateTuples(tuples);
+			assert ast1_result == 1;
+			tuples.unaryPlus();
 			popSourceLineNumber(tuples);
 			return 1;
 		}
