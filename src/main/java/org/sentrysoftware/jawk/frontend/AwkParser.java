@@ -1071,13 +1071,13 @@ public class AwkParser {
 		return comma_expression;
 	}
 
-	// COMMA_EXPRESSION = CONCAT_EXPRESSION [, COMMA_EXPRESSION] !!!ONLY IF!!! allow_multidim_indices is true
+	// COMMA_EXPRESSION = TERNARY_EXPRESSION [, COMMA_EXPRESSION] !!!ONLY IF!!! allow_multidim_indices is true
 	// allow_multidim_indices is set to true when we need (1,2,3,4) expressions to collapse into an array index expression
 	// (converts 1,2,3,4 to 1 SUBSEP 2 SUBSEP 3 SUBSEP 4) after an open parenthesis (grouping) expression starter
 	AST COMMA_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST concat_expression = CONCAT_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		AST concat_expression = TERNARY_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		if (allow_multidim_indices && token == _COMMA_) {
 			// consume the comma
 			lexer();
@@ -1093,46 +1093,27 @@ public class AwkParser {
 		}
 	}
 
-	// CONCAT_EXPRESSION = LE_1 [ CONCAT_EXPRESSION ]
-	AST CONCAT_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+	// TERNARY_EXPRESSION = LOGICAL_OR_EXPRESSION [ ? TERNARY_EXPRESSION : TERNARY_EXPRESSION ]
+	AST TERNARY_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST te = TERTIARY_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
-		if (token == _INTEGER_ || token == _DOUBLE_ || token == _OPEN_PAREN_ || token == _FUNC_ID_ || token == _INC_ || token == _DEC_ || token == _ID_ || token == _STRING_ || token == _DOLLAR_ || token == _BUILTIN_FUNC_NAME_ || token == _EXTENSION_) {
-			// allow concatination here only when certain tokens follow
-			return new ConcatExpression_AST(te, CONCAT_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices));
-		} else if (additional_type_functions && (
-					token == KEYWORDS.get("_INTEGER")
-					|| token == KEYWORDS.get("_DOUBLE")
-					|| token == KEYWORDS.get("_STRING")))
-		{
-			// allow concatination here only when certain tokens follow
-			return new ConcatExpression_AST(te, CONCAT_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices));
-		} else {
-			return te;
-		}
-	}
-
-	AST TERTIARY_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
-			throws IOException
-	{
-		AST le1 = LE1_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		AST le1 = LOGICAL_OR_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		if (token == _QUESTION_MARK_) {
 			lexer();
-			AST true_block = TERTIARY_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+			AST true_block = TERNARY_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 			lexer(_COLON_);
-			AST false_block = TERTIARY_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
-			return new TertiaryExpression_AST(le1, true_block, false_block);
+			AST false_block = TERNARY_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+			return new TernaryExpression_AST(le1, true_block, false_block);
 		} else {
 			return le1;
 		}
 	}
 
-	// LE_1 = LE_2 [ || LE_1 ]
-	AST LE1_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+	// LOGICAL_OR_EXPRESSION = LOGICAL_AND_EXPRESSION [ || LOGICAL_OR_EXPRESSION ]
+	AST LOGICAL_OR_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST le2 = LE2_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		AST le2 = LOGICAL_AND_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		int op = 0;
 		String txt = null;
 		AST le1 = null;
@@ -1140,14 +1121,14 @@ public class AwkParser {
 			op = token;
 			txt = text.toString();
 			lexer();
-			le1 = LE1_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+			le1 = LOGICAL_OR_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 			return new LogicalExpression_AST(le2, op, txt, le1);
 		}
 		return le2;
 	}
 
-	// LE_2 = COMPARISON_EXPRESSION [ && LE_2 ]
-	AST LE2_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+	// LOGICAL_AND_EXPRESSION = COMPARISON_EXPRESSION [ && LOGICAL_AND_EXPRESSION ]
+	AST LOGICAL_AND_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
 		AST comparison_expression = COMPARISON_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
@@ -1158,19 +1139,19 @@ public class AwkParser {
 			op = token;
 			txt = text.toString();
 			lexer();
-			le2 = LE2_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+			le2 = LOGICAL_AND_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 			return new LogicalExpression_AST(comparison_expression, op, txt, le2);
 		}
 		return comparison_expression;
 	}
 
-	// COMPARISON_EXPRESSION = EXPRESSION [ (==,>,>=,<,<=,!=,~,!~) COMPARISON_EXPRESSION ]
+	// COMPARISON_EXPRESSION = CONCAT_EXPRESSION [ (==,>,>=,<,<=,!=,~,!~) COMPARISON_EXPRESSION ]
 	// allow_comparators is set false when within a print/printf statement;
 	// all other times it is set true
 	AST COMPARISON_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST expression = EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		AST expression = CONCAT_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		int op = 0;
 		String txt = null;
 		AST comparison_expression = null;
@@ -1184,6 +1165,26 @@ public class AwkParser {
 			return new ComparisonExpression_AST(expression, op, txt, comparison_expression);
 		}
 		return expression;
+	}
+
+	// CONCAT_EXPRESSION = EXPRESSION [ CONCAT_EXPRESSION ]
+	AST CONCAT_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+			throws IOException
+	{
+		AST te = EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		if (token == _INTEGER_ || token == _DOUBLE_ || token == _OPEN_PAREN_ || token == _FUNC_ID_ || token == _INC_ || token == _DEC_ || token == _ID_ || token == _STRING_ || token == _DOLLAR_ || token == _BUILTIN_FUNC_NAME_ || token == _EXTENSION_) {
+			// allow concatination here only when certain tokens follow
+			return new ConcatExpression_AST(te, CONCAT_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices));
+		} else if (additional_type_functions && (
+					token == KEYWORDS.get("_INTEGER")
+					|| token == KEYWORDS.get("_DOUBLE")
+					|| token == KEYWORDS.get("_STRING")))
+		{
+			// allow concatenation here only when certain tokens follow
+			return new ConcatExpression_AST(te, CONCAT_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices));
+		} else {
+			return te;
+		}
 	}
 
 	// EXPRESSION : TERM [ (+|-|,) EXPRESSION ]
@@ -2699,9 +2700,9 @@ public class AwkParser {
 		}
 	}
 
-	private final class TertiaryExpression_AST extends ScalarExpression_AST {
+	private final class TernaryExpression_AST extends ScalarExpression_AST {
 
-		private TertiaryExpression_AST(AST a1, AST a2, AST a3) {
+		private TernaryExpression_AST(AST a1, AST a2, AST a3) {
 			super(a1, a2, a3);
 		}
 

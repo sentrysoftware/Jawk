@@ -13,8 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import org.sentrysoftware.jawk.Awk;
-import org.sentrysoftware.jawk.ExitException;
 import org.sentrysoftware.jawk.util.AwkSettings;
 import org.sentrysoftware.jawk.util.ScriptFileSource;
 import org.sentrysoftware.jawk.util.ScriptSource;
@@ -112,9 +110,9 @@ public class AwkTestHelper {
 
 
 	/**
-	 * Reads the specified resource file and returns its content as a String
+	 * Reads the specified file and returns its content as a String
 	 *
-	 * @param path Path to the resource file
+	 * @param textFile File reference to read
 	 * @return The content of the resource file as a String
 	 * @throws IOException 
 	 */
@@ -123,6 +121,30 @@ public class AwkTestHelper {
 		StringBuilder builder = new StringBuilder();
 	
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(textFile)))) {
+			String l;
+			while ((l = reader.readLine()) != null) {
+				builder.append(l).append('\n');
+			}
+			
+		}
+	
+		return builder.toString();
+	}
+	
+	/**
+	 * Reads the specified resource file and returns its content as a String
+	 *
+	 * @param path Path to the file
+	 * @return The content of the resource file as a String
+	 * @throws IOException 
+	 */
+	static String readResource(String path) throws IOException {
+	
+		StringBuilder builder = new StringBuilder();
+	
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(AwkTestHelper.class.getResourceAsStream(path))
+				)) {
 			String l;
 			while ((l = reader.readLine()) != null) {
 				builder.append(l).append('\n');
