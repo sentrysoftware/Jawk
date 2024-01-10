@@ -2,6 +2,8 @@ package org.sentrysoftware.jawk;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+
 import org.junit.Test;
 import org.sentrysoftware.jawk.frontend.AwkParser;
 
@@ -52,5 +54,16 @@ public class AwkParserTest {
 	@Test
 	public void testUnaryPlus() throws Exception {
 		assertEquals("+a must convert a to number", "0", AwkTestHelper.runAwk("BEGIN { printf +a }", null));
+	}
+	
+	@Test
+	public void testTernaryExpression() throws Exception {
+		assertEquals("Ternary expression must allow string concatenations", "success", AwkTestHelper.runAwk("BEGIN { printf( a \"1\" b ? \"suc\" \"cess\" : \"failure\" ) }", null));
+	}
+	
+	@Test
+	public void testParseGron() throws Exception {
+		String gron = AwkTestHelper.readResource("/xonixx/gron.awk");
+		assertEquals("gron.awk must not trigger any parser exception", "json=[]\n", AwkTestHelper.runAwk(gron, "[]"));
 	}
 }
