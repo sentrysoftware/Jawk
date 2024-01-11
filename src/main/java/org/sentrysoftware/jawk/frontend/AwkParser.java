@@ -601,6 +601,9 @@ public class AwkParser {
 			if (c == '=') {
 				read();
 				return token = _MULT_EQ_;
+			} else if (c == '*') {
+				read();
+				return token = _POW_;
 			}
 			return token = _MULT_;
 		}
@@ -1127,11 +1130,11 @@ public class AwkParser {
 		return le2;
 	}
 
-	// LOGICAL_AND_EXPRESSION = COMPARISON_EXPRESSION [ && LOGICAL_AND_EXPRESSION ]
+	// LOGICAL_AND_EXPRESSION = IN_EXPRESSION [ && LOGICAL_AND_EXPRESSION ]
 	AST LOGICAL_AND_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST comparison_expression = COMPARISON_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		AST comparison_expression = IN_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		int op = 0;
 		String txt = null;
 		AST le2 = null;
@@ -1145,7 +1148,44 @@ public class AwkParser {
 		return comparison_expression;
 	}
 
-	// COMPARISON_EXPRESSION = CONCAT_EXPRESSION [ (==,>,>=,<,<=,!=,~,!~) COMPARISON_EXPRESSION ]
+	// IN_EXPRESSION = MATCHING_EXPRESSION [ IN_EXPRESSION ]
+	// allow_in_keyword is set false while parsing the first expression within
+	// a for() statement (because it could be "for (key in arr)", and this
+	// production will consume and the for statement will never have a chance
+	// of processing it
+	// all other times, it is true
+	AST IN_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+			throws IOException
+	{
+		// true = allow post_inc/dec operators
+		AST comparison = MATCHING_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		if (allow_in_keyword && token == KEYWORDS.get("in")) {
+			lexer();
+			return new InExpression_AST(comparison, IN_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices));
+		}
+		return comparison;
+	}
+
+	// MATCHING_EXPRESSION = COMPARISON_EXPRESSION [ (~,!~) MATCHING_EXPRESSION ]
+	AST MATCHING_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+			throws IOException
+	{
+		AST expression = COMPARISON_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		int op = 0;
+		String txt = null;
+		AST comparison_expression = null;
+		if (token == _MATCHES_ || token == _NOT_MATCHES_)
+		{
+			op = token;
+			txt = text.toString();
+			lexer();
+			comparison_expression = MATCHING_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
+			return new ComparisonExpression_AST(expression, op, txt, comparison_expression);
+		}
+		return expression;
+	}
+
+	// COMPARISON_EXPRESSION = CONCAT_EXPRESSION [ (==,>,>=,<,<=,!=,|) COMPARISON_EXPRESSION ]
 	// allow_comparators is set false when within a print/printf statement;
 	// all other times it is set true
 	AST COMPARISON_EXPRESSION(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
@@ -1156,14 +1196,18 @@ public class AwkParser {
 		String txt = null;
 		AST comparison_expression = null;
 		if (allow_comparators
-				&& (token == _EQ_ || token == _GT_ || token == _GE_ || token == _LT_ || token == _LE_ || token == _NE_ || token == _MATCHES_ || token == _NOT_MATCHES_))
+				&& (token == _EQ_ || token == _GT_ || token == _GE_ || token == _LT_ || token == _LE_ || token == _NE_))
 		{
 			op = token;
 			txt = text.toString();
 			lexer();
 			comparison_expression = COMPARISON_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 			return new ComparisonExpression_AST(expression, op, txt, comparison_expression);
+		} else if (allow_comparators && token == _PIPE_) {
+			lexer();
+			return GETLINE_EXPRESSION(expression, allow_comparators, allow_in_keyword);
 		}
+
 		return expression;
 	}
 
@@ -1255,62 +1299,76 @@ public class AwkParser {
 		return b2;
 	}
 
-	// TERM : FACTOR_FOR_GETLINE [ (*|/|%|^) TERM ]
+	// TERM : UNARY_FACTOR [ (*|/|%) TERM ]
 	AST TERM(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST factor_for_getline = FACTOR_FOR_GETLINE(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		AST unary_factor_ast = UNARY_FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		int op = 0;
 		String txt = null;
 		AST term = null;
-		if (token == _MULT_ || token == _DIVIDE_ || token == _MOD_ || token == _POW_) {
+		if (token == _MULT_ || token == _DIVIDE_ || token == _MOD_) {
 			op = token;
 			txt = text.toString();
 			lexer();
 			term = TERM(allow_comparators, allow_in_keyword, allow_multidim_indices);
 
-			BinaryExpression_AST retval = new BinaryExpression_AST(factor_for_getline, op, txt, term);
+			BinaryExpression_AST retval = new BinaryExpression_AST(unary_factor_ast, op, txt, term);
 			if (term instanceof BinaryExpression_AST) {
 				BinaryExpression_AST be2 = (BinaryExpression_AST) term;
-				if (be2.op == _MULT_ || be2.op == _DIVIDE_ || be2.op == _MOD_ || be2.op == _POW_) {
+				if (be2.op == _MULT_ || be2.op == _DIVIDE_ || be2.op == _MOD_) {
 					// convert right-associativity to left-assiciativity
 					return rearrange(retval, be2);
 				}
 			}
 			return retval;
 		}
-		return factor_for_getline;
+		return unary_factor_ast;
 	}
 
-	// FACTOR_FOR_GETLINE : FACTOR_FOR_IN [ | getline_expr ]
-	// allow_comparators is set false when within a print/printf statement;
-	// all other times it is set true
-	AST FACTOR_FOR_GETLINE(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+	// UNARY_FACTOR : [ ! | - | + ] POWER_FACTOR
+	AST UNARY_FACTOR(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST factor_for_in = FACTOR_FOR_IN(allow_comparators, allow_in_keyword, allow_multidim_indices);
-		if (allow_comparators && token == _PIPE_) {
+		if (token == _NOT_) {
 			lexer();
-			return GETLINE_EXPRESSION(factor_for_in, allow_comparators, allow_in_keyword);
+			return new NotExpression_AST(POWER_FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
+		} else if (token == _MINUS_) {
+			lexer();
+			return new NegativeExpression_AST(POWER_FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
+		} else if (token == _PLUS_) {
+			lexer();
+			return new UnaryPlusExpression_AST(POWER_FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
+		} else {
+			return POWER_FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		}
-		return factor_for_in;
 	}
 
-	// allow_in_keyword is set false while parsing the first expression within
-	// a for() statement (because it could be "for (key in arr)", and this
-	// production will consume and the for statement will never have a chance
-	// of processing it
-	// all other times, it is true
-	AST FACTOR_FOR_IN(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
+	// POWER_FACTOR : FACTOR_FOR_INCDEC [ ^ POWER_FACTOR ]
+	AST POWER_FACTOR(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		// true = allow post_inc/dec operators
-		AST factor_for_incdec = FACTOR_FOR_INCDEC(allow_comparators, allow_in_keyword, allow_multidim_indices);
-		if (allow_in_keyword && token == KEYWORDS.get("in")) {
+		AST incdec_ast = FACTOR_FOR_INCDEC(allow_comparators, allow_in_keyword, allow_multidim_indices);
+		int op = 0;
+		String txt = null;
+		AST term = null;
+		if (token == _POW_) {
+			op = token;
+			txt = text.toString();
 			lexer();
-			return new InExpression_AST(factor_for_incdec, FACTOR_FOR_IN(allow_comparators, allow_in_keyword, allow_multidim_indices));
+			term = POWER_FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices);
+
+			BinaryExpression_AST retval = new BinaryExpression_AST(incdec_ast, op, txt, term);
+			if (term instanceof BinaryExpression_AST) {
+				BinaryExpression_AST be2 = (BinaryExpression_AST) term;
+				if (be2.op == _POW_) {
+					// convert right-associativity to left-assiciativity
+					return rearrange(retval, be2);
+				}
+			}
+			return retval;
 		}
-		return factor_for_incdec;
+		return incdec_ast;
 	}
 
 	// according to the spec, pre/post inc can occur
@@ -1373,7 +1431,7 @@ public class AwkParser {
 		}
 	}
 
-	// FACTOR : '(' ASSIGNMENT_EXPRESSION ')' | ! FACTOR | $ FACTOR | - FACTOR | _INTEGER_ | _DOUBLE_ | _STRING_ | GETLINE [ID-or-array-or-$val] | /[=].../ | [++|--] SYMBOL [++|--]
+	// FACTOR : '(' ASSIGNMENT_EXPRESSION ')' | _INTEGER_ | _DOUBLE_ | _STRING_ | GETLINE [ID-or-array-or-$val] | /[=].../ | [++|--] SYMBOL [++|--]
 	//AST FACTOR(boolean allow_comparators, boolean allow_in_keyword, boolean allow_post_incdec_operators)
 	AST FACTOR(boolean allow_comparators, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
@@ -1387,15 +1445,6 @@ public class AwkParser {
 			}
 			lexer(_CLOSE_PAREN_);
 			return assignment_expression;
-		} else if (token == _NOT_) {
-			lexer();
-			return new NotExpression_AST(FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
-		} else if (token == _MINUS_) {
-			lexer();
-			return new NegativeExpression_AST(FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
-		} else if (token == _PLUS_) {
-			lexer();
-			return new UnaryPlusExpression_AST(FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
 		} else if (token == _INTEGER_) {
 			AST integer = symbol_table.addINTEGER(text.toString());
 			lexer();
@@ -1427,15 +1476,17 @@ public class AwkParser {
 		} else if (additional_type_functions && token == KEYWORDS.get("_STRING")) {
 			return STRING_EXPRESSION(allow_comparators, allow_in_keyword, allow_multidim_indices);
 		} else {
-			AST target_ast;
 			if (token == _DOLLAR_) {
 				lexer();
-				target_ast = new DollarExpression_AST(FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
-			} else {
-				target_ast = SYMBOL(allow_comparators, allow_in_keyword);
+				if (token == _INC_ || token == _DEC_) {
+					return new DollarExpression_AST(FACTOR_FOR_INCDEC(allow_comparators, allow_in_keyword, allow_multidim_indices));
+				}
+				if (token == _NOT_ || token == _MINUS_ || token == _PLUS_) {
+					return new DollarExpression_AST(UNARY_FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
+				}
+				return new DollarExpression_AST(FACTOR(allow_comparators, allow_in_keyword, allow_multidim_indices));
 			}
-
-			return target_ast;
+			return SYMBOL(allow_comparators, allow_in_keyword);
 		}
 	}
 

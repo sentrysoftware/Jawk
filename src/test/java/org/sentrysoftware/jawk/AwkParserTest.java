@@ -1,8 +1,8 @@
 package org.sentrysoftware.jawk;
 
 import static org.junit.Assert.*;
-
-import java.io.File;
+import static org.sentrysoftware.jawk.AwkTestHelper.runAwk;
+import static org.sentrysoftware.jawk.AwkTestHelper.evalAwk;
 
 import org.junit.Test;
 import org.sentrysoftware.jawk.frontend.AwkParser;
@@ -11,59 +11,79 @@ public class AwkParserTest {
 
 	@Test
 	public void testStringParsing() throws Exception {
-		assertEquals("'\\\\' must become \\", "\\", AwkTestHelper.runAwk("BEGIN { printf \"\\\\\" }", null));
-		assertEquals("'\\a' must become BEL", "\u0007", AwkTestHelper.runAwk("BEGIN { printf \"\\a\" }", null));
-		assertEquals("'\\b' must become BS", "\u0008", AwkTestHelper.runAwk("BEGIN { printf \"\\b\" }", null));
-		assertEquals("'\\f' must become FF", "\014", AwkTestHelper.runAwk("BEGIN { printf \"\\f\" }", null));
-		assertEquals("'\\n' must become LF", "\n", AwkTestHelper.runAwk("BEGIN { printf \"\\n\" }", null));
-		assertEquals("'\\r' must become CR", "\r", AwkTestHelper.runAwk("BEGIN { printf \"\\r\" }", null));
-		assertEquals("'\\t' must become TAB", "\t", AwkTestHelper.runAwk("BEGIN { printf \"\\t\" }", null));
-		assertEquals("'\\v' must become VT", "\u000B", AwkTestHelper.runAwk("BEGIN { printf \"\\v\" }", null));
-		assertEquals("'\\33' must become ESC", "\u001B", AwkTestHelper.runAwk("BEGIN { printf \"\\33\" }", null));
-		assertEquals("'\\1!' must become {0x01, 0x21}", "\u0001!", AwkTestHelper.runAwk("BEGIN { printf \"\\1!\" }", null));
-		assertEquals("'\\19' must become {0x01, 0x39}", "\u00019", AwkTestHelper.runAwk("BEGIN { printf \"\\19\" }", null));
-		assertEquals("'\\38' must become {0x03, 0x38}", "\u00038", AwkTestHelper.runAwk("BEGIN { printf \"\\38\" }", null));
-		assertEquals("'\\132' must become Z", "Z", AwkTestHelper.runAwk("BEGIN { printf \"\\132\" }", null));
-		assertEquals("'\\1320' must become Z0", "Z0", AwkTestHelper.runAwk("BEGIN { printf \"\\1320\" }", null));
-		assertEquals("'\\\"' must become \"", "\"", AwkTestHelper.runAwk("BEGIN { printf \"\\\"\" }", null));
-		assertEquals("'\\x1B' must become ESC", "\u001B", AwkTestHelper.runAwk("BEGIN { printf \"\\x1B\" }", null));
-		assertEquals("'\\x1b' must become ESC", "\u001B", AwkTestHelper.runAwk("BEGIN { printf \"\\x1b\" }", null));
-		assertEquals("'\\x1!' must become {0x01, 0x21}", "\u0001!", AwkTestHelper.runAwk("BEGIN { printf \"\\x1!\" }", null));
-		assertEquals("'\\x1G' must become {0x01, 0x47}", "\u0001G", AwkTestHelper.runAwk("BEGIN { printf \"\\x1G\" }", null));
-		assertEquals("'\\x21A' must become !A", "!A", AwkTestHelper.runAwk("BEGIN { printf \"\\x21A\" }", null));
-		assertEquals("'\\x!' must become x!", "x!", AwkTestHelper.runAwk("BEGIN { printf \"\\x!\" }", null));	
-		assertThrows("Unfinished string by EOF must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished", null));
-		assertThrows("Unfinished string by EOL must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished\n\"}", null));
-		assertThrows("Interrupted octal number in string by EOF must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished\\0", null));
-		assertThrows("Interrupted octal number in string by EOL must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished\\0\n\"}", null));
-		assertThrows("Interrupted hex number in string by EOF must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished\\xF", null));
-		assertThrows("Interrupted hex number in string by EOL must throw", AwkParser.LexerException.class, () -> AwkTestHelper.runAwk("BEGIN { printf \"unfinished\\xf\n\"}", null));
+		assertEquals("'\\\\' must become \\", "\\", evalAwk("\"\\\\\" "));
+		assertEquals("'\\a' must become BEL", "\u0007", evalAwk("\"\\a\" "));
+		assertEquals("'\\b' must become BS", "\u0008", evalAwk("\"\\b\" "));
+		assertEquals("'\\f' must become FF", "\014", evalAwk("\"\\f\" "));
+		assertEquals("'\\n' must become LF", "\n", evalAwk("\"\\n\" "));
+		assertEquals("'\\r' must become CR", "\r", evalAwk("\"\\r\" "));
+		assertEquals("'\\t' must become TAB", "\t", evalAwk("\"\\t\" "));
+		assertEquals("'\\v' must become VT", "\u000B", evalAwk("\"\\v\" "));
+		assertEquals("'\\33' must become ESC", "\u001B", evalAwk("\"\\33\" "));
+		assertEquals("'\\1!' must become {0x01, 0x21}", "\u0001!", evalAwk("\"\\1!\" "));
+		assertEquals("'\\19' must become {0x01, 0x39}", "\u00019", evalAwk("\"\\19\" "));
+		assertEquals("'\\38' must become {0x03, 0x38}", "\u00038", evalAwk("\"\\38\" "));
+		assertEquals("'\\132' must become Z", "Z", evalAwk("\"\\132\" "));
+		assertEquals("'\\1320' must become Z0", "Z0", evalAwk("\"\\1320\" "));
+		assertEquals("'\\\"' must become \"", "\"", evalAwk("\"\\\"\" "));
+		assertEquals("'\\x1B' must become ESC", "\u001B", evalAwk("\"\\x1B\" "));
+		assertEquals("'\\x1b' must become ESC", "\u001B", evalAwk("\"\\x1b\" "));
+		assertEquals("'\\x1!' must become {0x01, 0x21}", "\u0001!", evalAwk("\"\\x1!\" "));
+		assertEquals("'\\x1G' must become {0x01, 0x47}", "\u0001G", evalAwk("\"\\x1G\" "));
+		assertEquals("'\\x21A' must become !A", "!A", evalAwk("\"\\x21A\" "));
+		assertEquals("'\\x!' must become x!", "x!", evalAwk("\"\\x!\" "));
+		assertThrows("Unfinished string by EOF must throw", AwkParser.LexerException.class, () -> runAwk("BEGIN { printf \"unfinished", null));
+		assertThrows("Unfinished string by EOL must throw", AwkParser.LexerException.class, () -> evalAwk("\"unfinished\n\""));
+		assertThrows("Interrupted octal number in string by EOF must throw", AwkParser.LexerException.class, () -> runAwk("BEGIN { printf \"unfinished\\0", null));
+		assertThrows("Interrupted octal number in string by EOL must throw", AwkParser.LexerException.class, () -> evalAwk("\"unfinished\\0\n\""));
+		assertThrows("Interrupted hex number in string by EOF must throw", AwkParser.LexerException.class, () -> runAwk("BEGIN { printf \"unfinished\\xF", null));
+		assertThrows("Interrupted hex number in string by EOL must throw", AwkParser.LexerException.class, () -> evalAwk("\"unfinished\\xf\n\""));
 	}
-	
+
 	@Test
 	public void testMultiLineStatement() throws Exception {
-		assertEquals("|| must allow eol", "success", AwkTestHelper.runAwk("BEGIN { if (0 || \n    1) { printf \"success\" } }", null));
-		assertEquals("&& must allow eol", "success", AwkTestHelper.runAwk("BEGIN { if (1 && \n    1) { printf \"success\" } }", null));
-		assertEquals("? must allow eol", "success", AwkTestHelper.runAwk("BEGIN { printf 1 ?\n\"success\" : \"failed\" }", null));
-		assertEquals(": must allow eol", "success", AwkTestHelper.runAwk("BEGIN { printf 1 ? \"success\" :\n\"failed\" }", null));
-		assertEquals(", must allow eol", "success", AwkTestHelper.runAwk("BEGIN { printf(\"%s\", \n\"success\") }", null));
-		assertEquals("do must allow eol", "success", AwkTestHelper.runAwk("BEGIN { do\n printf \"success\"; while (0) }", null));
-		assertEquals("else must allow eol", "success", AwkTestHelper.runAwk("BEGIN { if (0) { printf \"failure\" } else \n printf \"success\" }", null));
+		assertEquals("|| must allow eol", "success", runAwk("BEGIN { if (0 || \n    1) { printf \"success\" } }", null));
+		assertEquals("&& must allow eol", "success", runAwk("BEGIN { if (1 && \n    1) { printf \"success\" } }", null));
+		assertEquals("? must allow eol", "success", evalAwk("1 ?\n\"success\" : \"failed\" "));
+		assertEquals(": must allow eol", "success", evalAwk("1 ? \"success\" :\n\"failed\" "));
+		assertEquals(", must allow eol", "success", runAwk("BEGIN { printf(\"%s\", \n\"success\") }", null));
+		assertEquals("do must allow eol", "success", runAwk("BEGIN { do\n printf \"success\"; while (0) }", null));
+		assertEquals("else must allow eol", "success", runAwk("BEGIN { if (0) { printf \"failure\" } else \n printf \"success\" }", null));
 	}
 
 	@Test
 	public void testUnaryPlus() throws Exception {
-		assertEquals("+a must convert a to number", "0", AwkTestHelper.runAwk("BEGIN { printf +a }", null));
+		assertEquals("+a must convert a to number", "0", evalAwk("+a "));
 	}
-	
+
 	@Test
 	public void testTernaryExpression() throws Exception {
-		assertEquals("Ternary expression must allow string concatenations", "success", AwkTestHelper.runAwk("BEGIN { printf( a \"1\" b ? \"suc\" \"cess\" : \"failure\" ) }", null));
+		assertEquals("Ternary expression must allow string concatenations", "success", runAwk("BEGIN { printf( a \"1\" b ? \"suc\" \"cess\" : \"failure\" ) }", null));
 	}
-	
+
 	@Test
 	public void testParseGron() throws Exception {
 		String gron = AwkTestHelper.readResource("/xonixx/gron.awk");
-		assertEquals("gron.awk must not trigger any parser exception", "json=[]\n", AwkTestHelper.runAwk(gron, "[]"));
+		assertEquals("gron.awk must not trigger any parser exception", "json=[]\n", runAwk(gron, "[]"));
+	}
+
+	@Test
+	public void testPow() throws Exception {
+		assertEquals("^ (pow) operator must be supported", "256", evalAwk("2^8 "));
+		assertEquals("** (pow) operator must be supported", "256", evalAwk("2**8 "));
+	}
+	
+	@Test
+	public void testOperatorPrecedence() throws Exception {
+		assertEquals("$a precedes a++", "1122", runAwk("{ a = 1; printf $a++ ; printf a ; printf $(a++) ; printf a }", "1 2 3"));
+		assertEquals("$a precedes ++a", "2233", runAwk("{ a = 1; printf $++a ; printf a ; printf $(++a) ; printf a }", "1 2 3"));
+		assertEquals("$a precedes a--", "3322", runAwk("{ a = 3; printf $a-- ; printf a ; printf $(a--) ; printf a }", "1 2 3"));
+		assertEquals("$a precedes --a", "2211", runAwk("{ a = 3; printf $--a ; printf a ; printf $(--a) ; printf a }", "1 2 3"));
+		assertEquals("++ precedes ^", "22", runAwk("BEGIN { a = 1; printf(2^a++); printf a }", null));
+		assertEquals("^ precedes unary -", "-1", evalAwk("-1^2"));
+		assertEquals("^ precedes unary !", "1", evalAwk("!0^2"));
+		assertEquals("Unary - precedes *", "-2", evalAwk("0 + -1 * 2"));
+		assertEquals("* precedes +", "5", evalAwk("1 + 2 * 2"));
+		assertEquals("+ precedes string concat", "33", evalAwk("1 + 2 3"));
 	}
 }

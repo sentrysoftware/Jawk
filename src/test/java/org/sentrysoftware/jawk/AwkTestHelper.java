@@ -22,14 +22,14 @@ public class AwkTestHelper {
 	/** Temporary directory where to store temporary stuff */
 	private static String tempDirectory;
 	static {
-    	Path tempDirectoryPath;
+		Path tempDirectoryPath;
 		try {
 			tempDirectoryPath = Files.createTempDirectory("jawk-gawk-test");
-	    	tempDirectoryPath.toFile().deleteOnExit();
-	    	tempDirectory = tempDirectoryPath.toFile().getAbsolutePath();
-	    	} catch (IOException e) {
-	    		e.printStackTrace();
-	    	}
+			tempDirectoryPath.toFile().deleteOnExit();
+			tempDirectory = tempDirectoryPath.toFile().getAbsolutePath();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -88,24 +88,37 @@ public class AwkTestHelper {
 			settings.setInput(new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)));
 		}
 		
-       	// We force \n as the Record Separator (RS) because even if running on Windows
-       	// we're passing Java strings, where end of lines are simple \n
-       	settings.setDefaultRS("\n");
-       	
-       	// Create the OutputStream, to collect the result as a String
+		// We force \n as the Record Separator (RS) because even if running on Windows
+		// we're passing Java strings, where end of lines are simple \n
+		settings.setDefaultRS("\n");
+		
+		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
-    	settings.setOutputStream(new UniformPrintStream(resultBytesStream));
-    	
-    	// Sets the AWK script to execute
-    	settings.addScriptSource(new ScriptSource("Body", new StringReader(script), false));
-    	
-    	// Execute the awk script against the specified input
+		settings.setOutputStream(new UniformPrintStream(resultBytesStream));
+		
+		// Sets the AWK script to execute
+		settings.addScriptSource(new ScriptSource("Body", new StringReader(script), false));
+		
+		// Execute the awk script against the specified input
 		Awk awk = new Awk();
 		awk.invoke(settings);
 		
 		// Return the result as a string
 		return resultBytesStream.toString(StandardCharsets.UTF_8);
 
+	}
+
+	/**
+	 * Evaluates the specified AWK expression
+	 * <p>
+	 * @param expression AWK expression to evaluate (e.g. <code>2 + "3.0"</code>)
+	 * @return result as a String
+	 * @throws ExitException when the AWK script forces its exit with a specified code
+	 * @throws IOException on I/O problems
+	 * @throws ClassNotFoundException 
+	 */
+	static String evalAwk(String expression) throws IOException, ExitException, ClassNotFoundException {
+		return runAwk("BEGIN { printf " + expression + "}", null);
 	}
 
 
