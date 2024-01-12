@@ -417,13 +417,24 @@ public class AwkParser {
 		// should only contain nothing or =, depending on whether
 		// starting with /... or /=...
 		assert regexp.length() == 0 || regexp.length() == 1;
-		while (c >= 0 && c != '\n' && (c != '/' || (regexp.length() > 0 && regexp.charAt(regexp.length() - 1) == '\\'))) {
-			regexp.append((char) c);
-			c = reader.read();
-			// completely bypass \r's
+		while (c >= 0 && c != '\n' && c != '/') {
+			if (c == '\\') {
+				c = reader.read();
+				if (c == '/') {
+					regexp.append('/');
+					c = reader.read();
+					continue;
+				} else if (c == '\\') {
+					regexp.append('\\');
+				}
+			}
 			while (c == '\r') {
 				c = reader.read();
 			}
+			if (c < 0 || c == '\n' || c == '/') break;
+
+			regexp.append((char) c);
+			c = reader.read();
 		}
 		if (c < 0 || c == '\n') {
 			throw new LexerException("Unterminated regular expression: " + regexp);

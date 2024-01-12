@@ -86,4 +86,10 @@ public class AwkParserTest {
 		assertEquals("* precedes +", "5", evalAwk("1 + 2 * 2"));
 		assertEquals("+ precedes string concat", "33", evalAwk("1 + 2 3"));
 	}
+	
+	@Test
+	public void testRegExpConstant() throws Exception {
+		assertEquals("/\\\\/ must be supported", "success", runAwk("/\\\\/ { printf \"success\" }", "a\\b"));
+		assertEquals("/\\// must be supported", "success", runAwk("/\\// { printf \"success\" }", "a/b"));
+	}
 }
