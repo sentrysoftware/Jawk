@@ -3,7 +3,7 @@
 
 	<groupId>org.sentrysoftware</groupId>
 	<artifactId>jawk</artifactId>
-	<version>3.1.00</version>
+	<version>4.0.00-SNAPSHOT</version>
 
 	<packaging>jar</packaging>
 
@@ -49,7 +49,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/sentrysoftware/Jawk.git</connection>
 		<url>https://github.com/sentrysoftware/Jawk</url>
-		<tag>v3.1.00</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
@@ -87,7 +87,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2024-01-16T23:56:28Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2024-01-16T23:57:30Z</project.build.outputTimestamp>
 
 	</properties>
 
