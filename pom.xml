@@ -78,7 +78,7 @@
 	<properties>
 
 		<!-- Java 11 -->
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.release>8</maven.compiler.release>
 
 		<!-- UTF-8 -->
 		<project.build.encoding>UTF-8</project.build.encoding>
