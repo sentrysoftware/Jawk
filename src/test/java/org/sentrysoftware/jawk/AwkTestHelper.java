@@ -54,17 +54,17 @@ public class AwkTestHelper {
 
 		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
-    	settings.setOutputStream(new UniformPrintStream(resultBytesStream));
-    	
-    	// Sets the AWK script to execute
-    	settings.addScriptSource(new ScriptFileSource(scriptFile.getAbsolutePath()));
-    	
-    	// Execute the awk script against the specified input
+		settings.setOutputStream(new UniformPrintStream(resultBytesStream));
+		
+		// Sets the AWK script to execute
+		settings.addScriptSource(new ScriptFileSource(scriptFile.getAbsolutePath()));
+		
+		// Execute the awk script against the specified input
 		Awk awk = new Awk();
 		awk.invoke(settings);
 		
 		// Return the result as a string
-		return resultBytesStream.toString(StandardCharsets.UTF_8);
+		return resultBytesStream.toString("UTF-8");
 
 	}
 	
@@ -104,7 +104,7 @@ public class AwkTestHelper {
 		awk.invoke(settings);
 		
 		// Return the result as a string
-		return resultBytesStream.toString(StandardCharsets.UTF_8);
+		return resultBytesStream.toString("UTF-8");
 
 	}
 
