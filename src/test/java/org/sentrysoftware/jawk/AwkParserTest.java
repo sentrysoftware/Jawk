@@ -38,7 +38,7 @@ public class AwkParserTest {
 		assertThrows("Interrupted octal number in string by EOL must throw", AwkParser.LexerException.class, () -> evalAwk("\"unfinished\\0\n\""));
 		assertThrows("Interrupted hex number in string by EOF must throw", AwkParser.LexerException.class, () -> runAwk("BEGIN { printf \"unfinished\\xF", null));
 		assertThrows("Interrupted hex number in string by EOL must throw", AwkParser.LexerException.class, () -> evalAwk("\"unfinished\\xf\n\""));
-	}
+}
 
 	@Test
 	public void testMultiLineStatement() throws Exception {
@@ -91,5 +91,9 @@ public class AwkParserTest {
 	public void testRegExpConstant() throws Exception {
 		assertEquals("/\\\\/ must be supported", "success", runAwk("/\\\\/ { printf \"success\" }", "a\\b"));
 		assertEquals("/\\// must be supported", "success", runAwk("/\\// { printf \"success\" }", "a/b"));
+		assertEquals("/=1/ must be supported", "success", runAwk("/=1/ { printf \"success\" }", "a=1\n1\n="));
+		assertEquals("/\\057/ must be supported", "success", runAwk("/\\057/ { printf \"success\" }", "a/b"));
+		assertThrows("Unfinished regexp by EOF must throw", AwkParser.LexerException.class, () -> runAwk("/unfinished { print $0 }", null));
+		assertThrows("Unfinished regexp by EOL must throw", AwkParser.LexerException.class, () -> evalAwk("/unfinished\n/"));
 	}
 }
