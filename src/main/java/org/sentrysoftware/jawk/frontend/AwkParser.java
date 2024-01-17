@@ -410,49 +410,110 @@ public class AwkParser {
 					+ ":" + reader.getLineNumber() + ")");
 		}
 	}
+	
+	/**
+	 * Reads the string and handle all escape codes.
+	 * @throws IOException
+	 */
+	private void readString() 
+			throws IOException {
 
-	private void readRegexp()
-			throws IOException
-	{
-		// should only contain nothing or =, depending on whether
-		// starting with /... or /=...
-		assert regexp.length() == 0 || regexp.length() == 1;
-		while (c >= 0 && c != '\n' && c != '/') {
+		string.setLength(0);
+
+		while (token != _EOF_ && c > 0 && c != '"' && c != '\n') {
 			if (c == '\\') {
-				c = reader.read();
-				if (c == '/') {
-					regexp.append('/');
-					c = reader.read();
+				read();
+				switch (c) {
+				case 'n': string.append('\n'); break;
+				case 't': string.append('\t'); break;
+				case 'r': string.append('\r'); break;
+				case 'a': string.append('\007'); break; // BEL 0x07
+				case 'b': string.append('\010'); break; // BS 0x08
+				case 'f': string.append('\014'); break; // FF 0x0C
+				case 'v': string.append('\013'); break; // VT 0x0B
+				// Octal notation: \N \NN \NNN
+				case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': {
+					int octalChar = c - '0';
+					read();
+					if (c >= '0' && c <= '7') {
+						octalChar = (octalChar << 3) + c - '0';
+						read();
+						if (c >= '0' && c <= '7') {
+							octalChar = (octalChar << 3) + c - '0';
+							read();
+						}
+					}
+					string.append((char)octalChar);
 					continue;
-				} else if (c == '\\') {
+				}
+				// Hexadecimal notation: \xN \xNN
+				case 'x': {
+					int hexChar = 0;
+					read();
+					if (c >= '0' && c <= '9') {
+						hexChar = c - '0';
+					} else if (c >= 'A' && c <= 'F') {
+						hexChar = c - 'A' + 10;
+					} else if (c >= 'a' && c <= 'f') {
+						hexChar = c - 'a' + 10;
+					} else {
+						warn("no hex digits in `\\x' sequence");
+						string.append('x');
+						continue;
+					}
+					read();
+					if (c >= '0' && c <= '9') {
+						hexChar = (hexChar << 4) + c - '0';
+					} else if (c >= 'A' && c <= 'F') {
+						hexChar = (hexChar << 4) + c - 'A' + 10;
+					} else if (c >= 'a' && c <= 'f') {
+						hexChar = (hexChar << 4) + c - 'a' + 10;
+					} else {
+						// Append what we already have, and continue directly, because we already have read the next char
+						string.append((char)hexChar);
+						continue;
+					}
+					string.append((char)hexChar);
+					break;
+				}
+				default: string.append((char)c); break; // Remove the backslash
+				}
+			} else {
+				string.append((char) c);
+			}
+			read();
+		}
+		if (token == _EOF_ || c == '\n' || c <= 0) {
+			throw new LexerException("Unterminated string: " + text);
+		}
+		read();
+
+	}
+
+	/**
+	 * Reads the regular expression (between slashes '/') and handle '\/'.
+	 * @throws IOException
+	 */
+	private void readRegexp() 
+			throws IOException {
+
+		regexp.setLength(0);
+
+		while (token != _EOF_ && c > 0 && c != '/' && c != '\n') {
+			if (c == '\\') {
+				read();
+				if (c != '/') {
 					regexp.append('\\');
 				}
 			}
-			while (c == '\r') {
-				c = reader.read();
-			}
-			if (c < 0 || c == '\n' || c == '/') break;
-
 			regexp.append((char) c);
-			c = reader.read();
+			read();
 		}
-		if (c < 0 || c == '\n') {
-			throw new LexerException("Unterminated regular expression: " + regexp);
+		if (token == _EOF_ || c == '\n' || c <= 0) {
+			throw new LexerException("Unterminated string: " + text);
 		}
-		c = reader.read();
-		// completely bypass \r's
-		while (c == '\r') {
-			c = reader.read();
-		}
-	}
-	// LEXER
-	private Thread lexer_thread;
+		read();
 
-	private synchronized boolean assertOneLexerThread() {
-		if (lexer_thread == null) {
-			lexer_thread = Thread.currentThread();
-		}
-		return lexer_thread == Thread.currentThread();
 	}
 
 	private static String toTokenString(int token) {
@@ -475,8 +536,6 @@ public class AwkParser {
 			throws IOException
 	{
 
-		assert assertOneLexerThread();
-
 		if (token != expected_token) {
 			throw new ParserException("Expecting " + expected_token + " " + toTokenString(expected_token) + ". Found: " + token + " " + toTokenString(token) + " (" + text + ")");
 		}
@@ -486,8 +545,6 @@ public class AwkParser {
 	private int lexer()
 			throws IOException
 	{
-
-		assert assertOneLexerThread();
 
 		// clear whitespace
 		while (c >= 0 && (c == ' ' || c == '\t' || c == '#' || c == '\\')) {
@@ -770,74 +827,7 @@ public class AwkParser {
 		if (c == '"') {
 			// string
 			read();
-			string.setLength(0);
-			while (token != _EOF_ && c > 0 && c != '"' && c != '\n') {
-				if (c == '\\') {
-					read();
-					switch (c) {
-					case 'n': string.append('\n'); break;
-					case 't': string.append('\t'); break;
-					case 'r': string.append('\r'); break;
-					case 'a': string.append('\007'); break; // BEL 0x07
-					case 'b': string.append('\010'); break; // BS 0x08
-					case 'f': string.append('\014'); break; // FF 0x0C
-					case 'v': string.append('\013'); break; // VT 0x0B
-					// Octal notation: \N \NN \NNN
-					case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': {
-						int octalChar = c - '0';
-						read();
-						if (c >= '0' && c <= '7') {
-							octalChar = (octalChar << 3) + c - '0';
-							read();
-							if (c >= '0' && c <= '7') {
-								octalChar = (octalChar << 3) + c - '0';
-								read();
-							}
-						}
-						string.append((char)octalChar);
-						continue;
-					}
-					// Hexadecimal notation: \xN \xNN
-					case 'x': {
-						int hexChar = 0;
-						read();
-						if (c >= '0' && c <= '9') {
-							hexChar = c - '0';
-						} else if (c >= 'A' && c <= 'F') {
-							hexChar = c - 'A' + 10;
-						} else if (c >= 'a' && c <= 'f') {
-							hexChar = c - 'a' + 10;
-						} else {
-							warn("no hex digits in `\\x' sequence");
-							string.append('x');
-							continue;
-						}
-						read();
-						if (c >= '0' && c <= '9') {
-							hexChar = (hexChar << 4) + c - '0';
-						} else if (c >= 'A' && c <= 'F') {
-							hexChar = (hexChar << 4) + c - 'A' + 10;
-						} else if (c >= 'a' && c <= 'f') {
-							hexChar = (hexChar << 4) + c - 'a' + 10;
-						} else {
-							// Append what we already have, and continue directly, because we already have read the next char
-							string.append((char)hexChar);
-							continue;
-						}
-						string.append((char)hexChar);
-						break;
-					}
-					default: string.append((char)c); break; // Remove the backslash
-					}
-				} else {
-					string.append((char) c);
-				}
-				read();
-			}
-			if (token == _EOF_ || c == '\n' || c <= 0) {
-				throw new LexerException("Unterminated string: " + text);
-			}
-			read();
+			readString();
 			return token = _STRING_;
 		}
 
@@ -1471,12 +1461,10 @@ public class AwkParser {
 		} else if (token == KEYWORDS.get("getline")) {
 			return GETLINE_EXPRESSION(null, allow_comparators, allow_in_keyword);
 		} else if (token == _DIVIDE_ || token == _DIV_EQ_) {
-			// /.../ or /=.../
-			regexp.setLength(0);
-			if (token == _DIV_EQ_) {
-				regexp.append('=');
-			}
 			readRegexp();
+			if (token == _DIV_EQ_) {
+				regexp.insert(0, '=');
+			}
 			AST regexp_ast = symbol_table.addREGEXP(regexp.toString());
 			lexer();
 			return regexp_ast;
