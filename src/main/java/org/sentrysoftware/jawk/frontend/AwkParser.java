@@ -537,7 +537,7 @@ public class AwkParser {
 	{
 
 		if (token != expected_token) {
-			throw new ParserException("Expecting " + expected_token + " " + toTokenString(expected_token) + ". Found: " + token + " " + toTokenString(token) + " (" + text + ")");
+			throw new ParserException("Expecting " + toTokenString(expected_token) + ". Found: " + toTokenString(token) + " (" + text + ")");
 		}
 		return lexer();
 	}
@@ -852,7 +852,7 @@ public class AwkParser {
 	{
 		// like opt_terminator, except error if no terminator was found
 		if (!opt_terminator()) {
-			throw new ParserException("Expecting statement terminator. Got (" + token + "): " + text);
+			throw new ParserException("Expecting statement terminator. Got " + toTokenString(token) + ": " + text);
 		}
 	}
 
@@ -928,7 +928,7 @@ public class AwkParser {
 			function_name = text.toString();
 			lexer();
 		} else {
-			throw new ParserException("Expecting function name. Got (" + token + "): " + text);
+			throw new ParserException("Expecting function name. Got " + toTokenString(token) + ": " + text);
 		}
 		symbol_table.setFunctionName(function_name);
 		lexer(_OPEN_PAREN_);
@@ -1572,7 +1572,7 @@ public class AwkParser {
 			throws IOException
 	{
 		if (token != _ID_ && token != _FUNC_ID_ && token != _BUILTIN_FUNC_NAME_ && token != _EXTENSION_) {
-			throw new ParserException("Expecting an ID. Got (" + token + "): " + text);
+			throw new ParserException("Expecting an ID. Got " + toTokenString(token) + ": " + text);
 		}
 		int id_token = token;
 		String id = text.toString();
@@ -1857,7 +1857,7 @@ public class AwkParser {
 			lexer();
 			// id
 			if (token != _ID_) {
-				throw new ParserException("Expecting an ARRAY ID for 'in' statement. Got (" + token + "): " + text);
+				throw new ParserException("Expecting an ARRAY ID for 'in' statement. Got " + toTokenString(token) + ": " + text);
 			}
 			String arr_id = text.toString();
 
@@ -1874,7 +1874,7 @@ public class AwkParser {
 		if (token == _SEMICOLON_) {
 			lexer();
 		} else {
-			throw new ParserException("Expecting ;. Got (" + token + "): " + text);
+			throw new ParserException("Expecting ;. Got " + toTokenString(token) + ": " + text);
 		}
 		if (token != _SEMICOLON_) {
 			expr2 = ASSIGNMENT_EXPRESSION(true, true, false);	// allow comparators, allow IN keyword, do NOT allow multidim indices expressions
@@ -1882,7 +1882,7 @@ public class AwkParser {
 		if (token == _SEMICOLON_) {
 			lexer();
 		} else {
-			throw new ParserException("Expecting ;. Got (" + token + "): " + text);
+			throw new ParserException("Expecting ;. Got " + toTokenString(token) + ": " + text);
 		}
 		if (token != _CLOSE_PAREN_) {
 			expr3 = OPT_SIMPLE_STATEMENT(true);	// true = "allow the in keyword"
@@ -2151,7 +2151,7 @@ public class AwkParser {
 		if (token == KEYWORDS.get(keyword)) {
 			lexer();
 		} else {
-			throw new ParserException("Expecting " + keyword + ". Got (" + token + "): " + text);
+			throw new ParserException("Expecting " + keyword + ". Got " + toTokenString(token) + ": " + text);
 		}
 	}
 

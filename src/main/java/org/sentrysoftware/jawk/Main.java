@@ -89,7 +89,7 @@ public class Main {
 		} catch (ExitException e) {
 			System.exit(e.getCode());
 		} catch (Exception e) {
-			System.err.printf("%s: %s", e.getClass().getSimpleName(), e.getMessage());
+			System.err.printf("%s: %s\n", e.getClass().getSimpleName(), e.getMessage());
 			System.exit(1);
 		}
 
