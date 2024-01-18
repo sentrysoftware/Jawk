@@ -1,6 +1,8 @@
 package org.sentrysoftware.jawk;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.sentrysoftware.jawk.AwkTestHelper.evalAwk;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,7 +15,6 @@ import java.util.Collections;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
-import org.sentrysoftware.jawk.Main;
 
 public class AwkTest {
 
@@ -194,5 +195,18 @@ public class AwkTest {
 		awk("//{i=1; j=\"1\"; v[j] = 100; print v[i] v[j];}",
 				pathTo("inventory-shipped"));
 		assertArrayEquals(monotoneArray("100100", 17), linesOutput());
+	}
+	
+	@Test
+	public void testNot() throws Exception {
+		assertEquals("!0 must return 1", "1", evalAwk("!0"));
+		assertEquals("!1 must return 0", "0", evalAwk("!1"));
+		assertEquals("!0.0 must return 1", "1", evalAwk("!0.0"));
+		assertEquals("!0.1 must return 0", "0", evalAwk("!0.1"));
+		assertEquals("!2^31 must return 0", "0", evalAwk("!2^31"));
+		assertEquals("!2^33 must return 0", "0", evalAwk("!2^33"));
+		assertEquals("!\"\" must return 1", "1", evalAwk("!\"\""));
+		assertEquals("!\"a\" must return 0", "0", evalAwk("!\"a\""));
+		assertEquals("!uninitialized must return true", "1", evalAwk("!uninitialized"));
 	}
 }
