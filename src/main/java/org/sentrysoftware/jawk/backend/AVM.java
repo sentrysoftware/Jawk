@@ -482,7 +482,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 						} else if (o instanceof String) {
 							result = (o.toString().length() > 0);
 						} else if (o instanceof UninitializedObject) {
-							result = true;
+							result = false;
 						} else {
 							throw new Error("Unknown operand_stack type: "+o.getClass()+" for value "+o);
 						}

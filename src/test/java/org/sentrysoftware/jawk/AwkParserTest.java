@@ -62,9 +62,10 @@ public class AwkParserTest {
 	}
 
 	@Test
-	public void testParseGron() throws Exception {
+	public void testGron() throws Exception {
 		String gron = AwkTestHelper.readResource("/xonixx/gron.awk");
 		assertEquals("gron.awk must not trigger any parser exception", "json=[]\n", runAwk(gron, "[]"));
+		assertEquals("gron.awk must work", "json=[]\njson[0]={}\njson[0].a=1\njson[1]={}\njson[1].b=\"2\"\n", runAwk(gron, "[{\"a\": 1},\n{\"b\": \"2\"}]"));
 	}
 
 	@Test
