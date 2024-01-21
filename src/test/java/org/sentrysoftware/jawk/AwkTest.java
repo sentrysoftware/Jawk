@@ -2,7 +2,9 @@ package org.sentrysoftware.jawk;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.sentrysoftware.jawk.AwkTestHelper.evalAwk;
+import static org.sentrysoftware.jawk.AwkTestHelper.runAwk;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -208,5 +210,21 @@ public class AwkTest {
 		assertEquals("!\"\" must return 1", "1", evalAwk("!\"\""));
 		assertEquals("!\"a\" must return 0", "0", evalAwk("!\"a\""));
 		assertEquals("!uninitialized must return true", "1", evalAwk("!uninitialized"));
+	}
+	
+	@Test
+	public void testExit() throws Exception {
+		assertThrows("exit NN must throw ExitException", ExitException.class, () -> runAwk("BEGIN { exit 17 }", null));
+		assertEquals("exit in BEGIN prevents any rules execution", "", runAwk("BEGIN { exit 0 }\n{ print $0 }", "failure"));
+		assertEquals("exit in BEGIN jumps to END", "success", runAwk("BEGIN { exit 0 ; printf \"failure\" }\nEND { printf \"success\" }", null));
+		assertEquals("exit in END stops immediately", "success", runAwk("END { printf \"success\" ; exit 0 ; printf \"failure\" }", null));
+		assertEquals("exit without code works", "", runAwk("BEGIN { exit }\n{ print $0 }", "failure"));
+		int code = 0;
+		try {
+			runAwk("BEGIN { exit 2 }\nEND { exit }", null);
+		} catch (ExitException e) {
+			code = e.getCode();
+		}
+		assertEquals("exit without code must not alter previous exit with code", 2, code);
 	}
 }

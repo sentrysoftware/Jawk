@@ -61,7 +61,13 @@ public class AwkTestHelper {
 		
 		// Execute the awk script against the specified input
 		Awk awk = new Awk();
-		awk.invoke(settings);
+		try {
+			awk.invoke(settings);
+		} catch (ExitException e) {
+			if (e.getCode() != 0) {
+				throw e;
+			}
+		}
 		
 		// Return the result as a string
 		return resultBytesStream.toString("UTF-8");
@@ -101,7 +107,13 @@ public class AwkTestHelper {
 		
 		// Execute the awk script against the specified input
 		Awk awk = new Awk();
-		awk.invoke(settings);
+		try {
+			awk.invoke(settings);
+		} catch (ExitException e) {
+			if (e.getCode() != 0) {
+				throw e;
+			}
+		}
 		
 		// Return the result as a string
 		return resultBytesStream.toString("UTF-8");
