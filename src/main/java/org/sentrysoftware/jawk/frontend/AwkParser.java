@@ -4833,10 +4833,10 @@ public class AwkParser {
 			if (ast1 != null) {
 				int ast1_result = ast1.populateTuples(tuples);
 				assert ast1_result == 1;
+				tuples.exitWithCode();
 			} else {
-				tuples.push(0);
+				tuples.exitWithoutCode();
 			}
-			tuples.exitWithCode();
 			popSourceLineNumber(tuples);
 			return 0;
 		}

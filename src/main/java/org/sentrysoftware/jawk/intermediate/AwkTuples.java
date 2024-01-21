@@ -1782,6 +1782,14 @@ public class AwkTuples implements Serializable {
 	public static final int _UNARY_PLUS_ = 385;	// x -> -x
 
 	/**
+	 * Terminates execution without specifying an exit code.
+	 * <p>
+	 * Stack before: N/A <br>
+	 * Stack after: N/A
+	 */
+	public static final int _EXIT_WITHOUT_CODE_ = 386;	// 0 -> 0
+
+	/**
 	 * Override add() to populate the line number for each tuple,
 	 * rather than polluting all the constructors with this assignment.
 	 */
@@ -2885,6 +2893,13 @@ public class AwkTuples implements Serializable {
 	 */
 	public void exitWithCode() {
 		queue.add(new Tuple(_EXIT_WITH_CODE_));
+	}
+
+	/**
+	 * <p>exitWithCode.</p>
+	 */
+	public void exitWithoutCode() {
+		queue.add(new Tuple(_EXIT_WITHOUT_CODE_));
 	}
 
 	/**

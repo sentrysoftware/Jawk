@@ -194,12 +194,23 @@ public class AVM implements AwkInterpreter, VariableManager {
 	private int oldseed;
 
 	private Address exit_address = null;
+	
 	/**
 	 * <code>true</code> if execution position is within an END block;
 	 * <code>false</code> otherwise.
 	 */
 	private boolean within_end_blocks = false;
 
+	/**
+	 * Exit code set by the <code>exit NN</code> command (0 by default)
+	 */
+	private int exit_code = 0;
+	
+	/**
+	 * Whether <code>exit</code> has been called and we should throw ExitException
+	 */
+	private boolean throw_exit_exception = false;
+	
 	/**
 	 * Maps global variable names to their global array offsets.
 	 * It is useful when passing variable assignments from the file-list
@@ -1782,18 +1793,23 @@ public class AVM implements AwkInterpreter, VariableManager {
 						position.next();
 						break;
 					}
+					case AwkTuples._EXIT_WITHOUT_CODE_:
 					case AwkTuples._EXIT_WITH_CODE_: {
-						// stack[0] = exit code
-						final int exit_code = (int) JRT.toDouble(pop());
+						if (opcode == AwkTuples._EXIT_WITH_CODE_) {
+							// stack[0] = exit code
+							exit_code = (int) JRT.toDouble(pop());
+						}
+						throw_exit_exception = true;
+						
+						// If in BEGIN or in a rule, jump to the END section
 						if (!within_end_blocks) {
-							assert exit_address != null;
 							// clear runtime stack
 							runtime_stack.popAllFrames();
 							// clear operand stack
 							operand_stack.clear();
 							position.jump(exit_address);
 						} else {
-							// break;
+							// Exit immediately with ExitException
 							jrt.jrtCloseAll();
 							// clear operand stack
 							operand_stack.clear();
@@ -1957,8 +1973,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						throw new Error("invalid opcode: " + AwkTuples.toOpcodeString(position.opcode()));
 				}
 			}
+			
+			// End of the instructions
 			jrt.jrtCloseAll();
-			assert operand_stack.size() == 0 : "operand stack is NOT empty upon script termination. operand_stack (size=" + operand_stack.size() + ") = " + operand_stack;
+			
 		} catch (RuntimeException re) {
 			LOG.error("", re);
 			LOG.error("operand_stack = {}", operand_stack);
@@ -1985,12 +2003,13 @@ public class AVM implements AwkInterpreter, VariableManager {
 				LOG.error("{ could not report on line number", t);
 			}
 			throw ae;
-		} finally {
-//			assert operand_stack.size() == 0 : "operand stack is NOT empty upon script termination. operand_stack (size="+operand_stack.size()+") = "+operand_stack;
-//			if (operand_stack.size() != 0) {
-//				throw new Error("operand stack is NOT empty upon script termination. operand_stack (size=" + operand_stack.size() + ") = " + operand_stack);
-//			}
 		}
+		
+		// If <code>exit</code> was called, throw an ExitException
+		if (throw_exit_exception) {
+			throw new ExitException(exit_code, "The AWK script requested an exit");
+		}
+
 	}
 
 	/**
