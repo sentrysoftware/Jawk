@@ -92,11 +92,10 @@ public class GawkTest {
 		File okFile = new File(parent, shortName + ".ok");
 		
 		// Get the list of input files (usually *.in, but could be *.in1, *.in2, etc.)
-		List<String> inputFileList = IntStream.range(0, 10)
+		List<File> inputFileList = IntStream.range(0, 10)
 			.mapToObj(i -> (i == 0 ? "" : String.valueOf(i)))
 			.map(i -> new File(parent, shortName + ".in" + i))
 			.filter(File::isFile)
-			.map(File::getAbsolutePath)
 			.collect(Collectors.toList());
 		
 		String result;
