@@ -59,6 +59,21 @@ public class AwkTestHelper {
 	 * @throws ClassNotFoundException 
 	 */
 	static String runAwk(File scriptFile, List<File> inputFileList) throws IOException, ExitException, ClassNotFoundException {
+		return runAwk(scriptFile, inputFileList, false);
+	}
+
+	/**
+	 * Executes the specified AWK script
+	 * <p>
+	 * @param scriptFile File containing the AWK script to execute
+	 * @param inputFileList List of files that contain the input to be parsed by the AWK script
+	 * @param setTempDir Whether to set the TEMPDIR variable for the AWK script to play with
+	 * @return the printed output of the script as a String
+	 * @throws ExitException when the AWK script forces its exit with a specified code
+	 * @throws IOException on I/O problems
+	 * @throws ClassNotFoundException 
+	 */
+	static String runAwk(File scriptFile, List<File> inputFileList, boolean setTempDir) throws IOException, ExitException, ClassNotFoundException {
 		
 		AwkSettings settings = new AwkSettings();
 		
@@ -69,7 +84,9 @@ public class AwkTestHelper {
 		settings.getNameValueOrFileNames().addAll(inputFileList.stream().map(File::getAbsolutePath).collect(Collectors.toList()));
 		
 		// Set TEMPDIR so the AWK scripts can "play" with it
-		settings.getNameValueOrFileNames().add("TEMPDIR=" + tempDirectory);
+		if (setTempDir) {
+			settings.getNameValueOrFileNames().add("TEMPDIR=" + tempDirectory);
+		}
 
 		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();

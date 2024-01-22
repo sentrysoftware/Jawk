@@ -100,7 +100,7 @@ public class GawkTest {
 		
 		String result;
 		try {
-			result = AwkTestHelper.runAwk(awkFile, inputFileList);
+			result = AwkTestHelper.runAwk(awkFile, inputFileList, true);
 			String expectedResult = AwkTestHelper.readTextFile(okFile);
 			if (expectedResult != null && expectedResult.equals(result)) {
 				System.out.println("Success");
