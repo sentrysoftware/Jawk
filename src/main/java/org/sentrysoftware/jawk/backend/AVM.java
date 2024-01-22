@@ -2045,7 +2045,8 @@ public class AVM implements AwkInterpreter, VariableManager {
 		// # of items
 		if (num_args == 0) {
 			// display $0
-			ps.println(jrt.jrtGetInputField(0));
+			ps.print(jrt.jrtGetInputField(0));
+			ps.println();
 		} else {
 			// cache $OFS to separate fields below
 			// (no need to execute getOFS for each field)

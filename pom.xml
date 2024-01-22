@@ -213,8 +213,9 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*GawkTest.java</exclude>
+						<exclude>**/Bwk*Test.java</exclude>
 					</excludes>
-					<workingDirectory>${project.build.directory}/test-classes/gawk</workingDirectory>
+					<workingDirectory>${project.build.directory}/test-classes</workingDirectory>
 				</configuration>
 			</plugin>
 

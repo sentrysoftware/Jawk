@@ -11,7 +11,9 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.sentrysoftware.jawk.util.AwkSettings;
 import org.sentrysoftware.jawk.util.ScriptFileSource;
@@ -31,6 +33,20 @@ public class AwkTestHelper {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * Executes the specified AWK script
+	 * <p>
+	 * @param scriptFile File containing the AWK script to execute
+	 * @param inputFile Path to the file to be parsed by the AWK script
+	 * @return the printed output of the script as a String
+	 * @throws ExitException when the AWK script forces its exit with a specified code
+	 * @throws IOException on I/O problems
+	 * @throws ClassNotFoundException 
+	 */
+	static String runAwk(File scriptFile, File inputFile) throws IOException, ExitException, ClassNotFoundException {
+		return runAwk(scriptFile, Collections.singletonList(inputFile));
+	}
 	
 	/**
 	 * Executes the specified AWK script
@@ -42,12 +58,15 @@ public class AwkTestHelper {
 	 * @throws IOException on I/O problems
 	 * @throws ClassNotFoundException 
 	 */
-	static String runAwk(File scriptFile, List<String> inputFileList) throws IOException, ExitException, ClassNotFoundException {
+	static String runAwk(File scriptFile, List<File> inputFileList) throws IOException, ExitException, ClassNotFoundException {
 		
 		AwkSettings settings = new AwkSettings();
 		
+		// Default record separator should support both CRLF and LF
+		settings.setDefaultRS("\r?\n");
+		
 		// Set the input files
-		settings.getNameValueOrFileNames().addAll(inputFileList);
+		settings.getNameValueOrFileNames().addAll(inputFileList.stream().map(File::getAbsolutePath).collect(Collectors.toList()));
 		
 		// Set TEMPDIR so the AWK scripts can "play" with it
 		settings.getNameValueOrFileNames().add("TEMPDIR=" + tempDirectory);
