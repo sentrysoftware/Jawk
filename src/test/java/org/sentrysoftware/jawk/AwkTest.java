@@ -74,7 +74,7 @@ public class AwkTest {
 
 	/**
 	 * Tests the program <pre>$ awk 'BEGIN { print "Don\47t Panic!" }'</pre>
-	 * @see <a href="http://www.gnu.org/software/gawk/manual/gawk.html#Read-Terminal>Running awk Without Input Files</a>
+	 * @see <a href="http://www.gnu.org/software/gawk/manual/gawk.html#Read-Terminal">Running awk Without Input Files</a>
 	 */
 	@Test
 	public void testDontPanic() throws Exception {
@@ -216,12 +216,12 @@ public class AwkTest {
 	public void testExit() throws Exception {
 		assertThrows("exit NN must throw ExitException", ExitException.class, () -> runAwk("BEGIN { exit 17 }", null));
 		assertEquals("exit in BEGIN prevents any rules execution", "", runAwk("BEGIN { exit 0 }\n{ print $0 }", "failure"));
-		assertEquals("exit in BEGIN jumps to END", "success", runAwk("BEGIN { exit 0 ; printf \"failure\" }\nEND { printf \"success\" }", null));
-		assertEquals("exit in END stops immediately", "success", runAwk("END { printf \"success\" ; exit 0 ; printf \"failure\" }", null));
+		assertEquals("exit in BEGIN jumps to END", "success", runAwk("BEGIN { exit 0 ; printf \"failure\" }\nEND { printf \"success\" }", ""));
+		assertEquals("exit in END stops immediately", "success", runAwk("END { printf \"success\" ; exit 0 ; printf \"failure\" }", ""));
 		assertEquals("exit without code works", "", runAwk("BEGIN { exit }\n{ print $0 }", "failure"));
 		int code = 0;
 		try {
-			runAwk("BEGIN { exit 2 }\nEND { exit }", null);
+			runAwk("BEGIN { exit 2 }\nEND { exit }", "");
 		} catch (ExitException e) {
 			code = e.getCode();
 		}

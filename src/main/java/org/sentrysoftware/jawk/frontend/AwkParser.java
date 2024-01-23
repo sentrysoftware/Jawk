@@ -265,7 +265,6 @@ public class AwkParser {
 
 	private final boolean additional_functions;
 	private final boolean additional_type_functions;
-	private final boolean no_input;
 	private final Map<String, JawkExtension> extensions;
 
 	/**
@@ -276,10 +275,9 @@ public class AwkParser {
 	 * @param no_input a boolean
 	 * @param extensions a {@link java.util.Map} object
 	 */
-	public AwkParser(boolean additional_functions, boolean additional_type_functions, boolean no_input, Map<String, JawkExtension> extensions) {
+	public AwkParser(boolean additional_functions, boolean additional_type_functions, Map<String, JawkExtension> extensions) {
 		this.additional_functions = additional_functions;
 		this.additional_type_functions = additional_type_functions;
-		this.no_input = no_input;
 		// HACK : When recompiling via exec(),
 		// this code is executed more than once.
 		// As a result, guard against polluting the
@@ -2571,34 +2569,39 @@ public class AwkParser {
 			tuples.argvOffset(argv_ast.offset);
 
 			// grab all BEGINs
-
 			ptr = this;
 			// ptr.ast1 == blank rule condition (i.e.: { print })
 			while (ptr != null) {
 				if (ptr.ast1 != null && ptr.ast1.isBegin()) {
-					assert ptr.ast1 != null;
-					int ast1_count = ptr.ast1.populateTuples(tuples);
-					assert ast1_count == 0;
+					ptr.ast1.populateTuples(tuples);
 				}
 
 				ptr = ptr.ast2;
 			}
 
-			boolean req_loop = false;
+			// Do we have rules? (apart from BEGIN)
+			// If we have rules or END, we need to parse the input
 			boolean req_input = false;
 
+			// Check for "normal" rules
 			ptr = this;
 			while (!req_input && (ptr != null)) {
 				if (isRule(ptr.ast1)) {
-					req_loop = true;
-					if (!no_input) {
-						req_input = true;
-					}
+					req_input = true;
+				}
+				ptr = ptr.ast2;
+			}
+			
+			// Now check for "END" rules
+			ptr = this;
+			while (!req_input && (ptr != null)) {
+				if (ptr.ast1 != null && ptr.ast1.isEnd()) {
+					req_input = true;
 				}
 				ptr = ptr.ast2;
 			}
 
-			if (req_loop) {
+			if (req_input) {
 				Address input_loop_address = null;
 				Address no_more_input = null;
 
@@ -2607,21 +2610,15 @@ public class AwkParser {
 
 				ptr = this;
 
-				if (req_input) {
-					no_more_input = tuples.createAddress("no_more_input");
-					tuples.consumeInput(no_more_input);
-				}
+				no_more_input = tuples.createAddress("no_more_input");
+				tuples.consumeInput(no_more_input);
 
 				// grab all INPUT RULES
-
 				while (ptr != null) {
 					// the first one of these is an input rule
 					if (isRule(ptr.ast1)) {
-						assert ptr.ast1 != null;
-						int ast1_count = ptr.ast1.populateTuples(tuples);
-						assert ast1_count == 0;
+						ptr.ast1.populateTuples(tuples);
 					}
-
 					ptr = ptr.ast2;
 				}
 				tuples.address(next_address);
@@ -2637,20 +2634,15 @@ public class AwkParser {
 
 			// indicate where the first end block resides
 			// in the event of an exit statement
-
 			tuples.address(exit_addr);
 			tuples.setWithinEndBlocks(true);
 
 			// grab all ENDs
-
 			ptr = this;
 			while (ptr != null) {
 				if (ptr.ast1 != null && ptr.ast1.isEnd()) {
-					assert ptr.ast1 != null;
-					int ast1_count = ptr.ast1.populateTuples(tuples);
-					assert ast1_count == 0;
+					ptr.ast1.populateTuples(tuples);
 				}
-
 				ptr = ptr.ast2;
 			}
 
@@ -2685,9 +2677,7 @@ public class AwkParser {
 			tuples.ifFalse(bypass_rule);
 			// execute the opt_rule here!
 			if (ast2 == null) {
-				if (no_input) {
-					// with -ni, no default blank rule of print $0
-				} else if (ast1 == null || !ast1.isBegin() && !ast1.isEnd()) {
+				if (ast1 == null || !ast1.isBegin() && !ast1.isEnd()) {
 					// display $0
 					tuples.print(0);
 				}
@@ -4732,11 +4722,6 @@ public class AwkParser {
 
 		private Getline_AST(AST pipe_expr, AST lvalue_ast, AST in_redirect) {
 			super(pipe_expr, lvalue_ast, in_redirect);
-			if (no_input && pipe_expr == null && in_redirect == null) {
-				throw new SemanticException("getline via stdin/ARGV disabled by the -ni option");
-			}
-			// cannot have both pipe_expr and in_redirect NOT null!
-			assert pipe_expr == null || in_redirect == null;
 		}
 
 		@Override

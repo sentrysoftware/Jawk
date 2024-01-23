@@ -1,5 +1,7 @@
 package org.sentrysoftware.jawk.backend;
 
+import java.io.IOException;
+
 /*-
  * ╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲╱╲
  * Jawk
@@ -39,6 +41,7 @@ public interface AwkInterpreter {
 	 * @param tuples The tuples to compile.
 	 * @throws org.sentrysoftware.jawk.ExitException indicates that the interpreter would like
 	 *   the application to exit.
+	 * @throws IOException 
 	 */
-	void interpret(AwkTuples tuples) throws ExitException;
+	void interpret(AwkTuples tuples) throws ExitException, IOException;
 }

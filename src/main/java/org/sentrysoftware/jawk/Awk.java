@@ -139,7 +139,6 @@ public class Awk {
 				AwkParser parser = new AwkParser(
 						settings.isAdditionalFunctions(),
 						settings.isAdditionalTypeFunctions(),
-						settings.isUseStdIn(),
 						extensions);
 				// parse the script
 				AwkSyntaxTree ast = parser.parse(notIntermediateScriptSources);
