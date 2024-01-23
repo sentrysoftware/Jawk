@@ -272,7 +272,6 @@ public class AwkParser {
 	 *
 	 * @param additional_functions a boolean
 	 * @param additional_type_functions a boolean
-	 * @param no_input a boolean
 	 * @param extensions a {@link java.util.Map} object
 	 */
 	public AwkParser(boolean additional_functions, boolean additional_type_functions, Map<String, JawkExtension> extensions) {

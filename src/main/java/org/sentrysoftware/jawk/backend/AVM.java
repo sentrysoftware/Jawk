@@ -286,7 +286,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 *
 	 * Traverse the tuples, executing their associated opcodes to provide
 	 * an execution platform for Jawk scripts.
-	 * @throws IOException 
+	 * @throws IOException in case of I/O problems (with getline typically)
 	 */
 	@Override
 	public void interpret(AwkTuples tuples)
