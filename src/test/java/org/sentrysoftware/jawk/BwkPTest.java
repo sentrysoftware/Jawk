@@ -90,8 +90,14 @@ public class BwkPTest {
 		// Get the input file (always the same)
 		File inputFile = new File(bwkPDirectory, "inputs/test.countries");
 
-		String result = AwkTestHelper.runAwk(awkFile, inputFile);
+		// Get the expected result
 		String expectedResult = AwkTestHelper.readTextFile(okFile);
+
+		// Run AWK
+		String result = AwkTestHelper.runAwk(awkFile, inputFile);
+		
+		// Some post-processing: remove references to the inputs directory.
+		result = result.replace(inputFile.getParent() + System.getProperty("file.separator"), "");
 		assertEquals(expectedResult, result);
 
 	}
