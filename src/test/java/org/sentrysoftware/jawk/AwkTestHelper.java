@@ -138,7 +138,7 @@ public class AwkTestHelper {
 		
 		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
-		settings.setOutputStream(new UniformPrintStream(resultBytesStream));
+		settings.setOutputStream(new PrintStream(resultBytesStream));
 		
 		// Sets the AWK script to execute
 		settings.addScriptSource(new ScriptSource("Body", new StringReader(script), false));
