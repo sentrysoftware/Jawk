@@ -103,7 +103,6 @@ To enhance development and script execution over traditional AWK, **Jawk** also 
 * `-y` - Enable `**_INTEGER**`, `**_DOUBLE**` and `**_STRING**` typecast keywords. These are particularly useful in \[s\]printf functions/statements to force parameters to convert to particular types.
 * `-r` - Allow IllegalFormatExceptions to be thrown when using the java.util.Formatter class for printf/sprintf. If the argument is not provided, the interpreter/compiled result catches IllegalFormatExceptions and silently returns a blank string in its place. If the argument is provided, the interpreter/compiled result will halt by throwing this runtime exception.
 * `-ext` - Enables the parser/AVM to recognize extensions within scripts. Extensions allow for arbitrary Java code to be called as registered AWK functions. Please refer to the [Jawk Extension Facility Description](extensions.html) page for more information.
-* `-ni` - Conventionally used in conjunction with extensions, -ni prohibits Jawk from processing stdin or files in ARGC/V through action rules. This enables the extension facility to apply action rules to blockable events. Please refer to the [Jawk Extension Facility Description](extensions.php) page for more information.
 * `-h`/`-?` - Displays a usage screen. The screen contains a list of command-line arguments and what each does.
 
 If `-f` is not provided, a script argument is expected here.

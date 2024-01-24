@@ -133,12 +133,6 @@ public class AwkSettings {
 	private boolean userExtensions = false;
 
 	/**
-	 * Whether Jawk consumes stdin or ARGV file input;
-	 * <code>true</code> by default.
-	 */
-	private boolean useStdIn = false;
-
-	/**
 	 * Write to intermediate file;
 	 * <code>false</code> by default.
 	 */
@@ -678,26 +672,6 @@ public class AwkSettings {
 	 */
 	public void setCatchIllegalFormatExceptions(boolean catchIllegalFormatExceptions) {
 		this.catchIllegalFormatExceptions = catchIllegalFormatExceptions;
-	}
-
-	/**
-	 * Whether Jawk consumes stdin or ARGV file input;
-	 * <code>true</code> by default.
-	 *
-	 * @return the useStdIn
-	 */
-	public boolean isUseStdIn() {
-		return useStdIn;
-	}
-
-	/**
-	 * Whether Jawk consumes stdin or ARGV file input;
-	 * <code>true</code> by default.
-	 *
-	 * @param useStdIn the useStdIn to set
-	 */
-	public void setUseStdIn(boolean useStdIn) {
-		this.useStdIn = useStdIn;
 	}
 
 	/**

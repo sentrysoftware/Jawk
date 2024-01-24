@@ -286,10 +286,11 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 *
 	 * Traverse the tuples, executing their associated opcodes to provide
 	 * an execution platform for Jawk scripts.
+	 * @throws IOException in case of I/O problems (with getline typically)
 	 */
 	@Override
 	public void interpret(AwkTuples tuples)
-			throws ExitException
+			throws ExitException, IOException
 	{
 		Map<String, Pattern> regexps = new HashMap<String, Pattern>();
 		Map<Integer, PatternPair> pattern_pairs = new HashMap<Integer, PatternPair>();
@@ -1456,15 +1457,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// arg[0] = address
 						// false = do NOT put result on stack...
 						// instead, put it in field vars ($0, $1, ...)
-						try {
-							if (avmConsumeInput(false)) {
-								position.next();
-							} else {
-								position.jump(position.addressArg());
-							}
-						} catch (IOException ioe) {
-							//assert false : "Should not throw io exception here. ioe = "+ioe;
-							throw new Error("Should not throw io exception here. ioe = " + ioe);
+						if (avmConsumeInput(false)) {
+							position.next();
+						} else {
+							position.jump(position.addressArg());
 						}
 						break;
 					}
@@ -1888,7 +1884,6 @@ public class AVM implements AwkInterpreter, VariableManager {
 								//true, true, true, extensions
 								settings.isAdditionalFunctions(),
 								settings.isAdditionalTypeFunctions(),
-								settings.isUseStdIn(),
 								extensions);
 						try {
 							AwkSyntaxTree ast = ap.parse(scriptSources);
@@ -2285,47 +2280,30 @@ public class AVM implements AwkInterpreter, VariableManager {
 		push(o2);
 	}
 
-	private void avmConsumeInputForGetline() {
-		try {
-			if (avmConsumeInput(true)) {
-				push(1);
-			} else {
-				push("");
-				push(0);
-			}
-		} catch (IOException ioe) {
+	private void avmConsumeInputForGetline() throws IOException {
+		if (avmConsumeInput(true)) {
+			push(1);
+		} else {
 			push("");
-			push(-1);
+			push(0);
 		}
 		swapOnStack();
 	}
 
-	private void avmConsumeFileInputForGetline(String filename) {
-		try {
-			if (avmConsumeFileInput(filename)) {
-				push(1);
-			} else {
-				push("");
-				push(0);
-			}
-		} catch (IOException ioe) {
-			push("");
-			push(-1);
+	private void avmConsumeFileInputForGetline(String filename) throws IOException {
+		if (avmConsumeFileInput(filename)) {
+			push(1);
+		} else {
+			push(0);
 		}
 		swapOnStack();
 	}
 
-	private void avmConsumeCommandInputForGetline(String cmd) {
-		try {
-			if (avmConsumeCommandInput(cmd)) {
-				push(1);
-			} else {
-				push("");
-				push(0);
-			}
-		} catch (IOException ioe) {
-			push("");
-			push(-1);
+	private void avmConsumeCommandInputForGetline(String cmd) throws IOException {
+		if (avmConsumeCommandInput(cmd)) {
+			push(1);
+		} else {
+			push(0);
 		}
 		swapOnStack();
 	}
@@ -2336,6 +2314,8 @@ public class AVM implements AwkInterpreter, VariableManager {
 		boolean retval = jrt.jrtConsumeFileInput(filename);
 		if (retval) {
 			push(jrt.getInputLine());
+		} else {
+			push("");
 		}
 		return retval;
 	}
@@ -2346,6 +2326,8 @@ public class AVM implements AwkInterpreter, VariableManager {
 		boolean retval = jrt.jrtConsumeCommandInput(cmd);
 		if (retval) {
 			push(jrt.getInputLine());
+		} else {
+			push("");
 		}
 		return retval;
 	}
