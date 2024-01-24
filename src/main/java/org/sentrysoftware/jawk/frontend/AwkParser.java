@@ -245,6 +245,7 @@ public class AwkParser {
 		SPECIAL_VAR_NAMES.put("FS", sp_idx);
 		SPECIAL_VAR_NAMES.put("RS", sp_idx);
 		SPECIAL_VAR_NAMES.put("OFS", sp_idx);
+		SPECIAL_VAR_NAMES.put("ORS", sp_idx);
 		SPECIAL_VAR_NAMES.put("RSTART", sp_idx);
 		SPECIAL_VAR_NAMES.put("RLENGTH", sp_idx);
 		SPECIAL_VAR_NAMES.put("FILENAME", sp_idx);
@@ -2536,6 +2537,7 @@ public class AwkParser {
 			ID_AST fs_ast = symbol_table.getID("FS");
 			ID_AST rs_ast = symbol_table.getID("RS");
 			ID_AST ofs_ast = symbol_table.getID("OFS");
+			ID_AST ors_ast = symbol_table.getID("ORS");
 			ID_AST rstart_ast = symbol_table.getID("RSTART");
 			ID_AST rlength_ast = symbol_table.getID("RLENGTH");
 			ID_AST filename_ast = symbol_table.getID("FILENAME");
@@ -2557,6 +2559,7 @@ public class AwkParser {
 			tuples.fsOffset(fs_ast.offset);
 			tuples.rsOffset(rs_ast.offset);
 			tuples.ofsOffset(ofs_ast.offset);
+			tuples.orsOffset(ors_ast.offset);
 			tuples.rstartOffset(rstart_ast.offset);
 			tuples.rlengthOffset(rlength_ast.offset);
 			tuples.filenameOffset(filename_ast.offset);

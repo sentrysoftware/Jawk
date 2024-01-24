@@ -1790,6 +1790,15 @@ public class AwkTuples implements Serializable {
 	public static final int _EXIT_WITHOUT_CODE_ = 386;	// 0 -> 0
 
 	/**
+	 * Assign the ORS variable offset. This is important for the
+	 * AVM to use when outputting expressions via PRINT.
+	 * <p>
+	 * The operand stack is unaffected.
+	 *
+	 */
+	public static final int _ORS_OFFSET_ = 387;	// 0 -> 0
+
+	/**
 	 * Override add() to populate the line number for each tuple,
 	 * rather than polluting all the constructors with this assignment.
 	 */
@@ -2698,6 +2707,15 @@ public class AwkTuples implements Serializable {
 	 */
 	public void ofsOffset(int offset) {
 		queue.add(new Tuple(_OFS_OFFSET_, offset));
+	}
+
+	/**
+	 * <p>orsOffset.</p>
+	 *
+	 * @param offset a int
+	 */
+	public void orsOffset(int offset) {
+		queue.add(new Tuple(_ORS_OFFSET_, offset));
 	}
 
 	/**

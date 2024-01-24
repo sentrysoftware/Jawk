@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -79,6 +80,7 @@ public class AwkTestHelper {
 		
 		// Default record separator should support both CRLF and LF
 		settings.setDefaultRS("\r?\n");
+		settings.setDefaultORS("\n");
 		
 		// Set the input files
 		settings.getNameValueOrFileNames().addAll(inputFileList.stream().map(File::getAbsolutePath).collect(Collectors.toList()));
@@ -90,7 +92,7 @@ public class AwkTestHelper {
 
 		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
-		settings.setOutputStream(new UniformPrintStream(resultBytesStream));
+		settings.setOutputStream(new PrintStream(resultBytesStream));
 		
 		// Sets the AWK script to execute
 		settings.addScriptSource(new ScriptFileSource(scriptFile.getAbsolutePath()));
@@ -107,7 +109,6 @@ public class AwkTestHelper {
 		
 		// Return the result as a string
 		return resultBytesStream.toString("UTF-8");
-
 	}
 	
 
@@ -133,6 +134,7 @@ public class AwkTestHelper {
 		// We force \n as the Record Separator (RS) because even if running on Windows
 		// we're passing Java strings, where end of lines are simple \n
 		settings.setDefaultRS("\n");
+		settings.setDefaultORS("\n");
 		
 		// Create the OutputStream, to collect the result as a String
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();

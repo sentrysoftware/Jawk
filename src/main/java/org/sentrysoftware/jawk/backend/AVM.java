@@ -177,6 +177,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 	private long fs_offset = NULL_OFFSET;
 	private long rs_offset = NULL_OFFSET;
 	private long ofs_offset = NULL_OFFSET;
+	private long ors_offset = NULL_OFFSET;
 	private long rstart_offset = NULL_OFFSET;
 	private long rlength_offset = NULL_OFFSET;
 	private long filename_offset = NULL_OFFSET;
@@ -1541,6 +1542,15 @@ public class AVM implements AwkInterpreter, VariableManager {
 						position.next();
 						break;
 					}
+					case AwkTuples._ORS_OFFSET_: {
+						// stack[0] = offset
+						ors_offset = position.intArg(0);
+						assert ors_offset != NULL_OFFSET;
+						assign(ors_offset, settings.getDefaultORS(), true, position);
+						pop();			// clean up the stack after the assignment
+						position.next();
+						break;
+					}
 					case AwkTuples._RSTART_OFFSET_: {
 						// stack[0] = offset
 						rstart_offset = position.intArg(0);
@@ -2041,7 +2051,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 		if (num_args == 0) {
 			// display $0
 			ps.print(jrt.jrtGetInputField(0));
-			ps.println();
+			ps.print(getORS().toString());
 		} else {
 			// cache $OFS to separate fields below
 			// (no need to execute getOFS for each field)
@@ -2055,7 +2065,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 					ps.print(ofs_string);
 				}
 			}
-			ps.println();
+			ps.print(getORS().toString());
 		}
 		// for now, since we are not using Process.waitFor()
 		if (IS_WINDOWS) {
@@ -2194,6 +2204,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 		assert ofs_offset != NULL_OFFSET;
 		Object ofs_obj = runtime_stack.getVariable(ofs_offset, true);	// true = global
 		return ofs_obj;
+	}
+
+	public final Object getORS() {
+		return runtime_stack.getVariable(ors_offset, true);	// true = global
 	}
 
 	/** {@inheritDoc} */
