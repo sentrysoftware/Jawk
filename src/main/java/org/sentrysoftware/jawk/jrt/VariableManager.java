@@ -82,6 +82,13 @@ public interface VariableManager {
 	Object getOFS();
 
 	/**
+	 * <p>getORS.</p>
+	 *
+	 * @return the contents of the ORS variable.
+	 */
+	Object getORS();
+
+	/**
 	 * <p>getSUBSEP.</p>
 	 *
 	 * @return the contents of the SUBSEP variable.

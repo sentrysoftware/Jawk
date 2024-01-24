@@ -22,7 +22,7 @@ public class AwkTest {
 
 	private static final boolean IS_WINDOWS = (System.getProperty("os.name").contains("Windows"));
 
-	private static final String LF = System.getProperty("line.separator");
+	private static final String EOL = System.getProperty("line.separator");
 
 	@SafeVarargs
 	static <T> T[] array(T ... vals) {
@@ -59,7 +59,7 @@ public class AwkTest {
 
 
 	String[] linesOutput() {
-		return systemOutRule.getLog().split(LF);
+		return systemOutRule.getLog().split(EOL);
 	}
 
 	/**

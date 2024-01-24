@@ -170,6 +170,11 @@ public class AwkSettings {
 	private String defaultRS = System.getProperty("line.separator", "\n");
 
 	/**
+	 * Default value for ORS, when not set specifically by the AWK script
+	 */
+	private String defaultORS = System.getProperty("line.separator", "\n");
+
+	/**
 	 * <p>toDescriptionString.</p>
 	 *
 	 * @return a human readable representation of the parameters values.
@@ -708,5 +713,23 @@ public class AwkSettings {
 	 */
 	public void setDefaultRS(String rs) {
 		defaultRS = rs;
+	}
+
+	/**
+	 * <p>Getter for the field <code>defaultORS</code>.</p>
+	 *
+	 * @return the default ORS, when not set by the AWK script
+	 */
+	public String getDefaultORS() {
+		return defaultORS;
+	}
+
+	/**
+	 * Sets the default ORS, when not set by the AWK script
+	 *
+	 * @param ors The string that separates output records (with the print statement)
+	 */
+	public void setDefaultORS(String ors) {
+		defaultORS = ors;
 	}
 }
