@@ -1709,7 +1709,7 @@ public class AwkTuples implements Serializable {
 	 * Stack before: pattern1, pattern2 <br>
 	 * Stack after: regex pair object
 	 */
-	public static final int _REGEXP_PAIR_ = 376;		// x, y -> x
+	public static final int _CONDITION_PAIR_ = 376;		// x, y -> x
 
 	/**
 	 * Returns whether the specified key is in the array.
@@ -1856,7 +1856,7 @@ public class AwkTuples implements Serializable {
 	 * @param o a {@link java.lang.Object} object
 	 */
 	public void push(Object o) {
-		assert (o instanceof String) || (o instanceof Long) || (o instanceof Integer) || (o instanceof Double); //  || (o instanceof Pattern); //  || (o instanceof PatternPair);
+		assert (o instanceof String) || (o instanceof Long) || (o instanceof Integer) || (o instanceof Double); //  || (o instanceof Pattern);
 		if (o instanceof String) {
 			queue.add(new Tuple(_PUSH_, o.toString()));
 		} else if (o instanceof Integer) {
@@ -2932,8 +2932,8 @@ public class AwkTuples implements Serializable {
 	/**
 	 * <p>regexpPair.</p>
 	 */
-	public void regexpPair() {
-		queue.add(new Tuple(_REGEXP_PAIR_));
+	public void conditionPair() {
+		queue.add(new Tuple(_CONDITION_PAIR_));
 	}
 
 	/**

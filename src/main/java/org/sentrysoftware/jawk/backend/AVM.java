@@ -56,7 +56,7 @@ import org.sentrysoftware.jawk.jrt.CharacterTokenizer;
 import org.sentrysoftware.jawk.jrt.JRT;
 import org.sentrysoftware.jawk.jrt.KeyList;
 import org.sentrysoftware.jawk.jrt.KeyListImpl;
-import org.sentrysoftware.jawk.jrt.PatternPair;
+import org.sentrysoftware.jawk.jrt.ConditionPair;
 import org.sentrysoftware.jawk.jrt.RegexTokenizer;
 import org.sentrysoftware.jawk.jrt.SingleCharacterTokenizer;
 import org.sentrysoftware.jawk.jrt.VariableManager;
@@ -294,7 +294,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 			throws ExitException, IOException
 	{
 		Map<String, Pattern> regexps = new HashMap<String, Pattern>();
-		Map<Integer, PatternPair> pattern_pairs = new HashMap<Integer, PatternPair>();
+		Map<Integer, ConditionPair> condition_pairs = new HashMap<Integer, ConditionPair>();
 
 		global_variable_offsets = tuples.getGlobalVariableOffsetMap();
 		global_variable_arrays = tuples.getGlobalVariableAarrayMap();
@@ -1835,20 +1835,17 @@ public class AVM implements AwkInterpreter, VariableManager {
 						position.next();
 						break;
 					}
-					case AwkTuples._REGEXP_PAIR_: {
+					case AwkTuples._CONDITION_PAIR_: {
 						// stack[0] = 1st regexp in pair
 						// stack[1] = 2nd regexp in pair
-						PatternPair pp = pattern_pairs.get(position.current());
-						if (pp == null) {
-							String convfmt = getCONVFMT().toString();
-							String s1 = JRT.toAwkString(pop(), convfmt, locale);
-							String s2 = JRT.toAwkString(pop(), convfmt, locale);
-							pattern_pairs.put(position.current(), pp = new PatternPair(s1, s2));
-						} else {
-							pop();
-							pop();
+						ConditionPair cp = condition_pairs.get(position.current());
+						if (cp == null) {
+							cp = new ConditionPair();
+							condition_pairs.put(position.current(), cp);
 						}
-						push(pp);
+						boolean s1 = jrt.toBoolean(pop());
+						boolean s2 = jrt.toBoolean(pop());
+						push(cp.update(s1, s2) ? ONE : ZERO);
 						position.next();
 						break;
 					}

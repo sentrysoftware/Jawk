@@ -17,6 +17,7 @@ import java.util.Collections;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
+import org.sentrysoftware.jawk.frontend.AwkParser;
 
 public class AwkTest {
 
@@ -226,5 +227,18 @@ public class AwkTest {
 			code = e.getCode();
 		}
 		assertEquals("exit without code must not alter previous exit with code", 2, code);
+	}
+	
+	@Test
+	public void testRanges() throws Exception {
+		String input = "aa\nbb\ncc\ndd\nee\naa\nbb\ncc\ndd\nee";
+		assertEquals("Range of regexp must work", "bb\ncc\ndd\nbb\ncc\ndd\n", runAwk("/b/, /d/", input));
+		assertEquals("Range of conditions must work", "bb\ncc\ndd\n", runAwk("NR == 2, NR == 4", input));
+		assertEquals("Non-matching start condition in range must return nothing", "", runAwk("/zz/, /cc/", input));
+		assertEquals("Non-matching end condition in range must return all remaining", "cc\ndd\nee\naa\nbb\ncc\ndd\nee\n", runAwk("/cc/, /zz/", input));
+		assertEquals("Range of mixed conditions must work", "bb\ncc\ndd\n", runAwk("NR == 2, /d/", input));
+		assertThrows("Invalid range (3 args) must throw", AwkParser.ParserException.class, () -> runAwk("/a/, /b/, NR == 4", input));
+		assertEquals("Entering and leaving the range matches 1 record", "bb\nbb\n", runAwk("/b/, /b/", input));
+		assertEquals("Range comma is lowest precedence", "bb\ncc\nbb\ncc\n", runAwk("/b/, /d/ || /c/", input));
 	}
 }
