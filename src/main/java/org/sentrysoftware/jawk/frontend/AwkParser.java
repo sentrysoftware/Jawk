@@ -985,12 +985,12 @@ public class AwkParser {
 		} else if (token != _OPEN_BRACE_ && token != _SEMICOLON_ && token != _NEWLINE_ && token != _EOF_) {
 			// true = allow comparators, allow IN keyword, do NOT allow multidim indices expressions
 			opt_expr = ASSIGNMENT_EXPRESSION(true, true, false);
-			// for /regex/, /regex/
+			// for ranges, like conditionStart, conditionEnd
 			if (token == _COMMA_) {
 				lexer();
 				opt_newline();
 				// true = allow comparators, allow IN keyword, do NOT allow multidim indices expressions
-				opt_expr = new RegexpPair_AST(opt_expr, ASSIGNMENT_EXPRESSION(true, true, false));
+				opt_expr = new ConditionPair_AST(opt_expr, ASSIGNMENT_EXPRESSION(true, true, false));
 			}
 		} else {
 			opt_expr = null;
@@ -4269,10 +4269,10 @@ public class AwkParser {
 		}
 	}
 
-	private final class RegexpPair_AST extends ScalarExpression_AST {
+	private final class ConditionPair_AST extends ScalarExpression_AST {
 
-		private RegexpPair_AST(AST regexp_ast_1, AST regexp_ast_2) {
-			super(regexp_ast_1, regexp_ast_2);
+		private ConditionPair_AST(AST boolean_ast_1, AST boolean_ast_2) {
+			super(boolean_ast_1, boolean_ast_2);
 		}
 
 		@Override
@@ -4284,7 +4284,7 @@ public class AwkParser {
 			assert ast1 != null;
 			int ast1_result = ast1.populateTuples(tuples);
 			assert ast1_result == 1;
-			tuples.regexpPair();
+			tuples.conditionPair();
 			popSourceLineNumber(tuples);
 			return 1;
 		}
@@ -5227,7 +5227,7 @@ public class AwkParser {
 		}
 	}
 
-	private class ParserException extends RuntimeException {
+	public class ParserException extends RuntimeException {
 
 		private static final long serialVersionUID = 1L;
 

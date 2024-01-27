@@ -436,7 +436,7 @@ public class JRT {
 	// non-static to reference "inputLine"
 	/**
 	 * Converts an Integer, Double, String, Pattern,
-	 * or PatternPair to a boolean.
+	 * or ConditionPair to a boolean.
 	 *
 	 * @param o The object to convert to a boolean.
 	 * @return For the following class types for o:
@@ -447,10 +447,8 @@ public class JRT {
 	 * 	<li><strong>String</strong> - o.length() &gt; 0
 	 * 	<li><strong>UninitializedObject</strong> - false
 	 * 	<li><strong>Pattern</strong> - $0 ~ o
-	 * 	<li><strong>PatternPair</strong> - $0 ~ o (with some state information)
 	 * 	</ul>
 	 * 	If o is none of these types, an error is thrown.
-	 * @see PatternPair
 	 */
 	public final boolean toBoolean(Object o) {
 		boolean val;
@@ -471,9 +469,6 @@ public class JRT {
 			String s = inputLine == null ? "" : inputLine;
 			Matcher matcher = pattern.matcher(s);
 			val = matcher.find();
-		} else if (o instanceof PatternPair) {
-			String s = inputLine == null ? "" : inputLine;
-			val = ((PatternPair) o).matches(s);
 		} else {
 			throw new Error("Unknown operand_stack type: " + o.getClass() + " for value " + o);
 		}
