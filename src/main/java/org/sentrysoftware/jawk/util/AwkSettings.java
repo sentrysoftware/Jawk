@@ -71,18 +71,6 @@ public class AwkSettings {
 	private List<ScriptSource> scriptSources = new ArrayList<ScriptSource>();
 
 	/**
-	 * Whether to interpret or compile the script.
-	 * Initial value is set to <code>false</code> (interpret).
-	 */
-	private boolean compile = false;
-
-	/**
-	 * Whether to compile and execute the script.
-	 * Initial value is set to <code>false</code> (interpret).
-	 */
-	private boolean compileRun = false;
-
-	/**
 	 * Initial Field Separator (FS) value.
 	 * <code>null</code> means the default FS value.
 	 */
@@ -191,10 +179,6 @@ public class AwkSettings {
 				.append(getNameValueOrFileNames()).append(newLine);
 		desc.append("scriptSources = ")
 				.append(scriptSources).append(newLine);
-		desc.append("(should) compile = ")
-				.append(isCompile()).append(newLine);
-		desc.append("(should) compile & run = ")
-				.append(isCompileRun()).append(newLine);
 		desc.append("fieldSeparator = ")
 				.append(getFieldSeparator()).append(newLine);
 		desc.append("dumpSyntaxTree = ")
@@ -388,46 +372,6 @@ public class AwkSettings {
 	 */
 	public void setScriptSources(List<ScriptSource> scriptSources) {
 		this.scriptSources = scriptSources;
-	}
-
-	/**
-	 * Whether to interpret or compile the script.
-	 * Initial value is set to <code>false</code> (interpret).
-	 *
-	 * @return the compile
-	 */
-	public boolean isCompile() {
-		return compile;
-	}
-
-	/**
-	 * Whether to interpret or compile the script.
-	 * Initial value is set to <code>false</code> (interpret).
-	 *
-	 * @param compile the compile to set
-	 */
-	public void setCompile(boolean compile) {
-		this.compile = compile;
-	}
-
-	/**
-	 * Whether to compile and execute the script.
-	 * Initial value is set to <code>false</code> (interpret).
-	 *
-	 * @return the compileRun
-	 */
-	public boolean isCompileRun() {
-		return compileRun;
-	}
-
-	/**
-	 * Whether to compile and execute the script.
-	 * Initial value is set to <code>false</code> (interpret).
-	 *
-	 * @param compileRun the compileRun to set
-	 */
-	public void setCompileRun(boolean compileRun) {
-		this.compileRun = compileRun;
 	}
 
 	/**
