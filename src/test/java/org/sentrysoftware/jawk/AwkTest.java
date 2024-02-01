@@ -241,6 +241,16 @@ public class AwkTest {
 		assertEquals("Entering and leaving the range matches 1 record", "bb\nbb\n", runAwk("/b/, /b/", input));
 		assertEquals("Range comma is lowest precedence", "bb\ncc\nbb\ncc\n", runAwk("/b/, /d/ || /c/", input));
 	}
+	
+	@Test
+	public void testDavideBrini() throws Exception {
+		assertEquals("Davide Brini's signature", "dave_br@gx.cmm\n", runAwk(
+				"BEGIN{O=\"~\"~\"~\";o=\"==\"==\"==\";o+=+o;x=O\"\"O;while(X++<=x+o+o){c=c\"%c\";}"
+				+ "printf c,(x-O)*(x-O),x*(x-o)-o,x*(x-O)+x-O-o,+x*(x-O)-x+o,X*(o*o+O)+x-O,"
+				+ "X*(X-x)-o*o,(x+X)*o*o+o,x*(X-x)-O-O,x-O+(O+o+X+x)*(o+O),X*X-X*(x-O)-x+O,"
+				+ "O+X*(o*(o+O)+O),+x+O+X*o,x*(x-o),(o+X+x)*o*o-(x-O-O),O+(X-x)*(X+O),x-O}", null));
+	}
+	
 	@Test
 	public void testIncDec() throws Exception {
 		assertEquals("2", runAwk("BEGIN { a = 1; printf ++a }", null));
