@@ -213,7 +213,8 @@
 				<configuration>
 					<excludes>
 						<exclude>**/*GawkTest.java</exclude>
-						<exclude>**/Bwk*Test.java</exclude>
+						<exclude>**/BwkTTest.java</exclude>
+						<exclude>**/BwkMiscTest.java</exclude>
 					</excludes>
 					<workingDirectory>${project.build.directory}/test-classes</workingDirectory>
 				</configuration>
