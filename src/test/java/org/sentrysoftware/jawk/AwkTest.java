@@ -251,4 +251,8 @@ public class AwkTest {
 		assertEquals("01", runAwk("BEGIN { printf a++ ; printf a++; }", null));
 	}
 	
+	@Test
+	public void testPrintfC() throws Exception {
+		assertEquals("A", evalAwk("sprintf(\"%c\", 65)"));
+	}
 }
