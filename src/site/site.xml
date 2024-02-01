@@ -14,13 +14,13 @@
 
 	<bannerLeft>
 		<src>images/sentry-logo-white.png</src>
-		<href>https://sentrysoftware.com</href>
+		<href>https://sentrysoftware.org</href>
 	</bannerLeft>
 
 	<body>
 
 		<links>
-			<item name="Fork on GitHub" href="${project.scm.url}" />
+			<item name="Jawk on GitHub" href="${project.scm.url}" />
 			<item name="The GNU Awk User's Guide" href="https://www.gnu.org/software/gawk/manual/gawk.html" />
 		</links>
 

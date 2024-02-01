@@ -789,6 +789,22 @@ public class AVM implements AwkInterpreter, VariableManager {
 						position.next();
 						break;
 					}
+					case AwkTuples._POSTINC_: {
+						// arg[0] = offset
+						// arg[1] = is_global
+						pop();
+						push(inc(position.intArg(0), position.boolArg(1)));
+						position.next();
+						break;
+					}
+					case AwkTuples._POSTDEC_: {
+						// arg[0] = offset
+						// arg[1] = is_global
+						pop();
+						push(dec(position.intArg(0), position.boolArg(1)));
+						position.next();
+						break;
+					}
 					case AwkTuples._INC_ARRAY_REF_: {
 						// arg[0] = offset
 						// arg[1] = is_global
@@ -2167,24 +2183,26 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 * Numerically increases an Awk variable by one; the result
 	 * is placed back into that variable.
 	 */
-	private void inc(long l, boolean is_global) {
+	private Object inc(long l, boolean is_global) {
 		Object o = runtime_stack.getVariable(l, is_global);
-		if (o == null) {
-			runtime_stack.setVariable(l, o = BLANK, is_global);
+		if (o == null || o instanceof UninitializedObject) {
+			runtime_stack.setVariable(l, o = ZERO, is_global);
 		}
 		runtime_stack.setVariable(l, JRT.inc(o), is_global);
+		return o;
 	}
 
 	/**
 	 * Numerically decreases an Awk variable by one; the result
 	 * is placed back into that variable.
 	 */
-	private void dec(long l, boolean is_global) {
+	private Object dec(long l, boolean is_global) {
 		Object o = runtime_stack.getVariable(l, is_global);
 		if (o == null) {
-			runtime_stack.setVariable(l, o = BLANK, is_global);
+			runtime_stack.setVariable(l, o = ZERO, is_global);
 		}
 		runtime_stack.setVariable(l, JRT.dec(o), is_global);
+		return o;
 	}
 
 	/** {@inheritDoc} */

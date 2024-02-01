@@ -231,65 +231,96 @@ public class JRT {
 		return toAwkString(o, ofmt, locale);
 	}
 
-	/*
+	/**
 	 * Convert a String, Integer, or Double to Double.
 	 *
 	 * @param o Object to convert.
 	 *
 	 * @return the "double" value of o, or 0 if invalid
 	 */
-	/**
-	 * <p>toDouble.</p>
-	 *
-	 * @param o a {@link java.lang.Object} object
-	 * @return a double
-	 */
-	public static double toDouble(Object o) {
-		if (o instanceof Number) {
-			return ((Number) o).doubleValue();
-		} else {
-			// Try to convert the string to a number.
-			// If failed, try with one character less.
-			// This is to be able to handle the (original) way
-			// that AWK converts strings to numbers, i.e.:
-			// 25fix will convert to 25 (any numeric prefix
-			// will work)
-			String s = o.toString();
-			while (s.length() > 0) {
-				try {
-					return Double.parseDouble(s);
-				} catch (NumberFormatException nfe) {
-				}
-				s = s.substring(0, s.length() - 1);
-			}
-			// Failed (not even with one char)
+	public static double toDouble(final Object o) {
+
+		if (o == null) {
 			return 0;
 		}
+
+		if (o instanceof Number) {
+			return ((Number) o).doubleValue();
+		}
+
+		if (o instanceof Character) {
+			return (double)((Character)o).charValue();
+		}
+
+		// Try to convert the string to a number.
+		String s = o.toString();
+		int length = s.length();
+
+		// Optimization: We don't need to handle strings that are longer than 26 chars
+		// because a Double cannot be longer than 26 chars when converted to String.
+		if (length > 26) {
+			length = 26;
+		}
+
+		// Loop:
+		// If convervsion fails, try with one character less.
+		// 25fix will convert to 25 (any numeric prefix will work)
+		while (length > 0) {
+			try {
+				return Double.parseDouble(s.substring(0, length));
+			} catch (NumberFormatException nfe) {
+				length--;
+			}
+		}
+
+		// Failed (not even with one char)
+		return 0;
 	}
 
-	/*
+	/**
 	 * Convert a String, Long, or Double to Long.
 	 *
 	 * @param o Object to convert.
 	 *
 	 * @return the "long" value of o, or 0 if invalid
 	 */
-	/**
-	 * <p>toLong.</p>
-	 *
-	 * @param o a {@link java.lang.Object} object
-	 * @return a long
-	 */
-	public static long toLong(Object o) {
+	public static long toLong(final Object o) {
+
+		if (o == null) {
+			return 0;
+		}
+
 		if (o instanceof Number) {
 			return ((Number)o).longValue();
-		} else {
-			try {
-				return Long.parseLong(o.toString());
-			} catch (NumberFormatException nfe) {
-				return 0;
-			}
 		}
+
+		if (o instanceof Character) {
+			return (long)((Character)o).charValue();
+		}
+
+		// Try to convert the string to a number.
+		String s = o.toString();
+		int length = s.length();
+
+		// Optimization: We don't need to handle strings that are longer than 20 chars
+		// because a Long cannot be longer than 20 chars when converted to String.
+		if (length > 20) {
+			length = 20;
+		}
+
+		// Loop:
+		// If convervsion fails, try with one character less.
+		// 25fix will convert to 25 (any numeric prefix will work)
+		while (length > 0) {
+			try {
+				return Long.parseLong(s.substring(0, length));
+			} catch (NumberFormatException nfe) {
+				length--;
+			}
+
+		}
+		// Failed (not even with one char)
+		return 0;
 	}
 
 	/**
@@ -319,14 +350,15 @@ public class JRT {
 					"0".equals(o2String)) {
 				return mode == 0;
 			} else {
-				return mode != 0;
+				return mode < 0;
 			}
-		} else if (o2 instanceof UninitializedObject) {
+		}
+		if (o2 instanceof UninitializedObject) {
 			if ("".equals(o1String) ||
 					"0".equals(o1String)) {
 				return mode == 0;
 			} else {
-				return mode != 0;
+				return mode > 0;
 			}
 		}
 

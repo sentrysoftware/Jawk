@@ -67,9 +67,10 @@ There's a growing list of things that make our version diverge from the original
 * Removed the Socket extension (to get a smaller jar)
 * Improved performance in parsing inputs and printed output
 * Support for long integers
-* Support for octal and hexadecimal notation in strings (allowing `ESC`` characters to do fancy terminal effects)
+* Support for octal and hexadecimal notation in strings (allowing `ESC` characters to do fancy terminal effects)
 * Artifact *groupId* and package is `org.sentrysoftware`
 * Added gawk's suite of unit tests
+* Added bwk's suite of unit tests
 * License is LGPL for the Maven artifact
 
 ### Differences with other AWKs

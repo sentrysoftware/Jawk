@@ -4485,7 +4485,7 @@ public class AwkParser {
 			assert ast1_result == 1;
 			if (ast1 instanceof ID_AST) {
 				ID_AST id_ast = (ID_AST) ast1;
-				tuples.inc(id_ast.offset, id_ast.is_global);
+				tuples.postInc(id_ast.offset, id_ast.is_global);
 			} else if (ast1 instanceof ArrayReference_AST) {
 				ArrayReference_AST arr_ast = (ArrayReference_AST) ast1;
 				ID_AST id_ast = (ID_AST) arr_ast.ast1;
@@ -4522,7 +4522,7 @@ public class AwkParser {
 			assert ast1_result == 1;
 			if (ast1 instanceof ID_AST) {
 				ID_AST id_ast = (ID_AST) ast1;
-				tuples.dec(id_ast.offset, id_ast.is_global);
+				tuples.postDec(id_ast.offset, id_ast.is_global);
 			} else if (ast1 instanceof ArrayReference_AST) {
 				ArrayReference_AST arr_ast = (ArrayReference_AST) ast1;
 				ID_AST id_ast = (ID_AST) arr_ast.ast1;
