@@ -1799,6 +1799,34 @@ public class AwkTuples implements Serializable {
 	public static final int _ORS_OFFSET_ = 387;	// 0 -> 0
 
 	/**
+	 * Increases the variable reference by one; pushes the original value
+	 * onto the stack.
+	 * <p>
+	 * Argument 1: offset of the particular variable into the variable manager<br/>
+	 * Argument 2: whether the variable is global or local
+	 *
+	 * <p>
+	 * Stack before: ...<br/>
+	 * Stack after: x ... or 0 if uninitialized
+	 *
+	 */
+	public static final int _POSTINC_ = 388;	// 0 -> x
+
+	/**
+	 * Decreases the variable reference by one; pushes the original value
+	 * onto the stack.
+	 * <p>
+	 * Argument 1: offset of the particular variable into the variable manager<br/>
+	 * Argument 2: whether the variable is global or local
+	 *
+	 * <p>
+	 * Stack before: ...<br/>
+	 * Stack after: x ... or 0 if uninitialized
+	 *
+	 */
+	public static final int _POSTDEC_ = 389;	// 0 -> x
+
+	/**
 	 * Override add() to populate the line number for each tuple,
 	 * rather than polluting all the constructors with this assignment.
 	 */
@@ -2467,6 +2495,26 @@ public class AwkTuples implements Serializable {
 	 */
 	public void dec(int offset, boolean is_global) {
 		queue.add(new Tuple(_DEC_, offset, is_global));
+	}
+
+	/**
+	 * <p>postInc.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
+	public void postInc(int offset, boolean is_global) {
+		queue.add(new Tuple(_POSTINC_, offset, is_global));
+	}
+
+	/**
+	 * <p>postDec.</p>
+	 *
+	 * @param offset a int
+	 * @param is_global a boolean
+	 */
+	public void postDec(int offset, boolean is_global) {
+		queue.add(new Tuple(_POSTDEC_, offset, is_global));
 	}
 
 	/**

@@ -241,4 +241,14 @@ public class AwkTest {
 		assertEquals("Entering and leaving the range matches 1 record", "bb\nbb\n", runAwk("/b/, /b/", input));
 		assertEquals("Range comma is lowest precedence", "bb\ncc\nbb\ncc\n", runAwk("/b/, /d/ || /c/", input));
 	}
+	@Test
+	public void testIncDec() throws Exception {
+		assertEquals("2", runAwk("BEGIN { a = 1; printf ++a }", null));
+		assertEquals("12", runAwk("BEGIN { a = 1; printf a++ ; printf a++; }", null));
+		assertEquals("0", runAwk("BEGIN { a = 1; printf --a }", null));
+		assertEquals("10", runAwk("BEGIN { a = 1; printf a-- ; printf a--; }", null));
+		assertEquals("1", runAwk("BEGIN { printf ++a }", null));
+		assertEquals("01", runAwk("BEGIN { printf a++ ; printf a++; }", null));
+	}
+	
 }
