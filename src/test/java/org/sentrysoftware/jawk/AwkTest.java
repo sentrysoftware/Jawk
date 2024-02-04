@@ -265,4 +265,15 @@ public class AwkTest {
 	public void testPrintfC() throws Exception {
 		assertEquals("A", evalAwk("sprintf(\"%c\", 65)"));
 	}
+	
+	@Test
+	public void testEvalOrder() throws Exception {
+		assertEquals("Concatenated elements must be eval'ed from left to right", "0123", evalAwk("a++ a++ a++ a++"));
+		assertEquals("Function arguments must be eval'ed from left to right", "0 1 2 3\n", runAwk("BEGIN { print a++, a++, a++, a++ }", null));
+		assertEquals("atan2 arguments must be eval'ed from left to right", "0", evalAwk("atan2(a++, a++)"));
+		assertEquals("Comparison arguments must be eval'ed from left to right", "1", runAwk("BEGIN { r = (a++ < a++); printf r }", null));
+		assertEquals("Assignment is eval'ed right first, and then left", "0", runAwk("BEGIN { arr[a++] = a++; printf arr[1] }", null));
+		assertEquals("Binary expression is eval'ed from left to right", "0.5", runAwk("BEGIN { a = 1; printf a++ / a++ }", null));
+	}
+	
 }

@@ -3216,11 +3216,11 @@ public class AwkParser {
 			}
 			arr_ast.setArray(true);
 
-			int ast2_result = arr_ast.populateTuples(tuples);
-			assert ast2_result == 1;
-
 			int ast1_result = ast1.populateTuples(tuples);
 			assert ast1_result == 1;
+
+			int ast2_result = arr_ast.populateTuples(tuples);
+			assert ast2_result == 1;
 
 			tuples.isIn();
 
@@ -3254,10 +3254,11 @@ public class AwkParser {
 			assert ast1 != null;
 			assert ast2 != null;
 
-			int ast2_result = ast2.populateTuples(tuples);
-			assert ast2_result == 1;
 			int ast1_result = ast1.populateTuples(tuples);
 			assert ast1_result == 1;
+
+			int ast2_result = ast2.populateTuples(tuples);
+			assert ast2_result == 1;
 
 			// 2 values on the stack
 
@@ -3364,8 +3365,7 @@ public class AwkParser {
 			assert ast1_result == 1;
 			int ast2_result = ast2.populateTuples(tuples);
 			assert ast2_result == 1;
-			tuples.swap();
-			if        (op == _PLUS_) {
+			if (op == _PLUS_) {
 				tuples.add();
 			} else if (op == _MINUS_) {
 				tuples.subtract();
@@ -3394,12 +3394,12 @@ public class AwkParser {
 		@Override
 		public int populateTuples(AwkTuples tuples) {
 			pushSourceLineNumber(tuples);
-			assert ast2 != null;
-			int rhs_count = ast2.populateTuples(tuples);
-			assert rhs_count == 1;
 			assert ast1 != null;
 			int lhs_count = ast1.populateTuples(tuples);
 			assert lhs_count == 1;
+			assert ast2 != null;
+			int rhs_count = ast2.populateTuples(tuples);
+			assert rhs_count == 1;
 			tuples.concat();
 			popSourceLineNumber(tuples);
 			return 1;
@@ -4034,7 +4034,7 @@ public class AwkParser {
 			if (ast2 == null) {
 				retval = ast1.populateTuples(tuples);
 			} else {
-				retval = ast2.populateTuples(tuples) + ast1.populateTuples(tuples);
+				retval = ast1.populateTuples(tuples) + ast2.populateTuples(tuples);
 			}
 			popSourceLineNumber(tuples);
 			return retval;
@@ -4154,12 +4154,12 @@ public class AwkParser {
 			pushSourceLineNumber(tuples);
 			assert ast1 != null;
 			assert ast2 != null;
-			// get the index
-			int ast2_result = ast2.populateTuples(tuples);
-			assert ast2_result == 1;
 			// get the array var
 			int ast1_result = ast1.populateTuples(tuples);
 			assert ast1_result == 1;
+			// get the index
+			int ast2_result = ast2.populateTuples(tuples);
+			assert ast2_result == 1;
 			tuples.dereferenceArray();
 			popSourceLineNumber(tuples);
 			return 1;
@@ -4278,12 +4278,12 @@ public class AwkParser {
 		@Override
 		public int populateTuples(AwkTuples tuples) {
 			pushSourceLineNumber(tuples);
-			assert ast2 != null;
-			int ast2_result = ast2.populateTuples(tuples);
-			assert ast2_result == 1;
 			assert ast1 != null;
 			int ast1_result = ast1.populateTuples(tuples);
 			assert ast1_result == 1;
+			assert ast2 != null;
+			int ast2_result = ast2.populateTuples(tuples);
+			assert ast2_result == 1;
 			tuples.conditionPair();
 			popSourceLineNumber(tuples);
 			return 1;

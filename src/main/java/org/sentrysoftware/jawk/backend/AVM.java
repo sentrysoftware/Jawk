@@ -265,14 +265,14 @@ public class AVM implements AwkInterpreter, VariableManager {
 		String newString;
 
 		// arg[gsubArgPos] = is_gsub
-		// stack[0] = ere
+		// stack[0] = original field value
 		// stack[1] = replacement string
-		// stack[2] = original field value
+		// stack[2] = ere
 		boolean is_gsub = position.boolArg(gsubArgPos);
 		String convfmt = getCONVFMT().toString();
-		String ere = JRT.toAwkString(pop(), convfmt, locale);
-		String repl = JRT.toAwkString(pop(), convfmt, locale);
 		String orig = JRT.toAwkString(pop(), convfmt, locale);
+		String repl = JRT.toAwkString(pop(), convfmt, locale);
+		String ere = JRT.toAwkString(pop(), convfmt, locale);
 		if (is_gsub) {
 			newString = replaceAll(orig, ere, repl);
 		} else {
@@ -545,8 +545,8 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// stack[0] = string1
 						// stack[1] = string2
 						String convfmt = getCONVFMT().toString();
-						String s1 = JRT.toAwkString(pop(), convfmt, locale);
 						String s2 = JRT.toAwkString(pop(), convfmt, locale);
+						String s1 = JRT.toAwkString(pop(), convfmt, locale);
 						String result_string = s1 + s2;
 						push(result_string);
 						position.next();
@@ -894,15 +894,14 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._DEREF_ARRAY_: {
-						// stack[0] = AssocArray
-						// stack[1] = array index
-						Object o1 = pop();	// map
-						Object o2 = pop();	// idx
-						if (!(o1 instanceof AssocArray)) {
+						// stack[0] = array index
+						// stack[1] = AssocArray
+						Object idx = pop();	// idx
+						Object array = pop();	// map
+						if (!(array instanceof AssocArray)) {
 							throw new AwkRuntimeException("Attempting to index a non-associative-array.");
 						}
-						AssocArray array = (AssocArray) o1;
-						Object o = array.get(o2);
+						Object o = ((AssocArray) array).get(idx);
 						assert o != null;
 						push(o);
 						position.next();
@@ -986,20 +985,20 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._ATAN2_: {
-						// stack[0] = 1st arg to atan2() function
-						// stack[1] = 2nd arg to atan2() function
-						double d1 = JRT.toDouble(pop());
+						// stack[0] = 2nd arg to atan2() function
+						// stack[1] = 1st arg to atan2() function
 						double d2 = JRT.toDouble(pop());
+						double d1 = JRT.toDouble(pop());
 						push(Math.atan2(d1, d2));
 						position.next();
 						break;
 					}
 					case AwkTuples._MATCH_: {
-						// stack[0] = 1st arg to match() function
-						// stack[1] = 2nd arg to match() function
+						// stack[0] = 2nd arg to match() function
+						// stack[1] = 1st arg to match() function
 						String convfmt = getCONVFMT().toString();
-						String s = JRT.toAwkString(pop(), convfmt, locale);
 						String ere = JRT.toAwkString(pop(), convfmt, locale);
+						String s = JRT.toAwkString(pop(), convfmt, locale);
 
 						// check if IGNORECASE set
 						int flags = 0;
@@ -1031,26 +1030,26 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._INDEX_: {
-						// stack[0] = 1st arg to index() function
-						// stack[1] = 2nd arg to index() function
+						// stack[0] = 2nd arg to index() function
+						// stack[1] = 1st arg to index() function
 						String convfmt = getCONVFMT().toString();
-						String s1 = JRT.toAwkString(pop(), convfmt, locale);
 						String s2 = JRT.toAwkString(pop(), convfmt, locale);
+						String s1 = JRT.toAwkString(pop(), convfmt, locale);
 						push(s1.indexOf(s2) + 1);
 						position.next();
 						break;
 					}
 					case AwkTuples._SUB_FOR_DOLLAR_0_: {
 						// arg[0] = is_global
-						// stack[0] = ere
-						// stack[1] = replacement string
+						// stack[0] = replacement string
+						// stack[1] = ere
 						boolean is_gsub = position.boolArg(0);
 						// top-of-stack = ere
 						// next = repl
 						// (use $0 as orig)
 						String convfmt = getCONVFMT().toString();
-						String ere = JRT.toAwkString(pop(), convfmt, locale);
 						String repl = JRT.toAwkString(pop(), convfmt, locale);
+						String ere = JRT.toAwkString(pop(), convfmt, locale);
 						String orig = JRT.toAwkString(jrt.jrtGetInputField(0), convfmt, locale);
 						String newstring;
 						if (is_gsub) {
@@ -1066,13 +1065,13 @@ public class AVM implements AwkInterpreter, VariableManager {
 					}
 					case AwkTuples._SUB_FOR_DOLLAR_REFERENCE_: {
 						// arg[0] = is_global
-						// stack[0] = field num
-						// stack[1] = ere
-						// stack[2] = replacement string
-						// stack[3] = original field value
+						// stack[0] = original field value
+						// stack[1] = replacement string
+						// stack[2] = ere
+						// stack[3] = field num
 						// (use $field_num as orig)
-						int fieldNum = (int) JRT.toDouble(pop());
 						String newString = execSubOrGSub(position, 0);
+						int fieldNum = (int) JRT.toDouble(pop());
 						// assign it to "$0"
 						if (fieldNum == 0) {
 							jrt.setInputLine(newString);
@@ -1087,9 +1086,9 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// arg[0] = offset
 						// arg[1] = is_global
 						// arg[2] = is_gsub
-						// stack[0] = ere
+						// stack[0] = original variable value
 						// stack[1] = replacement string
-						// stack[2] = original variable value
+						// stack[2] = ere
 						long offset = position.intArg(0);
 						boolean is_global = position.boolArg(1);
 						String newString = execSubOrGSub(position, 2);
@@ -1103,15 +1102,15 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// arg[0] = offset
 						// arg[1] = is_global
 						// arg[2] = is_gsub
-						// stack[0] = array index
-						// stack[1] = ere
-						// stack[2] = replacement string
-						// stack[3] = original variable value
+						// stack[0] = original variable value
+						// stack[1] = replacement string
+						// stack[2] = ere
+						// stack[3] = array index
 						// ARRAY reference offset/is_global
 						long offset = position.intArg(0);
 						boolean is_global = position.boolArg(1);
-						Object arr_idx = pop();
 						String newString = execSubOrGSub(position, 2);
+						Object arr_idx = pop();
 						// assign it to "offset/arr_idx/global"
 						assignArray(offset, arr_idx, newString, is_global);
 						pop();
@@ -1120,24 +1119,24 @@ public class AVM implements AwkInterpreter, VariableManager {
 					}
 					case AwkTuples._SPLIT_: {
 						// arg[0] = num args
-						// stack[0] = string
+						// stack[0] = field_sep (only if num args == 3)
 						// stack[1] = array
-						// stack[2] = field_sep (only if num args == 3)
-						long numargs = position.intArg(0);
+						// stack[2] = string
 						String convfmt = getCONVFMT().toString();
-						String s = JRT.toAwkString(pop(), convfmt, locale);
-						Object o = pop();
-						if (!(o instanceof AssocArray)) {
-							throw new AwkRuntimeException(position.lineNumber(), o + " is not an array.");
-						}
+						long numargs = position.intArg(0);
 						String fs_string;
 						if (numargs == 2) {
 							fs_string = JRT.toAwkString(getFS(), convfmt, locale);
 						} else if (numargs == 3) {
 							fs_string = JRT.toAwkString(pop(), convfmt, locale);
 						} else {
-							throw new Error("Invalid # of args. split() tequires 2 or 3. Got: " + numargs);
+							throw new Error("Invalid # of args. split() requires 2 or 3. Got: " + numargs);
 						}
+						Object o = pop();
+						if (!(o instanceof AssocArray)) {
+							throw new AwkRuntimeException(position.lineNumber(), o + " is not an array.");
+						}
+						String s = JRT.toAwkString(pop(), convfmt, locale);
 						Enumeration<Object> tokenizer;
 						if (fs_string.equals(" ")) {
 							tokenizer = new StringTokenizer(s);
@@ -1161,37 +1160,38 @@ public class AVM implements AwkInterpreter, VariableManager {
 					}
 					case AwkTuples._SUBSTR_: {
 						// arg[0] = num args
-						// stack[0] = string
+						// stack[0] = length (only if num args == 3)
 						// stack[1] = start pos
-						// stack[2] = end pos (only if num args == 3)
+						// stack[2] = string
 						long numargs = position.intArg(0);
-						String s = JRT.toAwkString(pop(), getCONVFMT().toString(), locale);
-						int m = (int) JRT.toDouble(pop());
-						if (m <= 0) {
-							throw new AwkRuntimeException(position.lineNumber(), "2nd arg to substr must be a positive integer");
-						}
-						if (m > s.length()) {
-							if (numargs == 2) {
-							} else if (numargs == 3) {
-								pop();
-							} else {
-								throw new Error("numargs for _SUBSTR_ must be 2 or 3. It is " + numargs);
-							}
-							push(BLANK);
+						int startPos, length;
+						String s;
+						if (numargs == 3)
+						{
+							length = (int) JRT.toLong(pop());
+							startPos = (int) JRT.toDouble(pop());
+							s = JRT.toAwkString(pop(), getCONVFMT().toString(), locale);
 						} else if (numargs == 2) {
-							push(s.substring(m-1));
-						} else if (numargs == 3) {
-							int n = (int) JRT.toDouble(pop());
-							if (n < 0) {
-								throw new AwkRuntimeException(position.lineNumber(), "3rd arg to substr must be a non-negative integer");
-							}
-							if (m + n > s.length()) {
-								push(s.substring(m - 1));
-							} else {
-								push(s.substring(m - 1, m + n - 1));
-							}
+							startPos = (int) JRT.toDouble(pop());
+							s = JRT.toAwkString(pop(), getCONVFMT().toString(), locale);
+							length = s.length() - startPos + 1;
 						} else {
 							throw new Error("numargs for _SUBSTR_ must be 2 or 3. It is " + numargs);
+						}
+						if (startPos <= 0) {
+							throw new AwkRuntimeException(position.lineNumber(), "2nd arg to substr must be a positive integer");
+						}
+						if (length < 0) {
+							throw new AwkRuntimeException(position.lineNumber(), "3rd arg to substr must be a non-negative integer");
+						}
+						if (startPos > s.length()) {
+							push(BLANK);
+						} else {
+							if (startPos + length > s.length()) {
+								push(s.substring(startPos - 1));
+							} else {
+								push(s.substring(startPos - 1, startPos + length - 1));
+							}
 						}
 						position.next();
 						break;
@@ -1223,37 +1223,37 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._CMP_EQ_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						push(JRT.compare2(o1, o2, 0) ? ONE : ZERO);
 						position.next();
 						break;
 					}
 					case AwkTuples._CMP_LT_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						push(JRT.compare2(o1, o2, -1) ? ONE : ZERO);
 						position.next();
 						break;
 					}
 					case AwkTuples._CMP_GT_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						push(JRT.compare2(o1, o2, 1) ? ONE : ZERO);
 						position.next();
 						break;
 					}
 					case AwkTuples._MATCHES_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						// use o1's string value
 						String s = o1.toString();
 						// assume o2 is a regexp
@@ -1316,10 +1316,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._ADD_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						double d1 = JRT.toDouble(o1);
 						double d2 = JRT.toDouble(o2);
 						double ans = d1 + d2;
@@ -1332,10 +1332,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._SUBTRACT_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						double d1 = JRT.toDouble(o1);
 						double d2 = JRT.toDouble(o2);
 						double ans = d1 - d2;
@@ -1348,10 +1348,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._MULTIPLY_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						double d1 = JRT.toDouble(o1);
 						double d2 = JRT.toDouble(o2);
 						double ans = d1 * d2;
@@ -1364,10 +1364,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._DIVIDE_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						double d1 = JRT.toDouble(o1);
 						double d2 = JRT.toDouble(o2);
 						double ans = d1 / d2;
@@ -1380,10 +1380,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._MOD_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						double d1 = JRT.toDouble(o1);
 						double d2 = JRT.toDouble(o2);
 						double ans = d1 % d2;
@@ -1396,10 +1396,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._POW_: {
-						// stack[0] = item1
-						// stack[1] = item2
-						Object o1 = pop();
+						// stack[0] = item2
+						// stack[1] = item1
 						Object o2 = pop();
+						Object o1 = pop();
 						double d1 = JRT.toDouble(o1);
 						double d2 = JRT.toDouble(o2);
 						double ans = Math.pow(d1, d2);
@@ -1683,8 +1683,10 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// arg[1] = function name
 						// arg[2] = # of formal parameters
 						// arg[3] = # of actual parameters
-						// stack[0] = first actual parameter
-						// stack[1] = second actual parameter
+						// stack[0] = last actual parameter
+						// stack[1] = before-last actual parameter
+						// ...
+						// stack[n-1] = first actual parameter
 						// etc.
 						Address func_addr = position.addressArg();
 						//String func_name = position.arg(1).toString();
@@ -1692,7 +1694,8 @@ public class AVM implements AwkInterpreter, VariableManager {
 						long num_actual_params = position.intArg(3);
 						assert num_formal_params >= num_actual_params;
 						runtime_stack.pushFrame(num_formal_params, position.current());
-						for (int i = 0; i < num_actual_params; i++) {
+						// Arguments are stacked, so first in the stack is the last for the function 
+						for (long i = num_actual_params - 1 ; i >= 0 ; i--) {
 							runtime_stack.setVariable(i, pop(), false);	// false = local
 						}
 						position.jump(func_addr);
@@ -1852,24 +1855,24 @@ public class AVM implements AwkInterpreter, VariableManager {
 						break;
 					}
 					case AwkTuples._CONDITION_PAIR_: {
-						// stack[0] = 1st regexp in pair
-						// stack[1] = 2nd regexp in pair
+						// stack[0] = End condition
+						// stack[1] = Start condition
 						ConditionPair cp = condition_pairs.get(position.current());
 						if (cp == null) {
 							cp = new ConditionPair();
 							condition_pairs.put(position.current(), cp);
 						}
-						boolean s1 = jrt.toBoolean(pop());
-						boolean s2 = jrt.toBoolean(pop());
-						push(cp.update(s1, s2) ? ONE : ZERO);
+						boolean end = jrt.toBoolean(pop());
+						boolean start = jrt.toBoolean(pop());
+						push(cp.update(start, end) ? ONE : ZERO);
 						position.next();
 						break;
 					}
 					case AwkTuples._IS_IN_: {
-						// stack[0] = key to check
-						// stack[1] = AssocArray
-						Object arg = pop();
+						// stack[0] = AssocArray
+						// stack[1] = key to check
 						Object arr = pop();
+						Object arg = pop();
 						AssocArray aa = (AssocArray) arr;
 						boolean result = aa.isIn(arg);
 						push(result ? ONE : ZERO);
@@ -2069,9 +2072,16 @@ public class AVM implements AwkInterpreter, VariableManager {
 			// cache $OFS to separate fields below
 			// (no need to execute getOFS for each field)
 			String ofs_string = getOFS().toString();
-			for (int i = 0; i < num_args; i++) {
-				String s = JRT.toAwkStringForOutput(pop(), getOFMT().toString(), locale);
-				ps.print(s);
+			
+			// Arguments are stacked, so we need to reverse order
+			Object[] args = new Object[(int)num_args];
+			for (int i = (int)num_args - 1 ; i >=0 ; i--) {
+				args[i] = pop();
+			}
+			
+			// Now print
+			for (int i = 0 ; i < num_args ; i++) {
+				ps.print(JRT.toAwkStringForOutput(args[i], getOFMT().toString(), locale));
 				// if more elements, display $FS
 				if (i < num_args - 1) {
 					// use $OFS to separate fields
@@ -2105,13 +2115,17 @@ public class AVM implements AwkInterpreter, VariableManager {
 
 		// all but the format argument
 		Object[] arg_array = new Object[(int) (num_args - 1)];
-		// the format argument!
-		String fmt = JRT.toAwkString(pop(), getCONVFMT().toString(), locale);
+
 		// for each sprintf argument, put it into an
 		// array used in the String.format method
-		for (int i = 0; i < num_args - 1; i++) {
+		// Arguments are stacked, so we need to reverse their order
+		for (int i = (int)num_args - 2 ; i >= 0 ; i--) {
 			arg_array[i] = pop();
 		}
+
+		// the format argument!
+		String fmt = JRT.toAwkString(pop(), getCONVFMT().toString(), locale);
+
 		if (trap_illegal_format_exceptions) {
 			return Printf4J.sprintf(locale, fmt, arg_array);
 		} else {
