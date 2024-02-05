@@ -1179,12 +1179,9 @@ public class AVM implements AwkInterpreter, VariableManager {
 							throw new Error("numargs for _SUBSTR_ must be 2 or 3. It is " + numargs);
 						}
 						if (startPos <= 0) {
-							throw new AwkRuntimeException(position.lineNumber(), "2nd arg to substr must be a positive integer");
+							startPos = 1;
 						}
-						if (length < 0) {
-							throw new AwkRuntimeException(position.lineNumber(), "3rd arg to substr must be a non-negative integer");
-						}
-						if (startPos > s.length()) {
+						if (length <= 0 || startPos > s.length()) {
 							push(BLANK);
 						} else {
 							if (startPos + length > s.length()) {

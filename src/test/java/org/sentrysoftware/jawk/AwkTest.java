@@ -276,4 +276,19 @@ public class AwkTest {
 		assertEquals("Binary expression is eval'ed from left to right", "0.5", runAwk("BEGIN { a = 1; printf a++ / a++ }", null));
 	}
 	
+	@Test
+	public void testSubstr() throws Exception {
+		assertEquals("234", evalAwk("substr(\"12345\", 2, 3)"));
+		assertEquals("2345", evalAwk("substr(\"12345\", 2, 10)"));
+		assertEquals("123", evalAwk("substr(\"12345\", 0, 3)"));
+		assertEquals("123", evalAwk("substr(\"12345\", -1, 3)"));
+		assertEquals("", evalAwk("substr(\"12345\", 2, 0)"));
+		assertEquals("", evalAwk("substr(\"12345\", 2, -1)"));
+		assertEquals("", evalAwk("substr(\"12345\", -1, -1)"));
+		assertEquals("", evalAwk("substr(\"12345\", 10, 3)"));
+		assertEquals("2345", evalAwk("substr(\"12345\", 2)"));
+		assertEquals("12345", evalAwk("substr(\"12345\", 0)"));
+		assertEquals("12345", evalAwk("substr(\"12345\", -1)"));
+	}
+	
 }
