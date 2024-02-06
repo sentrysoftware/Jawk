@@ -27,12 +27,18 @@ public class AwkTestHelper {
 	static {
 		Path tempDirectoryPath;
 		try {
-			tempDirectoryPath = Files.createTempDirectory("jawk-gawk-test");
+			tempDirectoryPath = Files.createTempDirectory("jawk-test");
 			tempDirectoryPath.toFile().deleteOnExit();
 			tempDirectory = tempDirectoryPath.toFile().getAbsolutePath();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * @return the path to a temp directory (as a String)
+	 */
+	static String getTempDirectory() {
+		return tempDirectory;
 	}
 
 	/**
@@ -87,7 +93,7 @@ public class AwkTestHelper {
 		
 		// Set TEMPDIR so the AWK scripts can "play" with it
 		if (setTempDir) {
-			settings.getNameValueOrFileNames().add("TEMPDIR=" + tempDirectory);
+			settings.getVariables().put("TEMPDIR", tempDirectory);
 		}
 
 		// Create the OutputStream, to collect the result as a String
@@ -123,6 +129,21 @@ public class AwkTestHelper {
 	 * @throws ClassNotFoundException 
 	 */
 	static String runAwk(String script, String input) throws IOException, ExitException, ClassNotFoundException {
+		return runAwk(script, input, false);
+	}
+	
+	/**
+	 * Executes the specified script against the specified input
+	 * <p>
+	 * @param script AWK script to execute (as a String)
+	 * @param input Text to process (as a String)
+	 * @param setTempDir Whether to set the TEMPDIR variable for the AWK script to play with
+	 * @return result as a String
+	 * @throws ExitException when the AWK script forces its exit with a specified code
+	 * @throws IOException on I/O problems
+	 * @throws ClassNotFoundException 
+	 */
+	static String runAwk(String script, String input, boolean setTempDir) throws IOException, ExitException, ClassNotFoundException {
 		
 		AwkSettings settings = new AwkSettings();
 		
@@ -140,6 +161,11 @@ public class AwkTestHelper {
 		ByteArrayOutputStream resultBytesStream = new ByteArrayOutputStream();
 		settings.setOutputStream(new PrintStream(resultBytesStream));
 		
+		// Set TEMPDIR so the AWK scripts can "play" with it
+		if (setTempDir) {
+			settings.getVariables().put("TEMPDIR", tempDirectory);
+		}
+
 		// Sets the AWK script to execute
 		settings.addScriptSource(new ScriptSource("Body", new StringReader(script), false));
 		
