@@ -3,6 +3,7 @@ package org.sentrysoftware.jawk;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 import static org.sentrysoftware.jawk.AwkTestHelper.evalAwk;
 import static org.sentrysoftware.jawk.AwkTestHelper.runAwk;
 
@@ -11,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 
@@ -289,6 +291,38 @@ public class AwkTest {
 		assertEquals("2345", evalAwk("substr(\"12345\", 2)"));
 		assertEquals("12345", evalAwk("substr(\"12345\", 0)"));
 		assertEquals("12345", evalAwk("substr(\"12345\", -1)"));
+	}
+	
+	@Test
+	public void testPrintComparison() throws Exception {
+		assertEquals(
+				"Comparison operators must be allowed in a print statement", 
+				"1\n", 
+				runAwk("BEGIN { print 1 < \"2\" }", null)
+		);
+		assertEquals(
+				"Comparison operators must be allowed in a print statement", 
+				"0\n", 
+				runAwk("BEGIN { print 1 >= \"2\" }", null)
+		);
+		assertEquals(
+				"> in a print statement must not output to stdout", 
+				"", 
+				runAwk("BEGIN { print 1 > TEMPDIR\"/printRedirect\" }", null, true)
+		);
+		assertTrue("> in a print statement must write to the specified file",
+				Files.exists(Paths.get(AwkTestHelper.getTempDirectory(), "printRedirect"))
+		);
+		assertEquals(
+				"> surrounded with parenthesis in a print statement doesn't redirect",
+				"1\n",
+				runAwk("BEGIN { print(1 > 0) }", null)
+		);
+		assertEquals(
+				"> surrounded with parenthesis in a print statement doesn't redirect",
+				"test1test\n",
+				runAwk("BEGIN { print \"test\" (1 > 0) \"test\" }", null)
+		);
 	}
 	
 }
