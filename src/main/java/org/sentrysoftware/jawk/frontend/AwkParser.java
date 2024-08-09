@@ -1231,71 +1231,27 @@ public class AwkParser {
 		}
 	}
 
-	// EXPRESSION : TERM [ (+|-|,) EXPRESSION ]
+	// EXPRESSION : TERM [ (+|-) EXPRESSION ]
 	AST EXPRESSION(boolean not_in_print_root, boolean allow_in_keyword, boolean allow_multidim_indices)
-			throws IOException
-	{
+			throws IOException {
 		AST term = TERM(not_in_print_root, allow_in_keyword, allow_multidim_indices);
-		int op = 0;
-		String txt = null;
-		AST expression = null;
-		if (token == _PLUS_ || token == _MINUS_) {
-			//|| token == _COMMA_
-			op = token;
-			txt = text.toString();
+		while (token == _PLUS_ || token == _MINUS_) {
+			int op = token;
+			String txt = text.toString();
 			lexer();
-			expression = EXPRESSION(not_in_print_root, allow_in_keyword, allow_multidim_indices);
+			AST nextTerm = TERM(not_in_print_root, allow_in_keyword, allow_multidim_indices);
 
-			BinaryExpression_AST retval = new BinaryExpression_AST(term, op, txt, expression);
-			if (expression instanceof BinaryExpression_AST) {
-				BinaryExpression_AST be2 = (BinaryExpression_AST) expression;
-				if (be2.op == _PLUS_ || be2.op == _MINUS_) {
-					// convert right-associativity to left-assiciativity
-					return rearrange(retval, be2);
-				}
-			}
-			return retval;
+			// Build the tree in left-associative manner
+			term = new BinaryExpression_AST(term, op, txt, nextTerm);
 		}
 		return term;
 	}
 
-	// Before:
-	//
-	//     |
-	//     |
-	//    b1
-	//   /  \
-	//  /    \
-	// a     b2
-	//      /  \
-	//     /    \
-	//    b      c
-	//
-	// After:
-	//
-	//         |
-	//         |
-	//        b2
-	//       /  \
-	//      /    \
-	//    b1      c
-	//   /  \
-	//  /    \
-	// a      b
 	private static BinaryExpression_AST rearrange(BinaryExpression_AST b1, BinaryExpression_AST b2) {
 
-		assert b1.ast2 == b2;
-
-		AST a = b1.ast1;
 		AST b = b2.ast1;
-		AST c = b2.ast2;
-
-		b1.ast1 = a;
 		b1.ast2 = b;
-		b2.ast2 = c;
-
 		b2.ast1 = b1;
-
 		return b2;
 	}
 
@@ -1303,27 +1259,17 @@ public class AwkParser {
 	AST TERM(boolean not_in_print_root, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
 	{
-		AST unary_factor_ast = UNARY_FACTOR(not_in_print_root, allow_in_keyword, allow_multidim_indices);
-		int op = 0;
-		String txt = null;
-		AST term = null;
-		if (token == _MULT_ || token == _DIVIDE_ || token == _MOD_) {
-			op = token;
-			txt = text.toString();
+		AST unaryFactor = UNARY_FACTOR(not_in_print_root, allow_in_keyword, allow_multidim_indices);
+		while (token == _MULT_ || token == _DIVIDE_ || token == _MOD_) {
+			int op = token;
+			String txt = text.toString();
 			lexer();
-			term = TERM(not_in_print_root, allow_in_keyword, allow_multidim_indices);
+			AST nextUnaryFactor = UNARY_FACTOR(not_in_print_root, allow_in_keyword, allow_multidim_indices);
 
-			BinaryExpression_AST retval = new BinaryExpression_AST(unary_factor_ast, op, txt, term);
-			if (term instanceof BinaryExpression_AST) {
-				BinaryExpression_AST be2 = (BinaryExpression_AST) term;
-				if (be2.op == _MULT_ || be2.op == _DIVIDE_ || be2.op == _MOD_) {
-					// convert right-associativity to left-assiciativity
-					return rearrange(retval, be2);
-				}
-			}
-			return retval;
+			// Build the tree in left-associative manner
+			unaryFactor = new BinaryExpression_AST(unaryFactor, op, txt, nextUnaryFactor);
 		}
-		return unary_factor_ast;
+		return unaryFactor;
 	}
 
 	// UNARY_FACTOR : [ ! | - | + ] POWER_FACTOR
@@ -1349,24 +1295,13 @@ public class AwkParser {
 			throws IOException
 	{
 		AST incdec_ast = FACTOR_FOR_INCDEC(not_in_print_root, allow_in_keyword, allow_multidim_indices);
-		int op = 0;
-		String txt = null;
-		AST term = null;
 		if (token == _POW_) {
-			op = token;
-			txt = text.toString();
+			int op = token;
+			String txt = text.toString();
 			lexer();
-			term = POWER_FACTOR(not_in_print_root, allow_in_keyword, allow_multidim_indices);
+			AST term = POWER_FACTOR(not_in_print_root, allow_in_keyword, allow_multidim_indices);
 
-			BinaryExpression_AST retval = new BinaryExpression_AST(incdec_ast, op, txt, term);
-			if (term instanceof BinaryExpression_AST) {
-				BinaryExpression_AST be2 = (BinaryExpression_AST) term;
-				if (be2.op == _POW_) {
-					// convert right-associativity to left-assiciativity
-					return rearrange(retval, be2);
-				}
-			}
-			return retval;
+			return new BinaryExpression_AST(incdec_ast, op, txt, term);
 		}
 		return incdec_ast;
 	}
