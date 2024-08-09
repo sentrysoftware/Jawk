@@ -9,7 +9,7 @@
 
 	<groupId>org.sentrysoftware</groupId>
 	<artifactId>jawk</artifactId>
-	<version>4.0.00-SNAPSHOT</version>
+	<version>3.4.00-SNAPSHOT</version>
 
 	<name>Jawk</name>
 	<description>Java AWK interpreter, allowing Java to call and execute AWK scripts in the JVM.</description>
@@ -74,7 +74,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2024-02-04T23:20:28Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2024-08-09T15:40:27Z</project.build.outputTimestamp>
 	</properties>
 
 	<dependencies>
