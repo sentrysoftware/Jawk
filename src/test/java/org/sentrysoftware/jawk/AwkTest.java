@@ -246,7 +246,7 @@ public class AwkTest {
 	
 	@Test
 	public void testDavideBrini() throws Exception {
-		assertEquals("Davide Brini's signature", "dave_br@gx.cmm\n", runAwk(
+		assertEquals("Davide Brini's signature", "dave_br@gmx.com\n", runAwk(
 				"BEGIN{O=\"~\"~\"~\";o=\"==\"==\"==\";o+=+o;x=O\"\"O;while(X++<=x+o+o){c=c\"%c\";}"
 				+ "printf c,(x-O)*(x-O),x*(x-o)-o,x*(x-O)+x-O-o,+x*(x-O)-x+o,X*(o*o+O)+x-O,"
 				+ "X*(X-x)-o*o,(x+X)*o*o+o,x*(X-x)-O-O,x-O+(O+o+X+x)*(o+O),X*X-X*(x-O)-x+O,"
@@ -269,13 +269,86 @@ public class AwkTest {
 	}
 	
 	@Test
-	public void testEvalOrder() throws Exception {
+	public void testConcatenationLeftAssociativity() throws Exception {
 		assertEquals("Concatenated elements must be eval'ed from left to right", "0123", evalAwk("a++ a++ a++ a++"));
-		assertEquals("Function arguments must be eval'ed from left to right", "0 1 2 3\n", runAwk("BEGIN { print a++, a++, a++, a++ }", null));
+	}
+
+	@Test
+	public void testFunctionArgumentsLeftAssociativity() throws Exception {
+		assertEquals("Function arguments must be eval'ed from left to right", "0 1 2 3\n",
+				runAwk("BEGIN { print a++, a++, a++, a++ }", null));
+	}
+
+	@Test
+	public void testAtan2ArgumentsLeftAssociativity() throws Exception {
 		assertEquals("atan2 arguments must be eval'ed from left to right", "0", evalAwk("atan2(a++, a++)"));
-		assertEquals("Comparison arguments must be eval'ed from left to right", "1", runAwk("BEGIN { r = (a++ < a++); printf r }", null));
-		assertEquals("Assignment is eval'ed right first, and then left", "0", runAwk("BEGIN { arr[a++] = a++; printf arr[1] }", null));
-		assertEquals("Binary expression is eval'ed from left to right", "0.5", runAwk("BEGIN { a = 1; printf a++ / a++ }", null));
+	}
+
+	@Test
+	public void testComparisonArgumentsLeftAssociativity() throws Exception {
+		assertEquals("Comparison arguments must be eval'ed from left to right", "1",
+				runAwk("BEGIN { r = (a++ < a++); printf r }", null));
+	}
+
+	@Test
+	public void testAssignmentRightToLeft() throws Exception {
+		assertEquals("Assignment is eval'ed right first, and then left", "0",
+				runAwk("BEGIN { arr[a++] = a++; printf arr[1] }", null));
+	}
+
+	@Test
+	public void testBinaryExpressionLeftAssociativity() throws Exception {
+		assertEquals("Binary expression is eval'ed from left to right", "0.5",
+				runAwk("BEGIN { a = 1; printf a++ / a++ }", null));
+	}
+
+	@Test
+	public void testChainedAdditionsAndSubtractionsLeftAssociativity() throws Exception {
+		assertEquals("Chained additions and subtractions must be eval'ed from left to right", "6",
+				evalAwk("10 - 3 - 2 + 1"));
+	}
+
+	@Test
+	public void testChainedMultiplicationsAndDivisionsLeftAssociativity() throws Exception {
+		assertEquals("Chained multiplies and divides must be eval'ed from left to right", "5",
+				evalAwk("12 / 3 / 4 * 5"));
+	}
+
+	@Test
+	public void testChainedExponentiationRightAssociativity() throws Exception {
+		assertEquals("Chained powers must be eval'ed from right to left", "4", evalAwk("256 ^ 0.5 ^ 4 ^ 0.5"));
+	}
+
+	// Additional tests to further cover left associativity:
+
+	@Test
+	public void testChainedLogicalAndLeftAssociativity() throws Exception {
+		assertEquals("Chained logical AND must be eval'ed from left to right", "0",
+				runAwk("BEGIN { a = 0; r = (a++ && a++ && a++); printf r }", null));
+	}
+
+	@Test
+	public void testChainedLogicalOrLeftAssociativity() throws Exception {
+		assertEquals("Chained logical OR must be eval'ed from left to right", "1",
+				runAwk("BEGIN { a = 1; r = (a++ || a++ || a++); printf r }", null));
+	}
+
+	@Test
+	public void testChainedComparisonLeftAssociativity() throws Exception {
+		assertEquals("Chained comparisons must be eval'ed from left to right", "0",
+				runAwk("BEGIN { a = 1; r = (a++ < a++ < a++); printf r }", null));
+	}
+
+	@Test
+	public void testChainedStringConcatenationLeftAssociativity() throws Exception {
+		assertEquals("Chained string concatenation must be eval'ed from left to right", "abcde",
+				evalAwk("\"a\" \"b\" \"c\" \"d\" \"e\""));
+	}
+
+	@Test
+	public void testComplexExpressionLeftAssociativity() throws Exception {
+		assertEquals("Complex expression with mixed operators must be eval'ed from left to right", "8",
+				evalAwk("10 + 12 / 3 * 2 - 6 / 3 * 5"));
 	}
 	
 	@Test
