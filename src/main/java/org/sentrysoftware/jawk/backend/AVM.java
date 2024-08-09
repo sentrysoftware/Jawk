@@ -1954,7 +1954,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 						}
 
 						Object[] args = new Object[(int) num_args];
-						for (int i = 0; i < num_args; ++i) {
+						for (int i = (int)num_args - 1 ; i >=0 ; i--) {
 							args[i] = pop();
 						}
 
