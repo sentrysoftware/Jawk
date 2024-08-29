@@ -1247,14 +1247,6 @@ public class AwkParser {
 		return term;
 	}
 
-	private static BinaryExpression_AST rearrange(BinaryExpression_AST b1, BinaryExpression_AST b2) {
-
-		AST b = b2.ast1;
-		b1.ast2 = b;
-		b2.ast1 = b1;
-		return b2;
-	}
-
 	// TERM : UNARY_FACTOR [ (*|/|%) TERM ]
 	AST TERM(boolean not_in_print_root, boolean allow_in_keyword, boolean allow_multidim_indices)
 			throws IOException
