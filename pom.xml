@@ -9,7 +9,7 @@
 
 	<groupId>org.sentrysoftware</groupId>
 	<artifactId>jawk</artifactId>
-	<version>3.3.03</version>
+	<version>3.4.00-SNAPSHOT</version>
 
 	<name>Jawk</name>
 	<description>Java AWK interpreter, allowing Java to call and execute AWK scripts in the JVM.</description>
@@ -42,7 +42,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/sentrysoftware/Jawk.git</connection>
 		<url>https://github.com/sentrysoftware/Jawk</url>
-		<tag>v3.3.03</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
@@ -74,7 +74,7 @@
 
 		<!-- Reproducible Build -->
 		<!-- See https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
-		<project.build.outputTimestamp>2024-08-29T20:39:20Z</project.build.outputTimestamp>
+		<project.build.outputTimestamp>2024-08-29T20:40:17Z</project.build.outputTimestamp>
 	</properties>
 
 	<dependencies>
