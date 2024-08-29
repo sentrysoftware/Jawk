@@ -36,10 +36,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.sentrysoftware.jawk.util.LinkedListStackImpl;
 import org.sentrysoftware.jawk.util.MyStack;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>AwkTuples class.</p>
@@ -51,7 +51,7 @@ public class AwkTuples implements Serializable {
 	private static final long serialVersionUID = 2L;
 
 	/** Our logger */
-	private static final Logger LOG = LoggerFactory.getLogger(AwkTuples.class);
+	private static final Logger LOG = AwkLogger.getLogger(AwkTuples.class);
 
 	/** Version Manager */
 	private VersionManager version_manager = new VersionManager();

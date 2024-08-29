@@ -398,4 +398,13 @@ public class AwkTest {
 		);
 	}
 	
+	@Test
+	public void testGsubArray() throws Exception {
+		assertEquals(
+				"gsub on an array element must change the value of the element",
+				"abcd\n",
+				runAwk("BEGIN { a[1] = \"ab:cd\"; gsub(/:/, \"\", a[1]); print a[1]; }", null)
+		);
+	}
+	
 }

@@ -61,13 +61,13 @@ import org.sentrysoftware.jawk.jrt.RegexTokenizer;
 import org.sentrysoftware.jawk.jrt.SingleCharacterTokenizer;
 import org.sentrysoftware.jawk.jrt.VariableManager;
 import org.sentrysoftware.jawk.util.ArrayStackImpl;
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.sentrysoftware.jawk.util.AwkSettings;
 import org.sentrysoftware.jawk.util.LinkedListStackImpl;
 import org.sentrysoftware.jawk.util.MyStack;
 import org.sentrysoftware.jawk.util.ScriptSource;
 import org.sentrysoftware.printf4j.Printf4J;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Jawk interpreter.
@@ -100,7 +100,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AVM implements AwkInterpreter, VariableManager {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AVM.class);
+	private static final Logger LOG = AwkLogger.getLogger(AVM.class);
 	private static final boolean IS_WINDOWS = (System.getProperty("os.name").indexOf("Windows") >= 0);
 
 	private RuntimeStack runtime_stack = new RuntimeStack();
@@ -1109,8 +1109,8 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// ARRAY reference offset/is_global
 						long offset = position.intArg(0);
 						boolean is_global = position.boolArg(1);
-						String newString = execSubOrGSub(position, 2);
 						Object arr_idx = pop();
+						String newString = execSubOrGSub(position, 2);
 						// assign it to "offset/arr_idx/global"
 						assignArray(offset, arr_idx, newString, is_global);
 						pop();

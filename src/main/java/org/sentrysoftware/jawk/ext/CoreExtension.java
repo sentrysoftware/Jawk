@@ -39,8 +39,8 @@ import org.sentrysoftware.jawk.jrt.BlockObject;
 import org.sentrysoftware.jawk.jrt.IllegalAwkArgumentException;
 import org.sentrysoftware.jawk.jrt.JRT;
 import org.sentrysoftware.jawk.jrt.VariableManager;
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Extensions which make developing in Jawk and
@@ -195,7 +195,7 @@ public class CoreExtension extends AbstractExtension implements JawkExtension {
 
 	private static CoreExtension instance = null; // FIXME Ugly form of singleton implementation (which is ugly by itsself)
 	private static final Object INSTANCE_LOCK = new Object();
-	private static final Logger LOG = LoggerFactory.getLogger(CoreExtension.class);
+	private static final Logger LOG = AwkLogger.getLogger(CoreExtension.class);
 
 	private int refMapIdx = 0;
 	private Map<String, Object> referenceMap = new HashMap<String, Object>();

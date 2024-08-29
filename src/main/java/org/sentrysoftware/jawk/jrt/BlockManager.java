@@ -24,8 +24,9 @@ package org.sentrysoftware.jawk.jrt;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Manages multiple blocking code segments simultaneously such that
@@ -37,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class BlockManager {
 
-	private static final Logger LOG = LoggerFactory.getLogger(BlockManager.class);
+	private static final Logger LOG = AwkLogger.getLogger(BlockManager.class);
 
 	private final Object notifierLock = "NOTIFIER_LOCK";
 	private String notifier = null;
