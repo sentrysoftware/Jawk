@@ -1109,8 +1109,8 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// ARRAY reference offset/is_global
 						long offset = position.intArg(0);
 						boolean is_global = position.boolArg(1);
-						String newString = execSubOrGSub(position, 2);
 						Object arr_idx = pop();
+						String newString = execSubOrGSub(position, 2);
 						// assign it to "offset/arr_idx/global"
 						assignArray(offset, arr_idx, newString, is_global);
 						pop();
