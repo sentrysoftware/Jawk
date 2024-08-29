@@ -30,7 +30,6 @@ import java.net.URISyntaxException;
 import java.util.Locale;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Manages the command-line parameters accepted by Jawk.
@@ -89,7 +88,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AwkParameters {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AwkParameters.class);
+	private static final Logger LOG = AwkLogger.getLogger(AwkParameters.class);
 
 	private static final String JAR_NAME;
 	static {

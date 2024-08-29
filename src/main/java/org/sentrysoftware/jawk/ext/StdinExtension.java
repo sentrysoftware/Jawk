@@ -33,9 +33,9 @@ import org.sentrysoftware.jawk.NotImplementedError;
 import org.sentrysoftware.jawk.jrt.BlockObject;
 import org.sentrysoftware.jawk.jrt.JRT;
 import org.sentrysoftware.jawk.jrt.VariableManager;
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.sentrysoftware.jawk.util.AwkSettings;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Enable stdin processing in Jawk, to be used in conjunction with the -ni parameter.
@@ -100,7 +100,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StdinExtension extends AbstractExtension implements JawkExtension {
 
-	private static final Logger LOG = LoggerFactory.getLogger(StdinExtension.class);
+	private static final Logger LOG = AwkLogger.getLogger(StdinExtension.class);
 
 	private static final Object DONE = new Object();
 

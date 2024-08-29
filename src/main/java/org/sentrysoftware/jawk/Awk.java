@@ -44,10 +44,10 @@ import org.sentrysoftware.jawk.ext.JawkExtension;
 import org.sentrysoftware.jawk.frontend.AwkParser;
 import org.sentrysoftware.jawk.frontend.AwkSyntaxTree;
 import org.sentrysoftware.jawk.intermediate.AwkTuples;
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.sentrysoftware.jawk.util.AwkSettings;
 import org.sentrysoftware.jawk.util.ScriptSource;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Entry point into the parsing, analysis, and execution
@@ -89,7 +89,8 @@ public class Awk {
 	private static final String DEFAULT_EXTENSIONS
 			= org.sentrysoftware.jawk.ext.CoreExtension.class.getName()
 			+ "#" + org.sentrysoftware.jawk.ext.StdinExtension.class.getName();
-	private static final Logger LOG = LoggerFactory.getLogger(Awk.class);
+
+	private static final Logger LOG = AwkLogger.getLogger(Awk.class);
 
 	/**
 	 * Create a new instance of Awk

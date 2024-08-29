@@ -40,9 +40,9 @@ import org.sentrysoftware.jawk.intermediate.Address;
 import org.sentrysoftware.jawk.intermediate.AwkTuples;
 import org.sentrysoftware.jawk.intermediate.HasFunctionAddress;
 import org.sentrysoftware.jawk.jrt.KeyList;
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.sentrysoftware.jawk.util.ScriptSource;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Converts the AWK script into a syntax tree,
@@ -54,7 +54,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AwkParser {
 
-	private static final Logger LOG = LoggerFactory.getLogger(AwkParser.class);
+	private static final Logger LOG = AwkLogger.getLogger(AwkParser.class);
 
 	/**
 	 * Interface for statement AST nodes that can be interrupted

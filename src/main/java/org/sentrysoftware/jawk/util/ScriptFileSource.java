@@ -28,7 +28,6 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.io.Reader;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Represents one AWK-script file content source.
@@ -37,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ScriptFileSource extends ScriptSource {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ScriptFileSource.class);
+	private static final Logger LOG = AwkLogger.getLogger(ScriptFileSource.class);
 
 	private String filePath;
 	private Reader fileReader;

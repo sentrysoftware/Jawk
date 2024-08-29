@@ -50,8 +50,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.sentrysoftware.jawk.intermediate.UninitializedObject;
+import org.sentrysoftware.jawk.util.AwkLogger;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Jawk runtime coordinator.
@@ -91,7 +91,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JRT {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JRT.class);
+	private static final Logger LOG = AwkLogger.getLogger(JRT.class);
 
 	private static final boolean IS_WINDOWS = (System.getProperty("os.name").indexOf("Windows") >= 0);
 
