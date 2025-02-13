@@ -399,12 +399,74 @@ public class AwkTest {
 	}
 	
 	@Test
-	public void testGsubArray() throws Exception {
+	public void testSubArray() throws Exception {
+		assertEquals(
+				"sub on an array element must change the value of the element",
+				"abc:d\n",
+				runAwk("BEGIN { a[1] = \"ab:c:d\"; sub(/:/, \"\", a[1]); print a[1]; }", null)
+		);
+
 		assertEquals(
 				"gsub on an array element must change the value of the element",
 				"abcd\n",
-				runAwk("BEGIN { a[1] = \"ab:cd\"; gsub(/:/, \"\", a[1]); print a[1]; }", null)
+				runAwk("BEGIN { a[1] = \"ab:c:d\"; gsub(/:/, \"\", a[1]); print a[1]; }", null)
 		);
+	}
+	
+	@Test
+	public void testSubDollarReference() throws Exception {
+		assertEquals(
+				"sub on $4 must change the value of the 4th field",
+				"aa bb cc Zd\n",
+				runAwk("{ sub(/d/, \"Z\", $4); print $1, $2, $3, $4; }", "aa bb cc dd")
+		);		
+
+		assertEquals(
+				"gsub on $4 must change the value of the 4th field",
+				"aa bb cc ZZ\n",
+				runAwk("{ gsub(/d/, \"Z\", $4); print $1, $2, $3, $4; }", "aa bb cc dd")
+		);		
+	}
+	
+	@Test
+	public void testSubDollarZero() throws Exception {
+		assertEquals(
+				"sub on $0 must change the value of the entire line",
+				"aa bb cc Zd\nZd\n",
+				runAwk("{ sub(/d/, \"Z\"); print $0; print $4; }", "aa bb cc dd")
+		);		
+
+		assertEquals(
+				"gsub on $0 must change the value of the entire line",
+				"aa bb cc ZZ\nZZ\n",
+				runAwk("{ gsub(/d/, \"Z\"); print $0; print $4; }", "aa bb cc dd")
+		);		
+
+		assertEquals(
+				"sub on $0 must change the value of the entire line",
+				"aa bb cc Zd\nZd\n",
+				runAwk("{ sub(/d/, \"Z\", $0); print $0; print $4; }", "aa bb cc dd")
+		);		
+
+		assertEquals(
+				"gsub on $0 must change the value of the entire line",
+				"aa bb cc ZZ\nZZ\n",
+				runAwk("{ gsub(/d/, \"Z\", $0); print $0; print $4; }", "aa bb cc dd")
+		);		
+	}
+	
+	@Test
+	public void testSubVariable() throws Exception {
+		assertEquals(
+				"sub on variable must change the value of the variable",
+				"aa bb cc Zd\n",
+				runAwk("BEGIN { v = \"aa bb cc dd\"; sub(/d/, \"Z\", v); print v; }", null)
+		);		
+		assertEquals(
+				"gsub on variable must change the value of the variable",
+				"aa bb cc ZZ\n",
+				runAwk("BEGIN { v = \"aa bb cc dd\"; gsub(/d/, \"Z\", v); print v; }", null)
+		);		
 	}
 	
 }
