@@ -84,7 +84,24 @@ public class JRTTest {
 		assertFalse(JRT.compare2(new UninitializedObject(), 1, 1));
 		assertTrue(JRT.compare2("1", new UninitializedObject(), 1));
 		assertTrue(JRT.compare2(1, new UninitializedObject(), 1));
-
+	}
+	
+	@Test
+	public void testPrepareReplacement() throws Exception {
+		assertEquals("don't change", JRT.prepareReplacement("don't change"));
+		assertEquals("a$0a", JRT.prepareReplacement("a&a"));
+		assertEquals("1$01", JRT.prepareReplacement("1&1"));
+		assertEquals("a$0b$0c", JRT.prepareReplacement("a&b&c"));
+		assertEquals("a\\b", JRT.prepareReplacement("a\\b"));
+		assertEquals("a&b", JRT.prepareReplacement("a\\&b"));
+		assertEquals("a\\", JRT.prepareReplacement("a\\"));
+		assertEquals("a\\$", JRT.prepareReplacement("a$"));
+		assertEquals("a\\\\$", JRT.prepareReplacement("a\\$"));
+		assertEquals("a\\\\\\$", JRT.prepareReplacement("a\\\\$"));
+		assertEquals("a\\\\$0", JRT.prepareReplacement("a\\\\&"));
+		assertEquals("a\\\\&", JRT.prepareReplacement("a\\\\\\&"));
+		assertEquals("", JRT.prepareReplacement(""));
+		assertEquals("", JRT.prepareReplacement(null));
 	}
 
 }

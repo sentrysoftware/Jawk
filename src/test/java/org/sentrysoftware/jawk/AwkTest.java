@@ -469,4 +469,26 @@ public class AwkTest {
 		);		
 	}
 	
+	@Test
+	public void testSubReplaceWithMatchReference() throws Exception {
+		assertEquals(
+				"gsub must replace '&' with actual match",
+				"a _b_ _c_ d e\n",
+				runAwk("{ gsub(/[b-c]/, \"_&_\"); print $0; }", "a b c d e")
+		);
+		
+		assertEquals(
+				"gsub must replace '\\&' with '\\'",
+				"a _&_ _&_ d e\n",
+				runAwk("{ gsub(/[b-c]/, \"_\\\\&_\"); print $0; }", "a b c d e")
+		);
+
+		assertEquals(
+				"gsub must replace '$0' with '$0'",
+				"a _$0_ _$0_ d e\n",
+				runAwk("{ gsub(/[b-c]/, \"_$0_\"); print $0; }", "a b c d e")
+		);
+
+	}
+	
 }
