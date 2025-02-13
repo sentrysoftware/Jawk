@@ -1044,9 +1044,6 @@ public class AVM implements AwkInterpreter, VariableManager {
 						// stack[0] = replacement string
 						// stack[1] = ere
 						boolean is_gsub = position.boolArg(0);
-						// top-of-stack = ere
-						// next = repl
-						// (use $0 as orig)
 						String convfmt = getCONVFMT().toString();
 						String repl = JRT.toAwkString(pop(), convfmt, locale);
 						String ere = JRT.toAwkString(pop(), convfmt, locale);
@@ -1065,19 +1062,28 @@ public class AVM implements AwkInterpreter, VariableManager {
 					}
 					case AwkTuples._SUB_FOR_DOLLAR_REFERENCE_: {
 						// arg[0] = is_global
-						// stack[0] = original field value
-						// stack[1] = replacement string
-						// stack[2] = ere
-						// stack[3] = field num
-						// (use $field_num as orig)
-						String newString = execSubOrGSub(position, 0);
+						// stack[0] = field num
+						// stack[1] = original field value
+						// stack[2] = replacement string
+						// stack[3] = ere
+						boolean is_gsub = position.boolArg(0);
+						String convfmt = getCONVFMT().toString();
 						int fieldNum = (int) JRT.toDouble(pop());
+						String orig = JRT.toAwkString(pop(), convfmt, locale);
+						String repl = JRT.toAwkString(pop(), convfmt, locale);
+						String ere = JRT.toAwkString(pop(), convfmt, locale);
+						String newstring;
+						if (is_gsub) {
+							newstring = replaceAll(orig, ere, repl);
+						} else {
+							newstring = replaceFirst(orig, ere, repl);
+						}
 						// assign it to "$0"
 						if (fieldNum == 0) {
-							jrt.setInputLine(newString);
+							jrt.setInputLine(newstring);
 							jrt.jrtParseFields();
 						} else {
-							jrt.jrtSetInputField(newString, fieldNum);
+							jrt.jrtSetInputField(newstring, fieldNum);
 						}
 						position.next();
 						break;
