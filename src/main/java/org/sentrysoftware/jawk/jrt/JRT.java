@@ -1247,49 +1247,108 @@ public class JRT {
 	}
 
 	/**
+	 * Transform the sub/gsub replacement string from Awk syntax
+	 * (with '&') to Java (with '$') so it can be used in Matcher.appendReplacement()
+	 * <p>
+	 * Awk and Java don't use the same syntax for regex replace:
+	 * <ul>
+	 * <li>Awk uses & to refer to the matched string
+	 * <li>Java uses $0, $g, or ${name} to refer to the corresponding match groups
+	 * </ul>
+	 * @param awkRepl the replace string passed in sub() and gsub()
+	 * @return a string that can be used in Java's Matcher.appendReplacement()
+	 */
+	public static String prepareReplacement(String awkRepl) {
+
+		// Null
+		if (awkRepl == null) {
+			return "";
+		}
+		
+		// Simple case
+		if (
+			(awkRepl.indexOf('\\') == -1) && 
+			(awkRepl.indexOf('$') == -1) &&
+			(awkRepl.indexOf('&') == -1)
+		) {
+			return awkRepl;
+		}
+		
+		StringBuilder javaRepl = new StringBuilder();
+		for (int i = 0; i < awkRepl.length(); i++) {
+			
+			char c = awkRepl.charAt(i);
+
+			// Backslash
+			if (c == '\\' && i < awkRepl.length() - 1) {
+				i++;
+				c = awkRepl.charAt(i);
+				if (c == '&') {
+					javaRepl.append('&');
+					continue;
+				} else if (c == '\\') {
+					javaRepl.append("\\\\");
+					continue;
+				}
+				
+				// For everything else, append the backslash and continue with the logic
+				javaRepl.append('\\');
+			}
+
+			if (c == '$') {
+				javaRepl.append("\\$");
+			} else if (c == '&') {
+				javaRepl.append("$0");
+			} else {
+				javaRepl.append(c);
+			}
+		}
+		
+		return javaRepl.toString();
+	}
+	
+	/**
 	 * <p>replaceFirst.</p>
 	 *
 	 * @param orig_value_obj a {@link java.lang.Object} object
 	 * @param repl_obj a {@link java.lang.Object} object
 	 * @param ere_obj a {@link java.lang.Object} object
 	 * @param sb a {@link java.lang.StringBuffer} object
-	 * @param convfmt a {@link java.lang.String} object
-	 * @param locale a {@link java.util.Locale} object
 	 * @return a {@link java.lang.Integer} object
 	 */
-	public static Integer replaceFirst(Object orig_value_obj, Object repl_obj, Object ere_obj, StringBuffer sb, String convfmt, Locale locale) {
-		String orig_value = toAwkString(orig_value_obj, convfmt, locale);
-		String repl = toAwkString(repl_obj, convfmt, locale);
-		String ere = toAwkString(ere_obj, convfmt, locale);
-		// remove special meaning for backslash and dollar signs
-		repl = Matcher.quoteReplacement(repl);
+	public static Integer replaceFirst(String orig_value, String repl, String ere, StringBuffer sb) {
+		// remove special meaning for backslash and dollar signs and handle '&'
+		repl = prepareReplacement(repl);
+
+		// Reset provided StringBuffer
 		sb.setLength(0);
-		sb.append(orig_value.replaceFirst(ere, repl));
-		if (sb.toString().equals(orig_value)) {
-			return ZERO;
-		} else {
-			return ONE;
+		
+		Pattern p = Pattern.compile(ere);
+		Matcher m = p.matcher(orig_value);
+		int cnt = 0;
+		if (m.find()) {
+			++cnt;
+			m.appendReplacement(sb, repl);
 		}
+		m.appendTail(sb);
+		return Integer.valueOf(cnt);
 	}
 
 	/**
-	 * <p>replaceAll.</p>
-	 *
-	 * @param orig_value_obj a {@link java.lang.Object} object
-	 * @param repl_obj a {@link java.lang.Object} object
-	 * @param ere_obj a {@link java.lang.Object} object
-	 * @param sb a {@link java.lang.StringBuffer} object
-	 * @param convfmt a {@link java.lang.String} object
-	 * @param locale a {@link java.util.Locale} object
-	 * @return a {@link java.lang.Integer} object
+	 * Replace all occurrences of the regular expression with specified string
+	 * @param orig_value String where replace is done
+	 * @param repl Replacement string (with '&' for referring to matching string)
+	 * @param ere Regular expression
+	 * @param sb StringBuffer we will work on
+	 * @return the number of replacements performed
 	 */
-	public static Integer replaceAll(Object orig_value_obj, Object repl_obj, Object ere_obj, StringBuffer sb, String convfmt, Locale locale) {
-		String orig_value = toAwkString(orig_value_obj, convfmt, locale);
-		String repl = toAwkString(repl_obj, convfmt, locale);
-		String ere = toAwkString(ere_obj, convfmt, locale);
-		// remove special meaning for backslash and dollar signs
-		repl = Matcher.quoteReplacement(repl);
+	public static Integer replaceAll(String orig_value, String repl, String ere, StringBuffer sb) {
+		
+		// Reset the provided StringBuffer
 		sb.setLength(0);
+		
+		// remove special meaning for backslash and dollar signs and handle '&'
+		repl = prepareReplacement(repl);
 
 		Pattern p = Pattern.compile(ere);
 		Matcher m = p.matcher(orig_value);

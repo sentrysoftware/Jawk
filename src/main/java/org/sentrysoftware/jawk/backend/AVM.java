@@ -2142,8 +2142,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 * sub() functionality
 	 */
 	private String replaceFirst(String orig, String ere, String repl) {
-		replace_first_sb.setLength(0);
-		push(JRT.replaceFirst(orig, repl, ere, replace_first_sb, getCONVFMT().toString(), locale));
+		push(JRT.replaceFirst(orig, repl, ere, replace_first_sb));
 		return replace_first_sb.toString();
 	}
 
@@ -2153,8 +2152,7 @@ public class AVM implements AwkInterpreter, VariableManager {
 	 * gsub() functionality
 	 */
 	private String replaceAll(String orig, String ere, String repl) {
-		replace_all_sb.setLength(0);
-		push(JRT.replaceAll(orig, repl, ere, replace_all_sb, getCONVFMT().toString(), locale));
+		push(JRT.replaceAll(orig, repl, ere, replace_all_sb));
 		return replace_all_sb.toString();
 	}
 
